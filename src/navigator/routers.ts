@@ -6,4 +6,5 @@ export const ROUTE_KEY = createEnum({
 	BottomTab: 'BottomTab',
 	Login: 'Login',
 	Onboarding: 'Onboarding',
+	Home: 'Home'
 });

@@ -4,7 +4,8 @@ import {StyleSheet} from 'react-native';
 import Login from '../screens/login';
 import Onboarding from '../screens/onboarding';
 import Splash from '../screens/splash';
-import BottomTab from './bottom-tab';
+import Home from '../screens/home';
+// import BottomTab from './bottom-tab';
 import {RootStackScreensParams} from './params';
 import {ROUTE_KEY} from './routers';
 
@@ -23,7 +24,8 @@ const Stacks = () => {
 			}}>
 			<Screen name={ROUTE_KEY.Splash} component={Splash} />
 			<Screen name={ROUTE_KEY.Onboarding} component={Onboarding} />
-			<Screen name={ROUTE_KEY.Login} component={Login} />
+			
+			<Screen name={ROUTE_KEY.Home} component={Home} />
 		</Navigator>
 	);
 };
