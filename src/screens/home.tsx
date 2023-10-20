@@ -1,11 +1,11 @@
 import React, {memo, useState} from 'react';
 import {FlatList, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import {ICONS} from '../assets/image-paths';
-// import CustomHeader from '../components/custom-header';
-// import CustomText from '../components/custom-text';
+import CustomHeader from '../components/custom-header';
+import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
 import CustomScrollHorizontal from '../components/home/custom-scroll-horizontal';
-// import Star from '../components/star';
+import Star from '../components/star';
 import {FONT_FAMILY} from '../constants/enum';
 import {ROUTE_KEY} from '../navigator/routers';
 import {RootStackScreenProps} from '../navigator/stacks';
@@ -47,7 +47,7 @@ const outstandingService = [
 		image: 'https://cdn.vietnammoi.vn/171464242508312576/2022/1/4/1-1641288954484112203685.jpg',
 		name: 'dich vụ mua bán',
 		star: 0,
-		services: {name: 'tên thợ', phone: '0384756556'},
+		services: {name: 'Quy Đăng', phone: '0384756556'},
 	},
 	{
 		id: '',
@@ -73,10 +73,106 @@ const outstandingService = [
 ];
 
 const Home = (props: RootStackScreenProps<'Home'>) => {
-	
+	const {navigation} = props;
+
+	const [filterCategory, setfilterCategory] = useState<string>();
+
+	const onFocusSearch = () => {
+		navigation.navigate(ROUTE_KEY.Search);
+	};
+
+	const renderItemCategories = ({item}: any) => {
+		return (
+			<TouchableOpacity
+				onPress={() => setfilterCategory(item.id)}
+				style={[
+					styles.itemCategory,
+					{
+						backgroundColor: filterCategory === item.id ? colors.grayLine : `${colors.grayLine}50`,
+					},
+				]}>
+				<Image style={styles.imageCategory} source={{uri: item?.image}} />
+				<CustomText style={{width: '100%', textAlign: 'center'}} size={10} text={item?.name} />
+			</TouchableOpacity>
+		);
+	};
+
+	const renderItemOutstandingService = ({item}: any) => {
+		return (
+			<TouchableOpacity>
+				<Image source={{uri: item?.image}} style={styles.imageService} />
+
+				<View style={{flex: 1, padding: widthScale(15)}}>
+					<CustomText text={item?.name} />
+					<Star star={4} />
+					<CustomText text={item?.services?.name} />
+					<CustomText text={item?.services?.phone} />
+				</View>
+			</TouchableOpacity>
+		);
+	};
+
+	return (
+		<FixedContainer>
+			<CustomHeader title="TRANG CHỦ" hideBack />
+			<ScrollView showsVerticalScrollIndicator={false} style={styles.view}>
+				<TouchableOpacity onPress={onFocusSearch} style={styles.viewInput}>
+					<Image source={ICONS.search} style={styles.iconSearch} />
+					<TextInput editable={false} style={styles.input} />
+				</TouchableOpacity>
+
+				<CustomText style={styles.titleList} text={'Dịch vụ nổi bật'} font={FONT_FAMILY.BOLD} />
+				<CustomScrollHorizontal>
+					<FlatList
+						scrollEnabled={false}
+						keyExtractor={generateRandomId}
+						showsHorizontalScrollIndicator={false}
+						horizontal
+						data={outstandingService}
+						renderItem={renderItemOutstandingService}
+					/>
+				</CustomScrollHorizontal>
+
+				<CustomText style={styles.titleList} text={'Danh mục dịch vụ'} font={FONT_FAMILY.BOLD} />
+				<View style={{flexDirection: 'row'}}>
+					<TouchableOpacity
+						onPress={() => setfilterCategory('ALL')}
+						style={[
+							styles.itemCategory,
+							{
+								backgroundColor: filterCategory === 'ALL' ? colors.grayLine : `${colors.grayLine}50`,
+							},
+						]}>
+						<Image style={styles.imageCategory} source={ICONS.all} />
+						<CustomText style={{width: '100%', textAlign: 'center'}} size={10} text={'Tất cả'} />
+					</TouchableOpacity>
+					<CustomScrollHorizontal style={{flex: 1}}>
+						<FlatList
+							scrollEnabled={false}
+							keyExtractor={generateRandomId}
+							showsHorizontalScrollIndicator={false}
+							horizontal
+							data={Categories}
+							renderItem={renderItemCategories}
+						/>
+					</CustomScrollHorizontal>
+				</View>
+
+				<CustomText style={styles.titleList} text={'Tất cả dịch vụ'} font={FONT_FAMILY.BOLD} />
+				<FlatList
+					scrollEnabled={false}
+					columnWrapperStyle={{justifyContent: 'space-between', marginBottom: heightScale(20)}}
+					numColumns={2}
+					keyExtractor={generateRandomId}
+					showsHorizontalScrollIndicator={false}
+					data={[...outstandingService, ...outstandingService, ...outstandingService]}
+					renderItem={renderItemOutstandingService}
+				/>
+			</ScrollView>
+		</FixedContainer>
+	);
 };
 
-export default memo(Home);
 const styles = StyleSheet.create({
 	viewInput: {
 		borderRadius: 8,
@@ -135,3 +231,4 @@ const styles = StyleSheet.create({
 		marginRight: widthScale(15),
 	},
 });
+export default memo(Home);

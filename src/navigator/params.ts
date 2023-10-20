@@ -6,4 +6,6 @@ export type RootStackScreensParams = {
 	Login: undefined;
 	Onboarding: undefined;
 	Home : undefined;
+	Search: undefined;
+	DetailService: undefined;
 };
