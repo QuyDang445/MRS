@@ -5,4 +5,6 @@ export type RootStackScreensParams = {
 	BottomTab: undefined;
 	Login: undefined;
 	Onboarding: undefined;
+	SignUp: undefined,
+	SignUpServices: undefined,
 };

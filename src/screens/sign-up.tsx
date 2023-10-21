@@ -1,7 +1,7 @@
 import React, {memo, useState} from 'react';
 import {DeviceEventEmitter, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import {IMAGES} from '../assets/image-paths';
-import CustomButton from '../components/customer-button';
+import CustomButton from '../components/custom-button';
 import CustomCheckbox from '../components/custom-checkbox';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
@@ -23,7 +23,7 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 	const [pass, setPass] = useState('');
 	const [rePass, setRePass] = useState('');
 
-	const onPressSignUp = () => navigation.replace(ROUTE_KEY.SignUpServices);
+	//const onPressSignUp = () => navigation.replace(ROUTE_KEY.SignUpServices);
 
 	const handleSignUp = async () => {
 		if (!name.trim()) {
@@ -108,9 +108,9 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 					text={'Tôi đồng ý với Điều Khoản Sử Dụng'}
 				/>
 
-				<TouchableOpacity style={styles.signUp} onPress={onPressSignUp}>
+				{/* <TouchableOpacity style={styles.signUp} onPress={onPressSignUp}> */}
 					<CustomText text={'Đăng ký tài dành cho nhà cung cấp dịch vụ?'} size={13} font={FONT_FAMILY.BOLD} />
-				</TouchableOpacity>
+				{/* </TouchableOpacity> */}
 
 				<View style={{alignSelf: 'center', marginBottom: heightScale(20)}}>
 					<CustomButton onPress={handleSignUp} text="ĐĂNG KÝ" style={styles.button} />
