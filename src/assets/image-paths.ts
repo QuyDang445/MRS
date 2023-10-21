@@ -17,6 +17,8 @@ export const ICONS = {
 	add: require('./icons/add.png'),
 	camera: require('./icons/camera.png'),
 	user_accept: require('./icons/user-accept.png'),
+	notification_read: require('./icons/notification-icon-read.png'),
+	notification_unread: require('./icons/notification-icon-unread.png'),
 };
 
 export const IMAGES = {
