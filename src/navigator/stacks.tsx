@@ -5,7 +5,7 @@ import Login from '../screens/login';
 import Onboarding from '../screens/onboarding';
 import Splash from '../screens/splash';
 import Home from '../screens/home';
-// import BottomTab from './bottom-tab';
+import BottomTab from './bottom-tab';
 import {RootStackScreensParams} from './params';
 import {ROUTE_KEY} from './routers';
 import Search from '../screens/search';
@@ -27,6 +27,7 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.Onboarding} component={Onboarding} />
 			<Screen name={ROUTE_KEY.Home} component={Home} />
 			<Screen name={ROUTE_KEY.Search} component={Search} />
+			<Screen name={ROUTE_KEY.BottomTab} component={BottomTab} />
 		</Navigator>
 	);
 };
