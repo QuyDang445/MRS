@@ -6,15 +6,7 @@ import {ICONS} from '../assets/image-paths';
 import FixedContainer from '../components/fixed-container';
 import {WIDTH} from '../constants/constants';
 import {EMIT_EVENT, TYPE_USER} from '../constants/enum';
-import OrderAdmin from '../screens/admin/order-admin';
-import userAdmin from '../screens/admin/user-admin';
-import Home from '../screens/home';
-import HomeAdmin from '../screens/home-admin';
-import HomeServicer from '../screens/home-servicer';
-import Notification from '../screens/notification';
-import Order from '../screens/order';
-import OrderServicer from '../screens/order-servicer';
-import User from '../screens/user';
+import {Home, Order, User, Notification} from '../screens';
 import {clearUserData} from '../stores/reducers/userReducer';
 import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';
@@ -124,10 +116,8 @@ const BottomTab = (props: RootStackScreenProps<'BottomTab'>) => {
 		switch (userInfo?.type) {
 			case TYPE_USER.USER:
 				return Home;
-			case TYPE_USER.ADMIN:
-				return HomeAdmin;
 			default:
-				return HomeServicer;
+				return Home;
 		}
 	}, [userInfo]);
 
@@ -135,29 +125,22 @@ const BottomTab = (props: RootStackScreenProps<'BottomTab'>) => {
 		switch (userInfo?.type) {
 			case TYPE_USER.USER:
 				return Order;
-			case TYPE_USER.ADMIN:
-				return OrderAdmin;
 			default:
-				return OrderServicer;
+				return Order;
 		}
 	}, [userInfo]);
 
 	const USER = useMemo(() => {
-		switch (userInfo?.type) {
-			case TYPE_USER.ADMIN:
-				return userAdmin;
-			default:
-				return User;
-		}
+		return User;
 	}, [userInfo]);
 
 	return (
 		<FixedContainer>
 			<Tab.Navigator tabBar={renderTabBar} screenOptions={{tabBarShowLabel: false, headerShown: false}}>
-				<Tab.Screen name="Home" component={HOME} />
+				<Tab.Screen name="Home" component={Home} />
 				<Tab.Screen name="Notification" component={Notification} />
-				<Tab.Screen name="Order" component={ORDER} />
-				<Tab.Screen name="User" component={USER} />
+				<Tab.Screen name="Order" component={Order} />
+				<Tab.Screen name="User" component={User} />
 			</Tab.Navigator>
 		</FixedContainer>
 	);
