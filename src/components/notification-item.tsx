@@ -35,7 +35,7 @@ export const NotificationItem = (
 				borderRadius: 8,
 			}}>
 			<View style={{width: widthScale(40), height: '100%', justifyContent: 'center', alignItems: 'center'}}>
-				{notificationData.read ? (
+				{notificationData.isRead ? (
 					<Image style={styles.notificationIcon} source={ICONS.notification_read} />
 				) : (
 					<Image style={styles.notificationIcon} source={ICONS.notification_unread} />
@@ -45,7 +45,7 @@ export const NotificationItem = (
 			<View style={{flex: 1, height: '100%', justifyContent: 'space-between'}}>
 				<CustomText font={FONT_FAMILY.BOLD} text={notificationData.title} />
 				<CustomText text={notificationData.message} />
-				<CustomText size={12} color={colors.grayText} text={`${convertDateTime(notificationData.sendTime)}`} />
+				<CustomText size={12} color={colors.grayText} text={notificationData.sendTime} />
 			</View>
 
 			<TouchableOpacity

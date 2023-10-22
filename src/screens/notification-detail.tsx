@@ -21,7 +21,7 @@ const NotificationDetail = ({navigation, route}: RootStackScreenProps<'Notificat
 					<Image style={styles.notificationIcon} source={ICONS.notification_read} />
 					<View style={{flexDirection: 'column', gap: heightScale(10)}}>
 						<CustomText font={FONT_FAMILY.BOLD} text={notificationData.title} />
-						<CustomText size={12} color={colors.grayText} text={`${convertDateTime(notificationData.sendTime)}`} />
+						<CustomText size={12} color={colors.grayText} text={notificationData.sendTime} />
 					</View>
 				</View>
 				<View style={{width: '100%'}}>

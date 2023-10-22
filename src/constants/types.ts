@@ -11,7 +11,7 @@ export interface ImageProps {
 export interface UserProps {
 	id: string;
 	name: string;
-	address: string[];
+	address: string;
 	avatar: string;
 	phone: string;
 	tokenDevice: string;
@@ -29,6 +29,7 @@ export interface NotificationItemProps {
 	id: string;
 	title: string;
 	message: string;
-	sendTime: Date;
-	read: boolean;
+	sendTime: string;
+	isRead: boolean;
+	userId: string;
 }
