@@ -33,3 +33,13 @@ export interface NotificationItemProps {
 	isRead: boolean;
 	userId: string;
 }
+export interface ServiceProps {
+	id: string;
+	image: string;
+	name: string;
+	description: string;
+	averageRating: number;
+	serviceProviderName: string;
+	serviceProviderPhoneNumber: string;
+	serviceProviderId: string;
+}

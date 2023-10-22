@@ -12,6 +12,7 @@ import {RootStackScreenProps} from '../navigator/stacks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {generateRandomId} from '../utils';
+import {ServiceProps} from '../constants/types';
 
 const Categories = [
 	{
@@ -41,34 +42,28 @@ const Categories = [
 	},
 ];
 
-const outstandingService = [
+const outstandingService: ServiceProps[] = [
 	{
 		id: '',
 		image: 'https://cdn.vietnammoi.vn/171464242508312576/2022/1/4/1-1641288954484112203685.jpg',
 		name: 'dich vụ mua bán',
-		star: 0,
-		services: {name: 'Quy Đăng', phone: '0384756556'},
+		description:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut',
+		averageRating: 3,
+		serviceProviderName: 'Nguyen Van A',
+		serviceProviderPhoneNumber: '0384756556',
+		serviceProviderPhoneId: 'NgALzZvaK1_xjMDAAb',
 	},
 	{
 		id: '',
 		image: 'https://cdn.vietnammoi.vn/171464242508312576/2022/1/4/1-1641288954484112203685.jpg',
 		name: 'dich vụ mua bán',
-		star: 0,
-		services: {name: 'tên thợ', phone: '0384756556'},
-	},
-	{
-		id: '',
-		image: 'https://cdn.vietnammoi.vn/171464242508312576/2022/1/4/1-1641288954484112203685.jpg',
-		name: 'dich vụ mua bán',
-		star: 0,
-		services: {name: 'tên thợ', phone: '0384756556'},
-	},
-	{
-		id: '',
-		image: 'https://cdn.vietnammoi.vn/171464242508312576/2022/1/4/1-1641288954484112203685.jpg',
-		name: 'dich vụ mua bán',
-		star: 0,
-		services: {name: 'tên thợ', phone: '0384756556'},
+		description:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut',
+		averageRating: 3,
+		serviceProviderName: 'Nguyen Van A',
+		serviceProviderPhoneNumber: '0384756556',
+		serviceProviderId: 'NgALzZvaK1_xjMDAAb',
 	},
 ];
 
@@ -79,6 +74,10 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 
 	const onFocusSearch = () => {
 		navigation.navigate(ROUTE_KEY.Search);
+	};
+
+	const onServiceDetailClick = (item: any) => {
+		navigation.navigate(ROUTE_KEY.ServiceDetail, {serviceData: item});
 	};
 
 	const renderItemCategories = ({item}: any) => {
@@ -99,14 +98,17 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 
 	const renderItemOutstandingService = ({item}: any) => {
 		return (
-			<TouchableOpacity>
+			<TouchableOpacity
+				onPress={() => {
+					onServiceDetailClick(item);
+				}}>
 				<Image source={{uri: item?.image}} style={styles.imageService} />
 
 				<View style={{flex: 1, padding: widthScale(15)}}>
 					<CustomText text={item?.name} />
 					<Star star={4} />
-					<CustomText text={item?.services?.name} />
-					<CustomText text={item?.services?.phone} />
+					<CustomText text={item?.serviceProviderName} />
+					<CustomText text={item?.serviceProviderPhoneNumber} />
 				</View>
 			</TouchableOpacity>
 		);

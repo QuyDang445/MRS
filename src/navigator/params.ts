@@ -1,5 +1,5 @@
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {NotificationItemProps} from '../constants/types';
+import {NotificationItemProps, ServiceProps} from '../constants/types';
 
 export type RootStackScreensParams = {
 	Splash: undefined;
@@ -8,7 +8,7 @@ export type RootStackScreensParams = {
 	Onboarding: undefined;
 	Home: undefined;
 	Search: undefined;
-	DetailService: undefined;
+	ServiceDetail: {serviceData: ServiceProps};
 	NotificationDetail: {notificationData: NotificationItemProps};
 	Notification: undefined;
 };

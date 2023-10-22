@@ -8,7 +8,7 @@ export const ROUTE_KEY = createEnum({
 	Onboarding: 'Onboarding',
 	Home: 'Home',
 	Search: 'Search',
-	DetailService: 'DetailService',
+	ServiceDetail: 'ServiceDetail',
 	Notification: 'Notification',
 	NotificationDetail: 'NotificationDetail',
 	ChangePassword: 'ChangePassword',
