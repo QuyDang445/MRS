@@ -24,7 +24,7 @@ const CustomHeader = (props: Props) => {
 					<Image source={ICONS.back} style={styles.icon} />
 				</TouchableOpacity>
 			)}
-			<CustomText text={title} font={FONT_FAMILY.BOLD} />
+			<CustomText size={18} text={title} font={FONT_FAMILY.BOLD} />
 			<View style={styles.icon}>{rightContent}</View>
 		</View>
 	);

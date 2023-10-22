@@ -6,6 +6,7 @@ export const ICONS = {
 	notification: require('./icons/notification.png'),
 	bill: require('./icons/bill.png'),
 	user: require('./icons/user.png'),
+	user_default_avatar: require('./icons/user_default_avatar.png'),
 	search: require('./icons/search.png'),
 	bottom: require('./icons/bottom.png'),
 	star: require('./icons/star.png'),
@@ -17,6 +18,8 @@ export const ICONS = {
 	add: require('./icons/add.png'),
 	camera: require('./icons/camera.png'),
 	user_accept: require('./icons/user-accept.png'),
+	notification_read: require('./icons/notification-icon-read.png'),
+	notification_unread: require('./icons/notification-icon-unread.png'),
 };
 
 export const IMAGES = {

@@ -42,6 +42,16 @@ const API = {
 			return isParseArray ? [] : undefined;
 		}
 	},
+	delete: async (url: string, data?: any, isParseArray?: boolean) => {
+		try {
+			logAPI('DELETE', url, data);
+			const res = await API_AXIOS.delete(url + '.json', data);
+			return isParseArray ? parseObjectToArray(res) : res;
+		} catch (error) {
+			console.error(error);
+			return isParseArray ? [] : undefined;
+		}
+	},
 };
 
 export default API;

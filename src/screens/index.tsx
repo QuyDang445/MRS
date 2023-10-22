@@ -6,5 +6,6 @@ import Search from './search';
 import Order from './order';
 import User from './user';
 import Notification from './notification';
-
-export {Home, Login, Onboarding, Splash, Search, Order, User, Notification};
+import NotificationDetail from './notification-detail';
+import ServiceDetail from './detail-service';
+export {Home, Login, Onboarding, Splash, Search, Order, User, Notification, NotificationDetail, ServiceDetail};

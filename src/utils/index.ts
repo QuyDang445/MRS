@@ -26,4 +26,4 @@ export const showMessage = (message: string) => {
 	console.log(message);
 };
 export const AlertYesNo = (title = 'THÔNG BÁO', message?: string, onYes?: () => void) =>
-	Alert.alert('', message, [{text: 'HUỶ'}, {text: 'OK', onPress: onYes}], {cancelable: false});
+	Alert.alert(title, message, [{text: 'HUỶ'}, {text: 'OK', onPress: onYes}], {cancelable: false});
