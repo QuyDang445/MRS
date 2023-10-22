@@ -6,6 +6,7 @@ export const ICONS = {
 	notification: require('./icons/notification.png'),
 	bill: require('./icons/bill.png'),
 	user: require('./icons/user.png'),
+	user_default_avatar: require('./icons/user_default_avatar.png'),
 	search: require('./icons/search.png'),
 	bottom: require('./icons/bottom.png'),
 	star: require('./icons/star.png'),
