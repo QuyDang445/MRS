@@ -1,4 +1,4 @@
-import React, {memo} from 'react';
+import React from 'react';
 import {FlatList, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import CustomText from './custom-text';
@@ -8,19 +8,25 @@ import {RootStackScreenProps} from '../navigator/stacks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {NotificationItemProps} from '../constants/types';
+import {convertDateTime} from '../utils/time';
 
-export const NotificationItem = (props: RootStackScreenProps<'NotificationDetail'>, notificationData: NotificationItemProps) => {
-	const {navigation} = props;
+export const NotificationItem = (
+	props: RootStackScreenProps<'NotificationDetail'>,
+	notificationData: NotificationItemProps,
+	onNotificationItemClick,
+	onNotificationItemDelete,
+) => {
+	const {navigation, route} = props;
 
 	const onPressDetail = () => {
-		navigation.navigate(ROUTE_KEY.NotificationDetail);
+		onNotificationItemClick(notificationData);
+		navigation.navigate(ROUTE_KEY.NotificationDetail, {notificationData: notificationData});
 	};
 	return (
 		<TouchableOpacity
 			onPress={onPressDetail}
 			style={{
 				flexDirection: 'row',
-				// backgroundColor: `${colors.appColor}50`,
 				marginVertical: heightScale(12),
 				gap: 10,
 				width: '100%',
@@ -28,31 +34,36 @@ export const NotificationItem = (props: RootStackScreenProps<'NotificationDetail
 				alignItems: 'center',
 				borderRadius: 8,
 			}}>
-			<View style={{width: widthScale(70), height: '100%', justifyContent: 'center', alignItems: 'center'}}>
+			<View style={{width: widthScale(40), height: '100%', justifyContent: 'center', alignItems: 'center'}}>
 				{notificationData.read ? (
-					<Image style={styles.icon} source={ICONS.notification_read} />
+					<Image style={styles.notificationIcon} source={ICONS.notification_read} />
 				) : (
-					<Image style={styles.icon} source={ICONS.notification_unread} />
+					<Image style={styles.notificationIcon} source={ICONS.notification_unread} />
 				)}
-				{/* <Image style={styles.icon} source={ICONS.notification_read} /> */}
 			</View>
 
 			<View style={{flex: 1, height: '100%', justifyContent: 'space-between'}}>
 				<CustomText font={FONT_FAMILY.BOLD} text={notificationData.title} />
 				<CustomText text={notificationData.message} />
-				<CustomText text={'16:16:23 - 18/09/2023'} />
-				{/* <CustomText text={'16:16:23 - 18/09/2023'} /> */}
+				<CustomText size={12} color={colors.grayText} text={`${convertDateTime(notificationData.sendTime)}`} />
 			</View>
 
-			<TouchableOpacity style={{width: widthScale(30), height: '100%', justifyContent: 'center'}}>
-				<Image style={styles.icon} source={ICONS.delete} />
+			<TouchableOpacity
+				style={{width: widthScale(30), height: '100%', justifyContent: 'center', alignItems: 'center'}}
+				onPress={() => onNotificationItemDelete(notificationData)}>
+				<Image style={styles.deleteIcon} source={ICONS.delete} />
 			</TouchableOpacity>
 		</TouchableOpacity>
 	);
 };
 
 const styles = StyleSheet.create({
-	icon: {
+	notificationIcon: {
+		width: widthScale(40),
+		height: widthScale(40),
+	},
+
+	deleteIcon: {
 		width: widthScale(30),
 		height: widthScale(30),
 	},

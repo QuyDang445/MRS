@@ -26,6 +26,7 @@ export interface UserProps {
 }
 
 export interface NotificationItemProps {
+	id: string;
 	title: string;
 	message: string;
 	sendTime: Date;

@@ -30,6 +30,11 @@ const Splash = (props: RootStackScreenProps<'Splash'>) => {
 	useEffect(() => {
 		(async () => {
 			await sleep(2000);
+
+			// Thu test notification token
+			const token = await messaging().getToken();
+			console.log('Device token: ', token);
+
 			if (userInfo) {
 				await updateTokenDevice();
 				navigation.replace(ROUTE_KEY.BottomTab);
