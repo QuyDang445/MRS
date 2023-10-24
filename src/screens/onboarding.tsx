@@ -8,7 +8,7 @@ const Onboarding = (props: RootStackScreenProps<'Onboarding'>) => {
 	const {navigation} = props;
 
 	useEffect(() => {
-		navigation.navigate(ROUTE_KEY.Login);
+		navigation.navigate(ROUTE_KEY.Home);
 	}, []);
 
 	return <FixedContainer></FixedContainer>;

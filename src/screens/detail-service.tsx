@@ -39,7 +39,7 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 	// };
 
 	const onPressBooking = () => {
-		console.log('booking');
+		navigation.navigate(ROUTE_KEY.Booking);
 	};
 
 	const onPressViewInfoServicer = () => console.log('onPressViewInfoServicer');

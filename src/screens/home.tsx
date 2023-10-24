@@ -45,19 +45,41 @@ const Categories = [
 const outstandingService: ServiceProps[] = [
 	{
 		id: '',
-		image: 'https://cdn.vietnammoi.vn/171464242508312576/2022/1/4/1-1641288954484112203685.jpg',
-		name: 'dich vụ mua bán',
+		image: 'https://diennuochaiphong.com/content/upload/dich-vu/sua-chu-dien-tai-quan-kien-an.jpg',
+		name: 'Sửa điện',
 		description:
 			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut',
 		averageRating: 3,
 		serviceProviderName: 'Nguyen Van A',
 		serviceProviderPhoneNumber: '0384756556',
-		serviceProviderPhoneId: 'NgALzZvaK1_xjMDAAb',
+		serviceProviderId: 'NgALzZvaK1_xjMDAAb',
 	},
 	{
 		id: '',
-		image: 'https://cdn.vietnammoi.vn/171464242508312576/2022/1/4/1-1641288954484112203685.jpg',
-		name: 'dich vụ mua bán',
+		image: 'https://diennuochaiphong.com/content/upload/dich-vu/sua-chu-dien-tai-quan-kien-an.jpg',
+		name: 'Sửa điện',
+		description:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut',
+		averageRating: 3,
+		serviceProviderName: 'Nguyen Van A',
+		serviceProviderPhoneNumber: '0384756556',
+		serviceProviderId: 'NgALzZvaK1_xjMDAAb',
+	},
+	{
+		id: '',
+		image: 'https://diennuochaiphong.com/content/upload/dich-vu/sua-chu-dien-tai-quan-kien-an.jpg',
+		name: 'Sửa điện',
+		description:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut',
+		averageRating: 3,
+		serviceProviderName: 'Nguyen Van A',
+		serviceProviderPhoneNumber: '0384756556',
+		serviceProviderId: 'NgALzZvaK1_xjMDAAb',
+	},
+	{
+		id: '',
+		image: 'https://diennuochaiphong.com/content/upload/dich-vu/sua-chu-dien-tai-quan-kien-an.jpg',
+		name: 'Sửa điện',
 		description:
 			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut',
 		averageRating: 3,
@@ -198,7 +220,7 @@ const styles = StyleSheet.create({
 		fontSize: widthScale(15),
 	},
 	titleList: {
-		marginTop: heightScale(15),
+		marginTop: heightScale(20),
 		marginBottom: heightScale(5),
 	},
 	imageCategory: {

@@ -50,16 +50,16 @@ const Splash = (props: RootStackScreenProps<'Splash'>) => {
 	// 	dispatch(updateUserInfo(newUser));
 	// };
 
-	const getNotificationList = async () => {
-		const notificationList: NotificationItemProps[] = await API.get(`${TABLE.NOTIFICATION}`)
-			.then(result => {
-				const filterNotification = result.filter(item => item != null && item.userId == userInfo.id);
-				dispatch(updateNotificationList(filterNotification));
-			})
-			.catch(error => {
-				console.log(error.message);
-			});
-	};
+	// const getNotificationList = async () => {
+	// 	const notificationList: NotificationItemProps[] = await API.get(`${TABLE.NOTIFICATION}`)
+	// 		.then(result => {
+	// 			const filterNotification = result.filter(item => item != null && item.userId == userInfo.id);
+	// 			dispatch(updateNotificationList(filterNotification));
+	// 		})
+	// 		.catch(error => {
+	// 			console.log(error.message);
+	// 		});
+	// };
 
 	useEffect(() => {
 		(async () => {
@@ -69,7 +69,7 @@ const Splash = (props: RootStackScreenProps<'Splash'>) => {
 			const token = await messaging().getToken();
 			console.log('Device token: ', token);
 
-			await getNotificationList();
+			// await getNotificationList();
 
 			if (userInfo) {
 				// await updateTokenDevice();

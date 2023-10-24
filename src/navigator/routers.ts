@@ -11,11 +11,12 @@ export const ROUTE_KEY = createEnum({
 	ServiceDetail: 'ServiceDetail',
 	Notification: 'Notification',
 	NotificationDetail: 'NotificationDetail',
+	UpdateInformation: 'UpdateInformation',
 	ChangePassword: 'ChangePassword',
 	TermsAndConditions: 'TermsAndConditions',
-	UpdateInformation: 'UpdateInformation',
 	ListAddress: 'ListAddress',
 	DataPrivacy: 'DataPrivacy',
 	FAQs: 'FAQs',
 	Settings: 'Settings',
+	Booking: 'Booking',
 });
