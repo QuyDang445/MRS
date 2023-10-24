@@ -1,4 +1,4 @@
-import React, {memo} from 'react';
+import React, {memo, /*useState*/} from 'react';
 import {StyleProp, StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
 import {FONT_FAMILY} from '../constants/enum';
 import {colors} from '../styles/colors';
@@ -14,6 +14,14 @@ interface Props {
 }
 const CustomButton = (props: Props) => {
 	const {text, onPress, style, colorText, disabled} = props;
+	// const [buttonColor, setButtonColor] = useState(colors.purple);
+	// const handleClick = () => {
+	// 	setButtonColor(colors.appColor);
+	// 	onPress(() => void);
+	// 	setTimeout(() => {
+	// 	  setButtonColor(colors.purple);
+	// 	}, 100);
+	//   };
 
 	return (
 		<TouchableOpacity disabled={disabled} style={[styles.view, style]} onPress={onPress}>

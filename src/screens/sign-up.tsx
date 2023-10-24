@@ -83,6 +83,7 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 
 				<View style={styles.input}>
 					<TextInput
+						secureTextEntry
 						value={pass}
 						onChangeText={setPass}
 						placeholder="Mật khẩu"
@@ -93,6 +94,7 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 
 				<View style={styles.input}>
 					<TextInput
+						secureTextEntry
 						value={rePass}
 						onChangeText={setRePass}
 						placeholder="Nhập lại mật khẩu"
@@ -105,15 +107,14 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 					onPress={() => setIsCheck(!isCheck)}
 					isCheck={isCheck}
 					style={styles.viewCheck}
-					text={'Tôi đồng ý với Điều Khoản Sử Dụng'}
-				/>
+					text={'Tôi đồng ý với Điều Khoản Sử Dụng'}				/>
 
 				{/* <TouchableOpacity style={styles.signUp} onPress={onPressSignUp}> */}
-					<CustomText text={'Đăng ký tài dành cho nhà cung cấp dịch vụ?'} size={13} font={FONT_FAMILY.BOLD} />
+					<CustomText text={'Đăng ký tài dành cho nhà cung cấp dịch vụ?'} size={13} font={FONT_FAMILY.BOLD} style={{ textAlign: 'center' }}/>
 				{/* </TouchableOpacity> */}
 
 				<View style={{alignSelf: 'center', marginBottom: heightScale(20)}}>
-					<CustomButton onPress={handleSignUp} text="ĐĂNG KÝ" style={styles.button} />
+					<CustomButton onPress={handleSignUp} text="ĐĂNG KÝ" style={styles.button}/>
 				</View>
 			</ScrollView>
 		</FixedContainer>
@@ -150,5 +151,6 @@ const styles = StyleSheet.create({
 	viewCheck: {
 		marginHorizontal: widthScale(20),
 		marginTop: heightScale(10),
+		justifyContent: 'center',
 	},
 });

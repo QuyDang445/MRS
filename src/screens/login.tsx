@@ -1,13 +1,13 @@
 import {CommonActions} from '@react-navigation/native';
 import React, {memo, useEffect, useState} from 'react';
 import {DeviceEventEmitter, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
-import {IMAGES} from '../assets/image-paths';
+import {EYE, IMAGES} from '../assets/image-paths';
 import CustomButton from '../components/custom-button';
 import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
 import Spinner from '../components/spinner';
 import {EMIT_EVENT, FONT_FAMILY, TABLE, TYPE_USER} from '../constants/enum';
-//import {UserProps} from '../constants/types';
+import {UserProps} from '../constants/types';
 import {ROUTE_KEY} from '../navigator/routers';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
@@ -17,13 +17,14 @@ import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import messaging from '@react-native-firebase/messaging';
 import {showMessage} from '../utils';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Login = (props: RootStackScreenProps<'Login'>) => {
 	const {navigation} = props;
 	const dispatch = useAppDispatch();
 
-	const [phone, setPhone] = useState(__DEV__ ? 'Bbbb' : '');
-	const [password, setPassword] = useState(__DEV__ ? 'Bb' : '');
+	const [phone, setPhone] = useState(__DEV__ ? '' : '');
+	const [password, setPassword] = useState(__DEV__ ? '' : '');
 
 	useEffect(() => {
 		DeviceEventEmitter.addListener(EMIT_EVENT.DATA_LOGIN, ({phone: newPhone, password: newPassword}) => {
@@ -36,33 +37,35 @@ const Login = (props: RootStackScreenProps<'Login'>) => {
 
 	const onPressSignUp = () => navigation.navigate(ROUTE_KEY.SignUp);
 
-	// const onPressLogin = async () => {
-	// 	if (!phone || !password) {
-	// 		return;
-	// 	}
+	const [passwordVisible, setPasswordVisible] = useState(false);
 
-	// 	Spinner.show();
-	// 	const users = (await API.get(TABLE.USERS, true)) as UserProps[];
-	// 	Spinner.hide();
+	const onPressLogin = async () => {
+		if (!phone || !password) {
+			return;
+		}
 
-	// 	for (let i = 0; i < users.length; i++) {
-	// 		if (users[i].phone === phone && users[i].password === password) {
-	// 			// update token user:
-	// 			const tokenDevice = await messaging().getToken();
-	// 			const newUser = await API.put(`${TABLE.USERS}/${users[i]?.id}`, {...users[i], tokenDevice: tokenDevice});
+		Spinner.show();
+		const users = (await API.get(TABLE.USERS, true)) as UserProps[];
+		Spinner.hide();
 
-	// 			// check
-	// 			if (users[i].type === TYPE_USER.SERVICER && !users[i]?.isAccept) {
-	// 				return showMessage('Tài khoản của bạn đang chờ admin sét duyệt');
-	// 			} else {
-	// 				dispatch(cacheUserInfo(newUser));
-	// 				return navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.BottomTab}]}));
-	// 			}
-	// 		}
-	// 	}
+		for (let i = 0; i < users.length; i++) {
+			if (users[i].phone === phone && users[i].password === password) {
+				// update token user:
+				const tokenDevice = await messaging().getToken();
+				const newUser = await API.put(`${TABLE.USERS}/${users[i]?.id}`, {...users[i], tokenDevice: tokenDevice});
 
-	// 	showMessage('Sai thông tin đăng nhập!');
-	// };
+				// check
+				if (users[i].type === TYPE_USER.SERVICER && !users[i]?.isAccept) {
+					return showMessage('Tài khoản của bạn đang chờ admin sét duyệt');
+				} else {
+					dispatch(cacheUserInfo(newUser));
+					return navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.BottomTab}]}));
+				}
+			}
+		}
+
+		showMessage('Sai thông tin đăng nhập!');
+	};
 
 	return (
 		<FixedContainer>
@@ -83,25 +86,28 @@ const Login = (props: RootStackScreenProps<'Login'>) => {
 
 				<View style={styles.input}>
 					<TextInput
-						secureTextEntry
+						secureTextEntry={!passwordVisible}
 						value={password}
 						onChangeText={setPassword}
 						placeholder="Mật khẩu"
 						placeholderTextColor={colors.grayText}
 						style={styles.inputText}
 					/>
+					<TouchableOpacity style={styles.eyeIcon}onPress={() => setPasswordVisible(!passwordVisible)}>
+						<Icon name={passwordVisible ? 'eye' : 'eye-slash'} size={20} color={colors.blackGray}/>
+					</TouchableOpacity>
 				</View>
 
-				{/* <TouchableOpacity style={styles.forgotPass} onPress={onPressForgotPass}> */}
-					<CustomText text={'Quên mật khẩu?'} size={13} font={FONT_FAMILY.BOLD} />
-				{/* </TouchableOpacity> */}
+				{/* <TouchableOpacity style={styles.forgotPass} onPress={onPressForgotPass}>
+					<CustomText text={'Quên mật khẩu?'} size={13} font={FONT_FAMILY.BOLD} style={{ textAlign: 'center' }}/> 
+				</TouchableOpacity> */}
 
 				<TouchableOpacity style={styles.signUp} onPress={onPressSignUp}>
-					<CustomText text={'Đăng ký tài khoản ngay?'} size={13} font={FONT_FAMILY.BOLD} />
+					<CustomText text={'Đăng ký tài khoản ngay?'} size={13} font={FONT_FAMILY.BOLD} style={{ textAlign: 'center' }}/>
 				</TouchableOpacity>
 
 				<View style={{alignSelf: 'center'}}>
-					{/* <CustomButton onPress={onPressLogin} text="ĐĂNG NHẬP" style={styles.button} /> */}
+					<CustomButton onPress={onPressLogin} text="ĐĂNG NHẬP" style={styles.button} />
 				</View>
 			</ScrollView>
 		</FixedContainer>
@@ -140,5 +146,12 @@ const styles = StyleSheet.create({
 	},
 	signUp: {
 		margin: widthScale(20),
+	},
+	eyeIcon: {
+		position: 'absolute',
+		top: heightScale(12),
+		right: widthScale(10),
+		width: 20,
+		height: 30,
 	},
 });
