@@ -1,5 +1,10 @@
-import {Alert} from 'react-native';
-
+import {Alert,Linking, PermissionsAndroid, ToastAndroid} from 'react-native';
+import Geolocation from 'react-native-geolocation-service';
+import {PERMISSIONS, request} from 'react-native-permissions';
+import {TABLE, TYPE_ORDER_SERVICE, TYPE_USER} from '../constants/enum';
+import {EvaluateProps, ServiceProps, UserProps} from '../constants/types';
+import API from '../services/api';
+import {colors} from '../styles/colors';
 export const parseObjectToArray = (object: any) => {
 	const array = [];
 	for (const key in object) {
@@ -10,7 +15,14 @@ export const parseObjectToArray = (object: any) => {
 	}
 	return array as any[];
 };
-
+export const getLocationMyDevice = async () => {
+	try {
+		const check = await requestLocationPermission();
+		if (check) {
+			return (await getMyLocation()) as {lat: number; long: number};
+		}
+	} catch (error) {}
+};
 export const isNumber = (value: string) => /^\d+$/.test(value);
 
 export const generateRandomId = () => {

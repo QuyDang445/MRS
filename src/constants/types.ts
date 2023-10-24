@@ -43,3 +43,10 @@ export interface ServiceProps {
 	serviceProviderPhoneNumber: string;
 	serviceProviderId: string;
 }
+export interface EvaluateProps {
+	id: string;
+	id_service: string;
+	star: number;
+	images: string[];
+	user_id: string;
+}

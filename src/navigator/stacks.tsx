@@ -6,6 +6,7 @@ import BottomTab from './bottom-tab';
 import {RootStackScreensParams} from './params';
 import {ROUTE_KEY} from './routers';
 import UpdateInformation from '../screens/update-infomation';
+import Booking from '../screens/booking';
 
 export type RootStackScreens = keyof RootStackScreensParams;
 export type RootStackScreenProps<T extends RootStackScreens> = StackScreenProps<RootStackScreensParams, T>;
@@ -29,6 +30,7 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.BottomTab} component={BottomTab} />
 			<Screen name={ROUTE_KEY.UpdateInformation} component={UpdateInformation} />
 			<Screen name={ROUTE_KEY.ServiceDetail} component={ServiceDetail} />
+			<Screen name={ROUTE_KEY.Booking} component={Booking} />
 		</Navigator>
 	);
 };
