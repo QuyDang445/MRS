@@ -1,10 +1,12 @@
 import {CardStyleInterpolators, createStackNavigator, StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import React, {memo} from 'react';
-import {StyleSheet} from 'react-native';
-import {Onboarding, Splash, Home, Search, Notification, NotificationDetail, ServiceDetail} from '../screens';
+import {Settings, StyleSheet} from 'react-native';
+import {Onboarding, Splash, Home, Search, Notification, NotificationDetail, ServiceDetail,} from '../screens';
 import BottomTab from './bottom-tab';
 import {RootStackScreensParams} from './params';
 import {ROUTE_KEY} from './routers';
+import Setting from '../screens/setting';
+import FAQs from '../screens/FAQs';
 
 export type RootStackScreens = keyof RootStackScreensParams;
 export type RootStackScreenProps<T extends RootStackScreens> = StackScreenProps<RootStackScreensParams, T>;
@@ -27,6 +29,8 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.NotificationDetail} component={NotificationDetail} />
 			<Screen name={ROUTE_KEY.BottomTab} component={BottomTab} />
 			<Screen name={ROUTE_KEY.ServiceDetail} component={ServiceDetail} />
+			<Screen name={ROUTE_KEY.Setting} component={Setting} />
+			<Screen name={ROUTE_KEY.FAQs} component={FAQs} />
 		</Navigator>
 	);
 };

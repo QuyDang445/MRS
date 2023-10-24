@@ -17,5 +17,5 @@ export const ROUTE_KEY = createEnum({
 	ListAddress: 'ListAddress',
 	DataPrivacy: 'DataPrivacy',
 	FAQs: 'FAQs',
-	Settings: 'Settings',
+	Setting: 'Setting',
 });
