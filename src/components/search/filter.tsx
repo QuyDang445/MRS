@@ -12,6 +12,13 @@ interface Props{
     isOn: boolean;
 	onPressShow?: () => void;
 }
+//xét thuộc tính Sort
+export interface Sort {
+	title: string;
+	id: string;
+	function: (a: any, b: any) => number;
+	name?: string;
+}
 const Filter = (props: Props) =>{
     const {title, filter, isOn, onPressShow} = props;
     const rotateAnim = useState(new Animated.Value(0))[0];
