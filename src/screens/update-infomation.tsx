@@ -7,7 +7,7 @@ import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
 import Spinner from '../components/spinner';
 import {FONT_FAMILY, TABLE, TYPE_USER} from '../constants/enum';
-
+import {WIDTH} from '../constants/constants';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
 import {cacheUserInfo} from '../stores/reducers/userReducer';
@@ -16,7 +16,7 @@ import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {showMessage} from '../utils';
 import {getImageFromDevice, uploadImage} from '../utils/image';
-
+import Toast from 'react-native-toast-message';
 const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => {
 	const {navigation} = props;
 	const dispatch = useAppDispatch();
@@ -96,8 +96,9 @@ const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => 
 				<TextInput onChangeText={setName} value={name} style={styles.input} />
 				<CustomText text={'SỐ ĐIỆN THOẠI'} font={FONT_FAMILY.BOLD} size={14} />
 				<TextInput keyboardType="numeric" onChangeText={setPhone} value={phone} style={styles.input} />
-
-				<CustomButton onPress={onPressSave} text="LƯU"  />
+				<View style={{ alignItems: 'center'}}>
+				<CustomButton onPress={onPressSave} style={{width: WIDTH / 2.5}}  text="LƯU"  />
+				</View>
 			</ScrollView>
 		</FixedContainer>
 	);

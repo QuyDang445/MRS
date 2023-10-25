@@ -20,6 +20,8 @@ export const ICONS = {
 	user_accept: require('./icons/user-accept.png'),
 	notification_read: require('./icons/notification-icon-read.png'),
 	notification_unread: require('./icons/notification-icon-unread.png'),
+	location : require('./icons/location.png'),
+	bookaddress : require('./icons/bookaddress.png')
 };
 
 export const IMAGES = {

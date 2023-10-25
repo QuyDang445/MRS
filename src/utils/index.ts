@@ -1,10 +1,6 @@
 import {Alert,Linking, PermissionsAndroid, ToastAndroid} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {PERMISSIONS, request} from 'react-native-permissions';
-import {TABLE, TYPE_ORDER_SERVICE, TYPE_USER} from '../constants/enum';
-import {EvaluateProps, ServiceProps, UserProps} from '../constants/types';
-import API from '../services/api';
-import {colors} from '../styles/colors';
 export const parseObjectToArray = (object: any) => {
 	const array = [];
 	for (const key in object) {
@@ -15,6 +11,29 @@ export const parseObjectToArray = (object: any) => {
 	}
 	return array as any[];
 };
+export const requestLocationPermission = () => {
+	const getAlert = () => {
+		Alert.alert('THÔNG BÁO', 'Vui lòng cung cấp quyền truy cập vị trí!', [
+			{
+				text: 'Đồng ý',
+				onPress: () => Linking.openSettings(),
+				isPreferred: true,
+				style: 'cancel',
+			},
+			{text: 'Huỷ', onPress: () => {}},
+		]);
+	};
+
+	return new Promise<boolean>(async (resolve, reject) => {
+		const granted = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+		if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+			resolve(true);
+		} else {
+			getAlert();
+			reject(false);
+		}
+	});
+};
 export const getLocationMyDevice = async () => {
 	try {
 		const check = await requestLocationPermission();
@@ -23,6 +42,14 @@ export const getLocationMyDevice = async () => {
 		}
 	} catch (error) {}
 };
+export const getMyLocation = () =>
+	new Promise((resolve, reject) =>
+		Geolocation.getCurrentPosition(
+			position => resolve({lat: position?.coords?.latitude, long: position?.coords?.longitude}),
+			error => reject(error),
+			{accuracy: {android: 'high', ios: 'best'}},
+		),
+	);
 export const isNumber = (value: string) => /^\d+$/.test(value);
 
 export const generateRandomId = () => {
