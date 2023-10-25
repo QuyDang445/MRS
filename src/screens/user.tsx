@@ -19,10 +19,12 @@ const User = (props: RootStackScreenProps<'User'>) => {
 
 	const onPressChangePassword = () => console.log('On press change password');
 	const onPressSetting = () => navigation.navigate(ROUTE_KEY.Setting);
-	const onPressTermsAndConditions = () => console.log('On press T&C');
+	const onPressTermsAndConditions = () => navigation.navigate(ROUTE_KEY.Termsandconditions);
 	const onPressUpdateInformation = () => console.log('On press update information');
 	const onPressListAddress = () => console.log('On press list address');
-	const onPressDataPrivacy = () => console.log('On press data privacy');
+	const onPressDataPrivacy = () => navigation.navigate(ROUTE_KEY.Privacypolicy);
+	
+	
 	const onPressFAQs = () => navigation.navigate(ROUTE_KEY.FAQs);
 
 	const onPressLogout = () => DeviceEventEmitter.emit(EMIT_EVENT.LOGOUT);

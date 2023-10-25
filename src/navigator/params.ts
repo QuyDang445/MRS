@@ -13,4 +13,6 @@ export type RootStackScreensParams = {
 	Notification: undefined;
 	Setting: undefined;
 	FAQs: undefined;
+	Privacypolicy: undefined;
+	Termsandconditions: undefined;
 };
