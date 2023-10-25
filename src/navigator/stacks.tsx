@@ -4,6 +4,10 @@ import {StyleSheet} from 'react-native';
 import Login from '../screens/login';
 import Onboarding from '../screens/onboarding';
 import SignUp from '../screens/sign-up';
+import ForgotPass from '../screens/forgot-pass';
+import Otp from '../screens/otp';
+import Home from '../screens/home';
+import ChangePasswordForgot from '../screens/change-password-forgot';
 import SignUpServices from '../screens/sign-up-servives';
 import Splash from '../screens/splash';
 import {RootStackScreensParams} from './params';
@@ -27,6 +31,10 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.Login} component={Login} />
 			<Screen name={ROUTE_KEY.SignUp} component={SignUp} />
 			<Screen name={ROUTE_KEY.SignUpServices} component={SignUpServices} />
+			<Screen name={ROUTE_KEY.ForgotPass} component={ForgotPass} />
+			<Screen name={ROUTE_KEY.Otp} component={Otp} />
+			<Screen name={ROUTE_KEY.ChangePasswordForgot} component={ChangePasswordForgot} />
+			<Screen name={ROUTE_KEY.Home} component={Home} />
 		</Navigator>
 	);
 };

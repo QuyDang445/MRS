@@ -1,7 +1,7 @@
 import {CommonActions} from '@react-navigation/native';
 import React, {memo, useEffect, useState} from 'react';
-import {DeviceEventEmitter, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
-import {EYE, IMAGES} from '../assets/image-paths';
+import {DeviceEventEmitter, Image, ScrollView, StyleSheet, TextInput, ToastAndroid, TouchableOpacity, View} from 'react-native';
+import {IMAGES} from '../assets/image-paths';
 import CustomButton from '../components/custom-button';
 import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
@@ -17,7 +17,7 @@ import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import messaging from '@react-native-firebase/messaging';
 import {showMessage} from '../utils';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome'; 
 
 const Login = (props: RootStackScreenProps<'Login'>) => {
 	const {navigation} = props;
@@ -33,7 +33,7 @@ const Login = (props: RootStackScreenProps<'Login'>) => {
 		});
 	}, []);
 
-	//const onPressForgotPass = () => navigation.navigate(ROUTE_KEY.ForgotPass);
+	const onPressForgotPass = () => navigation.navigate(ROUTE_KEY.ForgotPass);
 
 	const onPressSignUp = () => navigation.navigate(ROUTE_KEY.SignUp);
 
@@ -54,16 +54,19 @@ const Login = (props: RootStackScreenProps<'Login'>) => {
 				const tokenDevice = await messaging().getToken();
 				const newUser = await API.put(`${TABLE.USERS}/${users[i]?.id}`, {...users[i], tokenDevice: tokenDevice});
 
-				// check
-				if (users[i].type === TYPE_USER.SERVICER && !users[i]?.isAccept) {
-					return showMessage('Tài khoản của bạn đang chờ admin sét duyệt');
-				} else {
-					dispatch(cacheUserInfo(newUser));
-					return navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.BottomTab}]}));
-				}
+				// Test
+				return navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.Home}]}));
+				ToastAndroid.show('Đăng nhập thành công!', ToastAndroid.SHORT);
+				//Main when have home screen
+				// if (users[i].type === TYPE_USER.SERVICER && !users[i]?.isAccept) {
+				// 	return showMessage('Tài khoản của bạn đang chờ admin sét duyệt');
+				// } else {
+				// 	dispatch(cacheUserInfo(newUser));
+				// 	return navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.BottomTab}]}));
+				// }
 			}
 		}
-
+		ToastAndroid.show('Sai thông tin đăng nhập!', ToastAndroid.SHORT);
 		showMessage('Sai thông tin đăng nhập!');
 	};
 
@@ -98,9 +101,9 @@ const Login = (props: RootStackScreenProps<'Login'>) => {
 					</TouchableOpacity>
 				</View>
 
-				{/* <TouchableOpacity style={styles.forgotPass} onPress={onPressForgotPass}>
+				<TouchableOpacity style={styles.forgotPass} onPress={onPressForgotPass}>
 					<CustomText text={'Quên mật khẩu?'} size={13} font={FONT_FAMILY.BOLD} style={{ textAlign: 'center' }}/> 
-				</TouchableOpacity> */}
+				</TouchableOpacity>
 
 				<TouchableOpacity style={styles.signUp} onPress={onPressSignUp}>
 					<CustomText text={'Đăng ký tài khoản ngay?'} size={13} font={FONT_FAMILY.BOLD} style={{ textAlign: 'center' }}/>

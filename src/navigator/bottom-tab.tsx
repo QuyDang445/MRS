@@ -5,6 +5,7 @@ import {AppState, DeviceEventEmitter, Image, Keyboard, StyleSheet, TouchableOpac
 import {ICONS} from '../assets/image-paths';
 import FixedContainer from '../components/fixed-container';
 import {WIDTH} from '../constants/constants';
+import {EMIT_EVENT, TYPE_USER} from '../constants/enum';
 import {clearUserData} from '../stores/reducers/userReducer';
 import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';

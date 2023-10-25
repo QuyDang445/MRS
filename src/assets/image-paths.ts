@@ -26,7 +26,3 @@ export const IMAGES = {
 export const ANIMATIONS = {
 	SPLASH: require('./animations/splash.json'),
 };
-
-export const EYE = {
-	EYE: require('./icons/eye.png')
-}
