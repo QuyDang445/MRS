@@ -5,6 +5,8 @@ import {Onboarding, Splash, Home, Search, Notification, NotificationDetail, Serv
 import BottomTab from './bottom-tab';
 import {RootStackScreensParams} from './params';
 import {ROUTE_KEY} from './routers';
+import ChangePassword from '../screens/change-password';
+import ListAddress from '../screens/list-address';
 
 export type RootStackScreens = keyof RootStackScreensParams;
 export type RootStackScreenProps<T extends RootStackScreens> = StackScreenProps<RootStackScreensParams, T>;
@@ -27,6 +29,8 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.NotificationDetail} component={NotificationDetail} />
 			<Screen name={ROUTE_KEY.BottomTab} component={BottomTab} />
 			<Screen name={ROUTE_KEY.ServiceDetail} component={ServiceDetail} />
+			<Screen name={ROUTE_KEY.ChangePassword} component={ChangePassword} />
+			<Screen name={ROUTE_KEY.ListAddress} component={ListAddress} />
 		</Navigator>
 	);
 };

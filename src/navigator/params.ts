@@ -11,4 +11,6 @@ export type RootStackScreensParams = {
 	ServiceDetail: {serviceData: ServiceProps};
 	NotificationDetail: {notificationData: NotificationItemProps};
 	Notification: undefined;
+	ChangePassword: undefined;
+	ListAddress: undefined;
 };
