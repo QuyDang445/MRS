@@ -52,7 +52,7 @@ const outstandingService: ServiceProps[] = [
 		averageRating: 3,
 		serviceProviderName: 'Nguyen Van A',
 		serviceProviderPhoneNumber: '0384756556',
-		serviceProviderPhoneId: 'NgALzZvaK1_xjMDAAb',
+		serviceProviderId: 'NgALzZvaK1_xjMDAAb',
 	},
 	{
 		id: '',

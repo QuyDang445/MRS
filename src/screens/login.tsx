@@ -17,9 +17,9 @@ import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import messaging from '@react-native-firebase/messaging';
 import {showMessage} from '../utils';
-import Icon from 'react-native-vector-icons/FontAwesome'; 
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const Login = (props: RootStackScreenProps<'Login'>) => {
+const LogIn = (props: RootStackScreenProps<'Login'>) => {
 	const {navigation} = props;
 	const dispatch = useAppDispatch();
 
@@ -59,7 +59,6 @@ const Login = (props: RootStackScreenProps<'Login'>) => {
 		} else {
 			setErrorPass('');
 		}
-
 
 		Spinner.show();
 		const users = (await API.get(TABLE.USERS, true)) as UserProps[];
@@ -136,7 +135,7 @@ const Login = (props: RootStackScreenProps<'Login'>) => {
 	);
 };
 
-export default memo(Login);
+export default memo(LogIn);
 const styles = StyleSheet.create({
 	logo: {
 		width: widthScale(100),

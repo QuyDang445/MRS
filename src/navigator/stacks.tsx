@@ -1,12 +1,8 @@
 import {CardStyleInterpolators, createStackNavigator, StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import React, {memo} from 'react';
 import {StyleSheet} from 'react-native';
-import {Onboarding, Splash, Home, Search, Notification, NotificationDetail, ServiceDetail} from '../screens';
+import {Onboarding, Splash, Home, Search, Notification, NotificationDetail, ServiceDetail, LogIn, ForgotPass, SignUp, Otp} from '../screens';
 import BottomTab from './bottom-tab';
-import Login from '../screens/login';
-import SignUp from '../screens/sign-up';
-import ForgotPass from '../screens/forgot-pass';
-import Otp from '../screens/otp';
 import ChangePasswordForgot from '../screens/change-password-forgot';
 import SignUpServices from '../screens/sign-up-servives';
 import {RootStackScreensParams} from './params';
@@ -34,6 +30,7 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.BottomTab} component={BottomTab} />
 			<Screen name={ROUTE_KEY.ServiceDetail} component={ServiceDetail} />
 			<Screen name={ROUTE_KEY.SignUp} component={SignUp} />
+			<Screen name={ROUTE_KEY.LogIn} component={LogIn} />
 			<Screen name={ROUTE_KEY.SignUpServices} component={SignUpServices} />
 			<Screen name={ROUTE_KEY.ForgotPass} component={ForgotPass} />
 			<Screen name={ROUTE_KEY.Otp} component={Otp} />
