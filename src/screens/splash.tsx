@@ -17,37 +17,35 @@ const Splash = (props: RootStackScreenProps<'Splash'>) => {
 	const dispatch = useAppDispatch();
 
 	// Test user
-	const userInfo = testUser;
-	dispatch(updateUserInfo(testUser));
-	console.log('Userinfo', JSON.stringify(userInfo));
+	// const userInfo = testUser;
+	// dispatch(updateUserInfo(testUser));
+	// console.log('Userinfo', JSON.stringify(userInfo));
 
-	// const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
-	const updateTokenDevice = async () => {
-		const userCurrent = await API.get(`${TABLE.USERS}/${userInfo?.id}`);
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
-
 	const updateTokenDevice = async () => {
 		const userCurrent = await API.get(`${TABLE.USERS}/${userInfo?.id}`);
+		// const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
 
-		const token = await messaging().getToken();
-		const newUser = await API.put(`${TABLE.USERS}/${userInfo?.id}`, {...userCurrent, tokenDevice: token});
-		const token = await messaging().getToken();
-		const newUser = await API.put(`${TABLE.USERS}/${userInfo?.id}`, {...userCurrent, tokenDevice: token});
+		const updateTokenDevice = async () => {
+			const userCurrent = await API.get(`${TABLE.USERS}/${userInfo?.id}`);
 
-		dispatch(updateUserInfo(newUser));
-	};
+			const token = await messaging().getToken();
+			const newUser = await API.put(`${TABLE.USERS}/${userInfo?.id}`, {...userCurrent, tokenDevice: token});
 
-	// const getNotificationList = async () => {
-	// 	const notificationList: NotificationItemProps[] = await API.get(`${TABLE.NOTIFICATION}`)
-	// 		.then(result => {
-	// 			const filterNotification = result.filter(item => item != null && item.userId == userInfo.id);
-	// 			dispatch(updateNotificationList(filterNotification));
-	// 		})
-	// 		.catch(error => {
-	// 			console.log(error.message);
-	// 		});
-	// };
-		dispatch(updateUserInfo(newUser));
+			dispatch(updateUserInfo(newUser));
+		};
+
+		// const getNotificationList = async () => {
+		// 	const notificationList: NotificationItemProps[] = await API.get(`${TABLE.NOTIFICATION}`)
+		// 		.then(result => {
+		// 			const filterNotification = result.filter(item => item != null && item.userId == userInfo.id);
+		// 			dispatch(updateNotificationList(filterNotification));
+		// 		})
+		// 		.catch(error => {
+		// 			console.log(error.message);
+		// 		});
+		// };
+		// dispatch(updateUserInfo(newUser));
 	};
 
 	useEffect(() => {
@@ -63,12 +61,9 @@ const Splash = (props: RootStackScreenProps<'Splash'>) => {
 			if (userInfo) {
 				await updateTokenDevice();
 				navigation.replace(ROUTE_KEY.BottomTab);
+				await updateTokenDevice();
 			} else {
 				navigation.replace(ROUTE_KEY.LogIn);
-					await updateTokenDevice();
-					navigation.replace(ROUTE_KEY.BottomTab);
-				} else {
-				navigation.replace(ROUTE_KEY.Order);
 			}
 		})();
 	}, []);

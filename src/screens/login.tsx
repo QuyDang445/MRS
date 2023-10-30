@@ -70,14 +70,14 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 				const newUser = await API.put(`${TABLE.USERS}/${users[i]?.id}`, {...users[i], tokenDevice: tokenDevice});
 
 				// Test
-				navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.Home}]}));
-				return ToastAndroid.show('Đăng nhập thành công!', ToastAndroid.SHORT);
+				// navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.BottomTab}]}));
+				ToastAndroid.show('Đăng nhập thành công!', ToastAndroid.SHORT);
 				//Main when have home screen
 				// if (users[i].type === TYPE_USER.SERVICER && !users[i]?.isAccept) {
 				// 	return showMessage('Tài khoản của bạn đang chờ admin sét duyệt');
 				// } else {
-				// 	dispatch(cacheUserInfo(newUser));
-				// 	return navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.BottomTab}]}));
+				dispatch(cacheUserInfo(newUser));
+				return navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.BottomTab}]}));
 				// }
 			}
 		}
