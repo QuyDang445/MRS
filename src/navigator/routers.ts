@@ -3,7 +3,6 @@ function createEnum<T extends {[P in keyof T]: P}>(o: T) {
 }
 export const ROUTE_KEY = createEnum({
 	Splash: 'Splash',
-	BottomTab: 'BottomTab',
 	Login: 'Login',
 	Onboarding: 'Onboarding',
 	Home: 'Home',
@@ -18,4 +17,10 @@ export const ROUTE_KEY = createEnum({
 	DataPrivacy: 'DataPrivacy',
 	FAQs: 'FAQs',
 	Settings: 'Settings',
+	SignUp: 'SignUp',
+	SignUpServices: 'SignUpServices',
+	ForgotPass: 'ForgotPass',
+	Otp: 'Otp',
+	ChangePasswordForgot: 'ChangePasswordForgot',
+	BottomTab: 'BottomTab',
 });

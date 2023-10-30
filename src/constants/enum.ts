@@ -30,3 +30,17 @@ export enum TABLE {
 	CATEGORY = 'CATEGORY',
 	NOTIFICATION = 'NOTIFICATION',
 }
+
+export enum TYPE_ORDER_SERVICE {
+	OrderPending = 'OrderPending',
+	OrderCanceled = 'OrderCanceled',
+	OrderInProcess = 'OrderInProcess',
+	OrderCompleted = 'OrderCompleted',
+}
+
+export enum TYPE_BLOCK_SERVICER {
+	ReportedManyTimes = 'ReportedManyTimes',
+	LatePaymentOfFees = 'LatePaymentOfFees',
+	Other = 'Other',
+	ThereIsUnusualSpamBehavior = 'ThereIsUnusualSpamBehavior',
+}
