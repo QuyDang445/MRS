@@ -106,7 +106,7 @@ const BottomTab = (props: RootStackScreenProps<'BottomTab'>) => {
 	}, []);
 
 	const logout = () => {
-		navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.Login}]}));
+		navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.LogIn}]}));
 		setTimeout(() => {
 			dispatch(clearUserData());
 		}, 600);

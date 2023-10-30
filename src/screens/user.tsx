@@ -9,6 +9,7 @@ import {RootStackScreenProps} from '../navigator/stacks';
 import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
+import { ROUTE_KEY } from '../navigator/routers';
 
 const User = (props: RootStackScreenProps<'User'>) => {
 	const {navigation} = props;
@@ -19,7 +20,7 @@ const User = (props: RootStackScreenProps<'User'>) => {
 	const onPressChangePassword = () => console.log('On press change password');
 	const onPressSetting = () => console.log('On press Settings');
 	const onPressTermsAndConditions = () => console.log('On press T&C');
-	const onPressUpdateInformation = () => console.log('On press update information');
+	const onPressUpdateInformation = () => navigation.navigate(ROUTE_KEY.UpdateInformation);
 	const onPressListAddress = () => console.log('On press list address');
 	const onPressDataPrivacy = () => console.log('On press data privacy');
 	const onPressFAQs = () => console.log('On press FAQs');

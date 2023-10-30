@@ -10,9 +10,9 @@ export const ROUTE_KEY = createEnum({
 	ServiceDetail: 'ServiceDetail',
 	Notification: 'Notification',
 	NotificationDetail: 'NotificationDetail',
+	UpdateInformation: 'UpdateInformation',
 	ChangePassword: 'ChangePassword',
 	TermsAndConditions: 'TermsAndConditions',
-	UpdateInformation: 'UpdateInformation',
 	ListAddress: 'ListAddress',
 	DataPrivacy: 'DataPrivacy',
 	FAQs: 'FAQs',
@@ -25,4 +25,5 @@ export const ROUTE_KEY = createEnum({
 	BottomTab: 'BottomTab',
 	Order: 'Order',
 	User: 'User',
+	Booking: 'Booking',
 });

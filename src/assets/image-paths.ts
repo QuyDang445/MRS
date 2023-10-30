@@ -21,6 +21,8 @@ export const ICONS = {
 	notification_read: require('./icons/notification-icon-read.png'),
 	notification_unread: require('./icons/notification-icon-unread.png'),
 	eye: require('./icons/eye.png'),
+	location: require('./icons/location.png'),
+	bookaddress: require('./icons/bookaddress.png'),
 };
 
 export const IMAGES = {
