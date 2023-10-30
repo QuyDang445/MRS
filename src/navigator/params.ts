@@ -21,4 +21,8 @@ export type RootStackScreensParams = {
 	User: undefined;
 	UpdateInformation: undefined;
 	Booking: {service: ServiceProps};
+	Setting: undefined;
+	FAQs: undefined;
+	Privacypolicy: undefined;
+	Termsandconditions: undefined;
 };
