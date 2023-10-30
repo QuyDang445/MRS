@@ -4,7 +4,7 @@ import {UserProps} from '../constants/types';
 
 export type RootStackScreensParams = {
 	Splash: undefined;
-	Login: undefined;
+	LogIn: undefined;
 	Onboarding: undefined;
 	Home: undefined;
 	Search: undefined;

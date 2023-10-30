@@ -17,9 +17,8 @@ import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import messaging from '@react-native-firebase/messaging';
 import {showMessage} from '../utils';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
-const LogIn = (props: RootStackScreenProps<'Login'>) => {
+const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 	const {navigation} = props;
 	const dispatch = useAppDispatch();
 

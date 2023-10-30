@@ -75,7 +75,7 @@ const Splash = (props: RootStackScreenProps<'Splash'>) => {
 				await updateTokenDevice();
 				navigation.replace(ROUTE_KEY.BottomTab);
 			} else {
-				navigation.replace(ROUTE_KEY.Login);
+				navigation.replace(ROUTE_KEY.LogIn);
 			}
 		})();
 	}, []);
