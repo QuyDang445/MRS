@@ -12,9 +12,8 @@ import {RootStackScreenProps} from '../navigator/stacks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {generateRandomId, getServiceAll} from '../utils';
-import {ServiceProps,Category} from '../constants/types';
+import {ServiceProps, Category} from '../constants/types';
 import API from '../services/api';
-
 
 const Home = (props: RootStackScreenProps<'Home'>) => {
 	const {navigation} = props;
@@ -85,7 +84,9 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 	};
 	const renderItemOutstandingService = ({item}: {item: ServiceProps}) => {
 		return (
-			<TouchableOpacity onPress={() => navigation.navigate(ROUTE_KEY.ServiceDetail, {serviceData: item})} style={[styles.itemService, {marginRight: 0}]}>
+			<TouchableOpacity
+				onPress={() => navigation.navigate(ROUTE_KEY.ServiceDetail, {serviceData: item})}
+				style={[styles.itemService, {marginRight: 0}]}>
 				<Image source={{uri: item?.image}} style={styles.imageService} />
 
 				<View style={{flex: 1, padding: widthScale(15)}}>
@@ -237,4 +238,3 @@ const styles = StyleSheet.create({
 		overflow: 'hidden',
 	},
 });
-
