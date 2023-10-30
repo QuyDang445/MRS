@@ -13,7 +13,9 @@ import Setting from '../screens/setting';
 import FAQs from '../screens/FAQs';
 import Privacypolicy from '../screens/Privacy policy';
 import Termsandconditions from '../screens/Termsandconditions';
-
+import ChangePassword from '../screens/change-password';
+import ListAddress from '../screens/list-address';
+import Order from '../screens/order';
 export type RootStackScreens = keyof RootStackScreensParams;
 export type RootStackScreenProps<T extends RootStackScreens> = StackScreenProps<RootStackScreensParams, T>;
 export type UseRootStackNavigation<T extends RootStackScreens = 'Splash'> = StackNavigationProp<RootStackScreensParams, T>;
@@ -47,6 +49,9 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.FAQs} component={FAQs} />
 			<Screen name={ROUTE_KEY.Privacypolicy} component={Privacypolicy} />
 			<Screen name={ROUTE_KEY.Termsandconditions} component={Termsandconditions} />
+			<Screen name={ROUTE_KEY.ChangePassword} component={ChangePassword} />
+			<Screen name={ROUTE_KEY.ListAddress} component={ListAddress} />
+			<Screen name={ROUTE_KEY.Order} component={Order} />
 		</Navigator>
 	);
 };

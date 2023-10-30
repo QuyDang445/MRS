@@ -28,4 +28,6 @@ export const ROUTE_KEY = createEnum({
 	Order: 'Order',
 	User: 'User',
 	Booking: 'Booking',
+	DetailOrder: 'DetailOrder',
+	Order: 'Order',
 });
