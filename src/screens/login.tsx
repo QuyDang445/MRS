@@ -25,6 +25,9 @@ const Login = (props: RootStackScreenProps<'Login'>) => {
 
 	const [phone, setPhone] = useState(__DEV__ ? '' : '');
 	const [password, setPassword] = useState(__DEV__ ? '' : '');
+	const [errorPhone, setErrorPhone] = useState('');
+	const [errorPass, setErrorPass] = useState('');
+	const phoneRegex = /(0)+([0-9]{9})\b/;
 
 	useEffect(() => {
 		DeviceEventEmitter.addListener(EMIT_EVENT.DATA_LOGIN, ({phone: newPhone, password: newPassword}) => {
@@ -40,9 +43,23 @@ const Login = (props: RootStackScreenProps<'Login'>) => {
 	const [passwordVisible, setPasswordVisible] = useState(false);
 
 	const onPressLogin = async () => {
-		if (!phone || !password) {
-			return;
+		if (!phone.trim()) {
+			setErrorPhone('Thiếu số điện thoại!');
+			return showMessage('Thiếu số điện thoại.');
+		} else if (phoneRegex.test(phone) == false) {
+			setErrorPhone('Số điện thoại không hợp lệ!');
+			return showMessage('Số điện thoại không hợp lệ.');
+		} else {
+			setErrorPhone('');
 		}
+
+		if (!password.trim()) {
+			setErrorPass('Thiếu mật khẩu!');
+			return showMessage('Thiếu mật khẩu.');
+		} else {
+			setErrorPass('');
+		}
+
 
 		Spinner.show();
 		const users = (await API.get(TABLE.USERS, true)) as UserProps[];
@@ -55,8 +72,8 @@ const Login = (props: RootStackScreenProps<'Login'>) => {
 				const newUser = await API.put(`${TABLE.USERS}/${users[i]?.id}`, {...users[i], tokenDevice: tokenDevice});
 
 				// Test
-				return navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.Home}]}));
-				ToastAndroid.show('Đăng nhập thành công!', ToastAndroid.SHORT);
+				navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.Home}]}));
+				return ToastAndroid.show('Đăng nhập thành công!', ToastAndroid.SHORT);
 				//Main when have home screen
 				// if (users[i].type === TYPE_USER.SERVICER && !users[i]?.isAccept) {
 				// 	return showMessage('Tài khoản của bạn đang chờ admin sét duyệt');
@@ -86,6 +103,7 @@ const Login = (props: RootStackScreenProps<'Login'>) => {
 						style={styles.inputText}
 					/>
 				</View>
+				<CustomText text={errorPhone} style={{color: colors.red, marginLeft: 25}} size={10} />
 
 				<View style={styles.input}>
 					<TextInput
@@ -100,6 +118,7 @@ const Login = (props: RootStackScreenProps<'Login'>) => {
 						<Image source={ICONS.eye} style={styles.eyeIcon} />
 					</TouchableOpacity>
 				</View>
+				<CustomText text={errorPass} style={{color: colors.red, marginLeft: 25}} size={10} />
 
 				<TouchableOpacity style={styles.forgotPass} onPress={onPressForgotPass}>
 					<CustomText text={'Quên mật khẩu?'} size={13} font={FONT_FAMILY.BOLD} style={{textAlign: 'center'}} />

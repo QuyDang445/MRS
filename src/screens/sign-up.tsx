@@ -1,5 +1,5 @@
 import React, {memo, useState} from 'react';
-import {DeviceEventEmitter, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import {DeviceEventEmitter, Image, ScrollView, StyleSheet, TextInput, ToastAndroid, TouchableOpacity, View} from 'react-native';
 import {ICONS, IMAGES} from '../assets/image-paths';
 import CustomButton from '../components/custom-button';
 import CustomCheckbox from '../components/custom-checkbox';
@@ -24,34 +24,62 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 	const [rePass, setRePass] = useState('');
 	const [passwordVisible, setPasswordVisible] = useState(false);
 	const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+	const [errorName, setErrorName] = useState('');
+	const [errorPhone, setErrorPhone] = useState('');
+	const [errorPass, setErrorPass] = useState('');
+	const [errorConfirmPass, setErrorConfirmPass,] = useState('');
+	const phoneRegex = /(0)+([0-9]{9})\b/;
+	
 
 	//const onPressSignUp = () => navigation.replace(ROUTE_KEY.SignUpServices);
 
 	const handleSignUp = async () => {
 		if (!name.trim()) {
-			return showMessage('Thiếu tên');
+			setErrorName('Thiếu tên!');
+			return showMessage('Thiếu tên.');
+		} else {
+			setErrorName('');
 		}
+
 		if (!phone.trim()) {
-			return showMessage('Thiếu số điện thoại');
+			setErrorPhone('Thiếu số điện thoại!');
+			return showMessage('Thiếu số điện thoại.');
+		} else if (phoneRegex.test(phone) == false) {
+			setErrorPhone('Số điện thoại không hợp lệ!');
+			return showMessage('Số điện thoại không hợp lệ.');
+		} else {
+			setErrorPhone('');
 		}
+
 		if (!pass.trim()) {
-			return showMessage('Thiếu mật khẩu');
+			setErrorPass('Thiếu mật khẩu!');
+			return showMessage('Thiếu mật khẩu.');
+		} else {
+			setErrorPass('');
 		}
+
 		if (pass !== rePass) {
-			return showMessage('Mật khẩu nhập lại không đúng');
+			setErrorConfirmPass('Mật khẩu nhập lại không đúng!');
+			return showMessage('Mật khẩu nhập lại không đúng.');
+		} else {
+			setErrorConfirmPass('');
 		}
+
 		if (!isCheck) {
-			return showMessage('Bạn chưa đồng ý điều khoản sử dụng');
+			ToastAndroid.show('Bạn chưa đồng ý điều khoản sử dụng!', ToastAndroid.SHORT);
+			return showMessage('Bạn chưa đồng ý điều khoản sử dụng.');
 		}
 
 		const body = {avatar: '', name: name, password: pass, phone: phone, type: 'USER'};
 		const res = await API.post(TABLE.USERS, body);
 		if (res) {
-			showMessage('Đăng ký tài khoản thành công');
+			showMessage('Đăng ký tài khoản thành công.');
+			ToastAndroid.show('Đăng ký tài khoản thành công!', ToastAndroid.SHORT);
 			DeviceEventEmitter.emit(EMIT_EVENT.DATA_LOGIN, {phone: phone, password: pass});
 			navigation.goBack();
 		} else {
-			showMessage('Đăng ký tài khoản thất bại');
+			showMessage('Đăng ký tài khoản thất bại.');
+			ToastAndroid.show('Đăng ký tài khoản thành công!', ToastAndroid.SHORT);
 		}
 	};
 
@@ -70,6 +98,7 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 						style={styles.inputText}
 					/>
 				</View>
+				<CustomText text={errorName} style={{color: colors.red, marginLeft: 25}} size={10} />
 
 				<View style={styles.input}>
 					<TextInput
@@ -82,6 +111,7 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 						style={styles.inputText}
 					/>
 				</View>
+				<CustomText text={errorPhone} style={{color: colors.red, marginLeft: 25}} size={10} />
 
 				<View style={styles.input}>
 					<TextInput
@@ -96,6 +126,7 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 						<Image source={ICONS.eye} style={styles.eyeIcon} />
 					</TouchableOpacity>
 				</View>
+				<CustomText text={errorPass} style={{color: colors.red, marginLeft: 25}} size={10} />
 
 				<View style={styles.input}>
 					<TextInput
@@ -110,6 +141,7 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 						<Image source={ICONS.eye} style={styles.eyeIcon} />
 					</TouchableOpacity>
 				</View>
+				<CustomText text={errorConfirmPass} style={{color: colors.red, marginLeft: 25}} size={10} />
 
 				<CustomCheckbox
 					onPress={() => setIsCheck(!isCheck)}
