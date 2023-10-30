@@ -38,7 +38,6 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.ForgotPass} component={ForgotPass} />
 			<Screen name={ROUTE_KEY.Otp} component={Otp} />
 			<Screen name={ROUTE_KEY.ChangePasswordForgot} component={ChangePasswordForgot} />
-			<Screen name={ROUTE_KEY.Home} component={Home} />
 		</Navigator>
 	);
 };

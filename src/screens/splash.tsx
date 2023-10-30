@@ -41,14 +41,14 @@ const Splash = (props: RootStackScreenProps<'Splash'>) => {
 	console.log('Userinfo', JSON.stringify(userInfo));
 
 	// const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
-	// const updateTokenDevice = async () => {
-	// 	const userCurrent = await API.get(`${TABLE.USERS}/${userInfo?.id}`);
+	const updateTokenDevice = async () => {
+		const userCurrent = await API.get(`${TABLE.USERS}/${userInfo?.id}`);
 
-	// 	const token = await messaging().getToken();
-	// 	const newUser = await API.put(`${TABLE.USERS}/${userInfo?.id}`, {...userCurrent, tokenDevice: token});
+		const token = await messaging().getToken();
+		const newUser = await API.put(`${TABLE.USERS}/${userInfo?.id}`, {...userCurrent, tokenDevice: token});
 
-	// 	dispatch(updateUserInfo(newUser));
-	// };
+		dispatch(updateUserInfo(newUser));
+	};
 
 	const getNotificationList = async () => {
 		const notificationList: NotificationItemProps[] = await API.get(`${TABLE.NOTIFICATION}`)

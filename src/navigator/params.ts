@@ -16,5 +16,4 @@ export type RootStackScreensParams = {
 	ForgotPass: undefined;
 	Otp: {confirm: FirebaseAuthTypes.ConfirmationResult; userPhone: UserProps};
 	ChangePasswordForgot: {userPhone: UserProps};
-	Home: undefined;
 };
