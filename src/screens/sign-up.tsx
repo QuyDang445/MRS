@@ -1,6 +1,6 @@
 import React, {memo, useState} from 'react';
 import {DeviceEventEmitter, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
-import {IMAGES} from '../assets/image-paths';
+import {ICONS, IMAGES} from '../assets/image-paths';
 import CustomButton from '../components/custom-button';
 import CustomCheckbox from '../components/custom-checkbox';
 import CustomHeader from '../components/custom-header';
@@ -22,6 +22,8 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 	const [phone, setPhone] = useState('');
 	const [pass, setPass] = useState('');
 	const [rePass, setRePass] = useState('');
+	const [passwordVisible, setPasswordVisible] = useState(false);
+	const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
 	//const onPressSignUp = () => navigation.replace(ROUTE_KEY.SignUpServices);
 
@@ -83,24 +85,30 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 
 				<View style={styles.input}>
 					<TextInput
-						secureTextEntry
+						secureTextEntry={!passwordVisible}
 						value={pass}
 						onChangeText={setPass}
 						placeholder="Mật khẩu"
 						placeholderTextColor={colors.grayText}
 						style={styles.inputText}
 					/>
+					<TouchableOpacity style={styles.eyeIcon} onPress={() => setPasswordVisible(!passwordVisible)}>
+						<Image source={ICONS.eye} style={styles.eyeIcon} />
+					</TouchableOpacity>
 				</View>
 
 				<View style={styles.input}>
 					<TextInput
-						secureTextEntry
+						secureTextEntry={!confirmPasswordVisible}
 						value={rePass}
 						onChangeText={setRePass}
 						placeholder="Nhập lại mật khẩu"
 						placeholderTextColor={colors.grayText}
 						style={styles.inputText}
 					/>
+					<TouchableOpacity style={styles.eyeIcon} onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}>
+						<Image source={ICONS.eye} style={styles.eyeIcon} />
+					</TouchableOpacity>
 				</View>
 
 				<CustomCheckbox
@@ -110,7 +118,7 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 					text={'Tôi đồng ý với Điều Khoản Sử Dụng'}				/>
 
 				{/* <TouchableOpacity style={styles.signUp} onPress={onPressSignUp}> */}
-					<CustomText text={'Đăng ký tài dành cho nhà cung cấp dịch vụ?'} size={13} font={FONT_FAMILY.BOLD} style={{ textAlign: 'center' }}/>
+					<CustomText text={'Đăng ký tài dành cho nhà cung cấp dịch vụ?'} size={13} font={FONT_FAMILY.BOLD} style={{ textAlign: 'center', marginTop: 10 }}/>
 				{/* </TouchableOpacity> */}
 
 				<View style={{alignSelf: 'center', marginBottom: heightScale(20)}}>
@@ -152,5 +160,12 @@ const styles = StyleSheet.create({
 		marginHorizontal: widthScale(20),
 		marginTop: heightScale(10),
 		justifyContent: 'center',
+	},
+	eyeIcon: {
+		position: 'absolute',
+		top: heightScale(5),
+		right: widthScale(10),
+		width: 20,
+		height: 30,
 	},
 });

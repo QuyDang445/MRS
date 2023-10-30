@@ -1,5 +1,6 @@
 import React, {memo, useState} from 'react';
-import {DeviceEventEmitter, ScrollView, StyleSheet, TextInput, View} from 'react-native';
+import {DeviceEventEmitter, ScrollView, StyleSheet, TextInput, View, TouchableOpacity, Image} from 'react-native';
+import {ICONS, IMAGES} from '../assets/image-paths';
 import CustomButton from '../components/custom-button';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
@@ -18,6 +19,8 @@ const ChangePasswordForgot = (props: RootStackScreenProps<'ChangePasswordForgot'
 
 	const [newPass, setNewPass] = useState('');
 	const [renewPass, setRenewPass] = useState('');
+	const [newPasswordVisible, setNewPasswordVisible] = useState(false);
+	const [confirmNewPasswordVisible, setConfirmNewPasswordVisible] = useState(false);
 
 	const handleChangePass = async () => {
 		if (newPass !== renewPass) {
@@ -41,9 +44,19 @@ const ChangePasswordForgot = (props: RootStackScreenProps<'ChangePasswordForgot'
 			<CustomHeader title="ĐỔI MẬT KHẨU" />
 			<ScrollView style={styles.view}>
 				<CustomText text={'NHẬP MẬT KHẨU MỚI'} font={FONT_FAMILY.BOLD} size={14} />
-				<TextInput secureTextEntry value={newPass} onChangeText={setNewPass} style={styles.input} />
+				<View>
+					<TextInput secureTextEntry={!newPasswordVisible} value={newPass} onChangeText={setNewPass} style={styles.input} />
+					<TouchableOpacity style={styles.eyeIcon} onPress={() => setNewPasswordVisible(!newPasswordVisible)}>
+						<Image source={ICONS.eye} style={styles.eyeIcon} />
+					</TouchableOpacity>
+				</View>
 				<CustomText text={'NHẬP LẠI MẬT KHẨU MỚI'} font={FONT_FAMILY.BOLD} size={14} />
-				<TextInput secureTextEntry value={renewPass} onChangeText={setRenewPass} style={styles.input} />
+				<View>
+					<TextInput secureTextEntry={!confirmNewPasswordVisible} value={renewPass} onChangeText={setRenewPass} style={styles.input} />
+					<TouchableOpacity style={styles.eyeIcon} onPress={() => setConfirmNewPasswordVisible(!confirmNewPasswordVisible)}>
+						<Image source={ICONS.eye} style={styles.eyeIcon} />
+					</TouchableOpacity>
+				</View>
 			</ScrollView>
 			<View style={{margin: widthScale(20)}}>
 				<CustomButton disabled={!newPass.trim() || !renewPass.trim()} onPress={handleChangePass} text="ĐẶT LẠI MẬT KHẨU" />
@@ -65,5 +78,12 @@ const styles = StyleSheet.create({
 		paddingLeft: widthScale(10),
 		marginTop: heightScale(5),
 		marginBottom: heightScale(20),
+	},
+	eyeIcon: {
+		position: 'absolute',
+		top: heightScale(7),
+		right: widthScale(10),
+		width: 20,
+		height: 30,
 	},
 });

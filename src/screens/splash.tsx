@@ -31,9 +31,9 @@ const Splash = (props: RootStackScreenProps<'Splash'>) => {
 		(async () => {
 			await sleep(2000);
 			if (userInfo) {
-				// 	await updateTokenDevice();
-				// 	navigation.replace(ROUTE_KEY.BottomTab);
-				// } else {
+					await updateTokenDevice();
+					navigation.replace(ROUTE_KEY.Login);
+				} else {
 				navigation.replace(ROUTE_KEY.Login);
 			}
 		})();

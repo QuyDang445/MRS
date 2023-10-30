@@ -1,7 +1,7 @@
 import {CommonActions} from '@react-navigation/native';
 import React, {memo, useEffect, useState} from 'react';
 import {DeviceEventEmitter, Image, ScrollView, StyleSheet, TextInput, ToastAndroid, TouchableOpacity, View} from 'react-native';
-import {IMAGES} from '../assets/image-paths';
+import {ICONS, IMAGES} from '../assets/image-paths';
 import CustomButton from '../components/custom-button';
 import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
@@ -96,17 +96,17 @@ const Login = (props: RootStackScreenProps<'Login'>) => {
 						placeholderTextColor={colors.grayText}
 						style={styles.inputText}
 					/>
-					<TouchableOpacity style={styles.eyeIcon}onPress={() => setPasswordVisible(!passwordVisible)}>
-						<Icon name={passwordVisible ? 'eye' : 'eye-slash'} size={20} color={colors.blackGray}/>
+					<TouchableOpacity style={styles.eyeIcon} onPress={() => setPasswordVisible(!passwordVisible)}>
+						<Image source={ICONS.eye} style={styles.eyeIcon} />
 					</TouchableOpacity>
 				</View>
 
 				<TouchableOpacity style={styles.forgotPass} onPress={onPressForgotPass}>
-					<CustomText text={'Quên mật khẩu?'} size={13} font={FONT_FAMILY.BOLD} style={{ textAlign: 'center' }}/> 
+					<CustomText text={'Quên mật khẩu?'} size={13} font={FONT_FAMILY.BOLD} style={{textAlign: 'center'}} />
 				</TouchableOpacity>
 
 				<TouchableOpacity style={styles.signUp} onPress={onPressSignUp}>
-					<CustomText text={'Đăng ký tài khoản ngay?'} size={13} font={FONT_FAMILY.BOLD} style={{ textAlign: 'center' }}/>
+					<CustomText text={'Đăng ký tài khoản ngay?'} size={13} font={FONT_FAMILY.BOLD} style={{textAlign: 'center'}} />
 				</TouchableOpacity>
 
 				<View style={{alignSelf: 'center'}}>
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
 	},
 	eyeIcon: {
 		position: 'absolute',
-		top: heightScale(12),
+		top: heightScale(5),
 		right: widthScale(10),
 		width: 20,
 		height: 30,
