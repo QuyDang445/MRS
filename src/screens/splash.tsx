@@ -32,9 +32,9 @@ const Splash = (props: RootStackScreenProps<'Splash'>) => {
 			await sleep(2000);
 			if (userInfo) {
 					await updateTokenDevice();
-					navigation.replace(ROUTE_KEY.ChangePassword);
+					navigation.replace(ROUTE_KEY.Order);
 				} else {
-				navigation.replace(ROUTE_KEY.ChangePassword);
+				navigation.replace(ROUTE_KEY.Order);
 			}
 		})();
 	}, []);

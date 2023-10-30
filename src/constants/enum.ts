@@ -19,6 +19,12 @@ export enum TYPE_USER {
 	ADMIN = 'ADMIN',
 	SERVICER = 'SERVICER',
 }
+export enum TYPE_ORDER_SERVICE {
+	OrderPending = 'OrderPending',
+	OrderCanceled = 'OrderCanceled',
+	OrderInProcess = 'OrderInProcess',
+	OrderCompleted = 'OrderCompleted',
+}
 
 export enum TABLE {
 	USERS = 'USERS',

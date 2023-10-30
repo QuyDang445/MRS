@@ -18,4 +18,6 @@ export const ROUTE_KEY = createEnum({
 	DataPrivacy: 'DataPrivacy',
 	FAQs: 'FAQs',
 	Settings: 'Settings',
+	DetailOrder: 'DetailOrder',
+	Order: 'Order',
 });

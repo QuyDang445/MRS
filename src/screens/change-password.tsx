@@ -22,6 +22,10 @@ const ChangePassword = (props: RootStackScreenProps<'ChangePassword'>) => {
 	const [currentPass, setCurrentPass] = useState('');
 	const [newPass, setNewPass] = useState('');
 	const [renewPass, setRenewPass] = useState('');
+	const [passwordVisible, setPasswordVisible] = useState(false);
+	const [newPasswordVisible, setNewPasswordVisible] = useState(false);
+	const [confirmNewPasswordVisible, setConfirmNewPasswordVisible] = useState(false);
+
 
 	const handleChangePass = () => {
 		if (userInfo?.password !== currentPass) {
