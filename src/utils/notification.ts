@@ -25,3 +25,5 @@ export const sendNotificationToDevices = async (token: string, title: string, bo
 		console.error('Error sending notification:', error);
 	}
 };
+// Bắn thông báo cho service khi người dùng đặt hàng thành công.
+export const pushNotificationToServiceNewOrder = (idService: string, idUser: string, idOrder: string) => {};

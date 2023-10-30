@@ -1,115 +1,99 @@
-import React, {memo, useState} from 'react';
-import {FlatList, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import React, {memo, useState, useRef, useEffect} from 'react';
+import {FlatList, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View, RefreshControl} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
 import CustomScrollHorizontal from '../components/home/custom-scroll-horizontal';
 import Star from '../components/star';
-import {FONT_FAMILY} from '../constants/enum';
+import {FONT_FAMILY, TABLE} from '../constants/enum';
 import {ROUTE_KEY} from '../navigator/routers';
 import {RootStackScreenProps} from '../navigator/stacks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
-import {generateRandomId} from '../utils';
-import {ServiceProps} from '../constants/types';
-
-const Categories = [
-	{
-		id: generateRandomId(),
-		name: 'Điện',
-		image: 'https://media.istockphoto.com/id/488310618/vi/vec-to/th%E1%BB%A3-%C4%91i%E1%BB%87n.jpg?s=1024x1024&w=is&k=20&c=0ylzYKN5SBZKPDmCisolukQmudeFwKp0CqoD1zjEygY=',
-	},
-	{
-		id: generateRandomId(),
-		name: 'Điện lạnh',
-		image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmc5INwFivVODAZpPpqhY2dhTEEaoIO5rAcHer0gbP&s',
-	},
-	{
-		id: generateRandomId(),
-		name: 'Điện tử',
-		image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSr_ssRg1VmwVJ2oOsiki6X3A9IkBvAr9kGL0eONMUf&s',
-	},
-	{
-		id: generateRandomId(),
-		name: 'Điện nước',
-		image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2zmLHMDBkeEaUS4fXKE9xOE1_RIAJ2F0G7w7eEwV1NA&s',
-	},
-	{
-		id: generateRandomId(),
-		name: 'IT',
-		image: 'https://top10dongnai.com/wp-content/uploads/2019/12/Vi-t%C3%ADnh-%C4%90%E1%BB%93ng-Nai.jpg',
-	},
-];
-
-const outstandingService: ServiceProps[] = [
-	{
-		id: '',
-		image: 'https://cdn.vietnammoi.vn/171464242508312576/2022/1/4/1-1641288954484112203685.jpg',
-		name: 'dich vụ mua bán',
-		description:
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut',
-		averageRating: 3,
-		serviceProviderName: 'Nguyen Van A',
-		serviceProviderPhoneNumber: '0384756556',
-		serviceProviderPhoneId: 'NgALzZvaK1_xjMDAAb',
-	},
-	
-	{
-		id: '',
-		image: 'https://cdn.vietnammoi.vn/171464242508312576/2022/1/4/1-1641288954484112203685.jpg',
-		name: 'dich vụ mua bán',
-		description:
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut',
-		averageRating: 3,
-		serviceProviderName: 'Nguyen Van A',
-		serviceProviderPhoneNumber: '0384756556',
-		serviceProviderId: 'NgALzZvaK1_xjMDAAb',
-	},
-];
+import {generateRandomId, getServiceAll} from '../utils';
+import {ServiceProps, Category} from '../constants/types';
+import API from '../services/api';
 
 const Home = (props: RootStackScreenProps<'Home'>) => {
 	const {navigation} = props;
 
-	const [filterCategory, setfilterCategory] = useState<string>();
+	const [filterCategory, setFilterCategory] = useState<string>();
+	const [refreshing, setRefreshing] = useState(false);
+	const allServiceRef = useRef<ServiceProps[]>([]);
+	const [outstandingService, setOutstandingService] = useState<ServiceProps[]>([]);
+	const [categories, setCategories] = useState<Category[]>([]);
+	const [serviceAll, setServiceAll] = useState<ServiceProps[]>([]);
 
 	const onFocusSearch = () => {
 		navigation.navigate(ROUTE_KEY.Search);
 	};
-
-	const onServiceDetailClick = (item: any) => {
-		navigation.navigate(ROUTE_KEY.ServiceDetail, {serviceData: item});
+	const onRefresh = async () => {
+		setRefreshing(true);
+		Promise.all([getAllService(), getCategories()]).finally(() => setRefreshing(false));
+	};
+	const getAllService = async () => {
+		const data = await getServiceAll();
+		allServiceRef.current = data;
+		setServiceAll(data);
 	};
 
-	const renderItemCategories = ({item}: any) => {
+	const getCategories = async () => {
+		const data = (await API.get(`${TABLE.CATEGORY}`, true)) as Category[];
+		setCategories(data);
+	};
+	const handleFilterService = (filter?: Category) => {
+		if (filter) {
+			const newData = [];
+
+			for (let i = 0; i < allServiceRef.current.length; i++) {
+				allServiceRef.current[i].category === filter.id && newData.push(allServiceRef.current[i]);
+			}
+
+			setServiceAll(newData);
+		} else {
+			setServiceAll(allServiceRef.current);
+		}
+	};
+	// useEffect(() => {
+	// 	onRefresh();
+	// 	setTimeout(() => {
+	// 		requestGiveNotification();
+	// 	}, 1000);
+	// }, []);
+	const renderItemCategories = ({item}: {item: Category}) => {
 		return (
 			<TouchableOpacity
-				onPress={() => setfilterCategory(item.id)}
+				onPress={() => {
+					setFilterCategory(item);
+					handleFilterService(item);
+				}}
 				style={[
 					styles.itemCategory,
 					{
-						backgroundColor: filterCategory === item.id ? colors.grayLine : `${colors.grayLine}50`,
+						backgroundColor: filterCategory?.id === item.id ? colors.grayLine : `${colors.grayLine}50`,
 					},
 				]}>
-				<Image style={styles.imageCategory} source={{uri: item?.image}} />
+				<Image
+					style={styles.imageCategory}
+					source={{uri: 'https://top10dongnai.com/wp-content/uploads/2019/12/Vi-t%C3%ADnh-%C4%90%E1%BB%93ng-Nai.jpg'}}
+				/>
 				<CustomText style={{width: '100%', textAlign: 'center'}} size={10} text={item?.name} />
 			</TouchableOpacity>
 		);
 	};
-
-	const renderItemOutstandingService = ({item}: any) => {
+	const renderItemOutstandingService = ({item}: {item: ServiceProps}) => {
 		return (
 			<TouchableOpacity
-				onPress={() => {
-					onServiceDetailClick(item);
-				}}>
+				onPress={() => navigation.navigate(ROUTE_KEY.ServiceDetail, {serviceData: item})}
+				style={[styles.itemService, {marginRight: 0}]}>
 				<Image source={{uri: item?.image}} style={styles.imageService} />
 
 				<View style={{flex: 1, padding: widthScale(15)}}>
-					<CustomText text={item?.name} />
-					<Star star={4} />
-					<CustomText text={item?.serviceProviderName} />
-					<CustomText text={item?.serviceProviderPhoneNumber} />
+					<CustomText numberOfLines={1} font={FONT_FAMILY.BOLD} text={item?.name} />
+					<Star star={item.star} />
+					<CustomText text={item.servicerObject.name} />
+					<CustomText text={item.servicerObject.phone} />
 				</View>
 			</TouchableOpacity>
 		);
@@ -118,64 +102,87 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 	return (
 		<FixedContainer>
 			<CustomHeader title="TRANG CHỦ" hideBack />
-			<ScrollView showsVerticalScrollIndicator={false} style={styles.view}>
-				<TouchableOpacity onPress={onFocusSearch} style={styles.viewInput}>
+			<ScrollView
+				refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+				showsVerticalScrollIndicator={false}
+				style={styles.view}>
+				<TouchableOpacity disabled={refreshing} onPress={onFocusSearch} style={styles.viewInput}>
 					<Image source={ICONS.search} style={styles.iconSearch} />
 					<TextInput editable={false} style={styles.input} />
 				</TouchableOpacity>
 
-				<CustomText style={styles.titleList} text={'Dịch vụ nổi bật'} font={FONT_FAMILY.BOLD} />
-				<CustomScrollHorizontal>
-					<FlatList
-						scrollEnabled={false}
-						keyExtractor={generateRandomId}
-						showsHorizontalScrollIndicator={false}
-						horizontal
-						data={outstandingService}
-						renderItem={renderItemOutstandingService}
-					/>
-				</CustomScrollHorizontal>
+				{!!outstandingService.length && (
+					<>
+						<CustomText style={styles.titleList} text={'Dịch vụ nổi bật'} font={FONT_FAMILY.BOLD} />
+						<CustomScrollHorizontal>
+							<FlatList
+								scrollEnabled={false}
+								keyExtractor={generateRandomId}
+								showsHorizontalScrollIndicator={false}
+								horizontal
+								data={outstandingService}
+								renderItem={renderItemOutstandingService}
+							/>
+						</CustomScrollHorizontal>
+					</>
+				)}
+				{!!categories.length && (
+					<>
+						<CustomText style={styles.titleList} text={'Danh mục dịch vụ'} font={FONT_FAMILY.BOLD} />
+						<View style={{flexDirection: 'row'}}>
+							<TouchableOpacity
+								onPress={() => {
+									setFilterCategory(undefined);
+									handleFilterService();
+								}}
+								style={[
+									styles.itemCategory,
+									{
+										backgroundColor: !filterCategory ? colors.grayLine : `${colors.grayLine}50`,
+									},
+								]}>
+								<Image style={styles.imageCategory} source={ICONS.all} />
+								<CustomText style={{width: '100%', textAlign: 'center'}} size={10} text={'Tất cả'} />
+							</TouchableOpacity>
+							<CustomScrollHorizontal style={{flex: 1}}>
+								<FlatList
+									scrollEnabled={false}
+									keyExtractor={generateRandomId}
+									showsHorizontalScrollIndicator={false}
+									horizontal
+									data={categories}
+									renderItem={renderItemCategories}
+								/>
+							</CustomScrollHorizontal>
+						</View>
+					</>
+				)}
 
-				<CustomText style={styles.titleList} text={'Danh mục dịch vụ'} font={FONT_FAMILY.BOLD} />
-				<View style={{flexDirection: 'row'}}>
-					<TouchableOpacity
-						onPress={() => setfilterCategory('ALL')}
-						style={[
-							styles.itemCategory,
-							{
-								backgroundColor: filterCategory === 'ALL' ? colors.grayLine : `${colors.grayLine}50`,
-							},
-						]}>
-						<Image style={styles.imageCategory} source={ICONS.all} />
-						<CustomText style={{width: '100%', textAlign: 'center'}} size={10} text={'Tất cả'} />
-					</TouchableOpacity>
-					<CustomScrollHorizontal style={{flex: 1}}>
-						<FlatList
-							scrollEnabled={false}
-							keyExtractor={generateRandomId}
-							showsHorizontalScrollIndicator={false}
-							horizontal
-							data={Categories}
-							renderItem={renderItemCategories}
-						/>
-					</CustomScrollHorizontal>
-				</View>
-
-				<CustomText style={styles.titleList} text={'Tất cả dịch vụ'} font={FONT_FAMILY.BOLD} />
+				<CustomText
+					style={styles.titleList}
+					text={filterCategory ? `Dịch Vụ ${filterCategory?.name}` : 'Tất cả dịch vụ'}
+					font={FONT_FAMILY.BOLD}
+				/>
 				<FlatList
 					scrollEnabled={false}
 					columnWrapperStyle={{justifyContent: 'space-between', marginBottom: heightScale(20)}}
 					numColumns={2}
 					keyExtractor={generateRandomId}
 					showsHorizontalScrollIndicator={false}
-					data={[...outstandingService, ...outstandingService, ...outstandingService]}
+					data={serviceAll}
 					renderItem={renderItemOutstandingService}
+					ListEmptyComponent={
+						<View style={{marginTop: heightScale(50)}}>
+							<CustomText style={{textAlign: 'center'}} color={colors.grayText} text={'Không có dịch vụ nào'} />
+						</View>
+					}
 				/>
 			</ScrollView>
 		</FixedContainer>
 	);
 };
 
+export default memo(Home);
 const styles = StyleSheet.create({
 	viewInput: {
 		borderRadius: 8,
@@ -219,19 +226,15 @@ const styles = StyleSheet.create({
 		marginRight: widthScale(20),
 	},
 	imageService: {
-		width: widthScale(120),
-		height: widthScale(80),
+		width: '100%',
+		height: widthScale(100),
 		alignSelf: 'center',
-		backgroundColor: 'blue',
-		borderRadius: 5,
-		marginTop: widthScale(15),
 	},
 	itemService: {
 		width: widthScale(150),
-		height: heightScale(220),
 		backgroundColor: `${colors.blackGray}10`,
 		borderRadius: 10,
 		marginRight: widthScale(15),
+		overflow: 'hidden',
 	},
 });
-export default memo(Home);

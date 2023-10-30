@@ -3,12 +3,16 @@ import React, {useState} from 'react';
 import FixedContainer from '../components/fixed-container';
 import CustomHeader from '../components/custom-header';
 import {RootStackScreenProps} from '../navigator/stacks';
-import Filter from '../components/search/filter';
+import Filter,{Sort} from '../components/search/filter';
 import {colors} from '../styles/colors';
 import {ICONS} from '../assets/image-paths';
 import {widthScale} from '../styles/scaling-utils';
-import {FONT_FAMILY} from '../constants/enum';
 
+import {FONT_FAMILY} from '../constants/enum';
+const sort = [
+	{title: 'Đánh giá tăng dần', id: '333', function: (a: any, b: any) => a?.star - b?.star},
+	{title: 'Đánh giá giảm dần', id: '444', function: (a: any, b: any) => b?.star - a?.star},
+];
 const Search = (props: RootStackScreenProps<'Search'>) => {
 	const {navigation} = props;
 
@@ -21,7 +25,8 @@ const Search = (props: RootStackScreenProps<'Search'>) => {
 			<ScrollView showsVerticalScrollIndicator={false} style={styles.view}>
 				<View style={styles.viewInput}>
 					<Image source={ICONS.search} style={styles.iconSearch} />
-					<TextInput autoFocus onChangeText={setTextSearch} style={styles.input} value={textSearch} />
+					<TextInput autoFocus onChangeText={setTextSearch} style={styles.input} value={textSearch} placeholderTextColor={colors.grayText}
+						placeholder="Nhập thông tin cần tìm kiếm" />
 				</View>
 
 				<Filter
@@ -30,7 +35,12 @@ const Search = (props: RootStackScreenProps<'Search'>) => {
 					title="Sắp xếp"
 					filter={['Sắp xếp theo giá', 'Sắp xếp theo đánh giá', 'Sắp xếp theo']}
 				/>
-				{/* <Filter isOn title="Sắp xếp" filter={['Sắp xếp theo giá', 'Sắp xếp theo đánh giá', 'Sắp xếp theo']} /> */}
+				<Filter
+					onPressShow={() => setIsShow(!isShow)}
+					isOn={isShow}
+					title="Lọc"
+					filter={['Sắp xếp theo giá', 'Sắp xếp theo đánh giá', 'Sắp xếp theo']}
+				/>
 			</ScrollView>
 		</FixedContainer>
 	);
@@ -58,5 +68,17 @@ const styles = StyleSheet.create({
 	},
 	view: {
 		marginHorizontal: widthScale(20),
+	},
+	imageService: {
+		width: '100%',
+		height: widthScale(100),
+		alignSelf: 'center',
+	},
+	itemService: {
+		width: widthScale(150),
+		backgroundColor: `${colors.blackGray}10`,
+		borderRadius: 10,
+		marginRight: widthScale(15),
+		overflow: 'hidden',
 	},
 });
