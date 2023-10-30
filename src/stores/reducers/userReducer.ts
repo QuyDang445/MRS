@@ -1,12 +1,15 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {UserProps} from '../../constants/types';
+import {NotificationItemProps, UserProps} from '../../constants/types';
+import {TYPE_USER} from '../../constants/enum';
 
 interface userInfoState {
 	userInfo?: UserProps;
+	notificationList?: NotificationItemProps[];
 }
 
 const initialState: userInfoState = {
 	userInfo: undefined,
+	notificationList: undefined,
 };
 
 const userInfo = createSlice({
@@ -20,9 +23,12 @@ const userInfo = createSlice({
 		updateUserInfo: (state, action: PayloadAction<any>) => {
 			state.userInfo = {...state.userInfo, ...action.payload};
 		},
+		updateNotificationList: (state, action: PayloadAction<any>) => {
+			state.notificationList = action.payload;
+		},
 	},
 });
 
-export const {cacheUserInfo, clearUserData, updateUserInfo} = userInfo.actions;
+export const {cacheUserInfo, clearUserData, updateUserInfo, updateNotificationList} = userInfo.actions;
 const userInfoReducer = userInfo.reducer;
 export default userInfoReducer;

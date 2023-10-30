@@ -6,6 +6,7 @@ import {ICONS} from '../assets/image-paths';
 import FixedContainer from '../components/fixed-container';
 import {WIDTH} from '../constants/constants';
 import {EMIT_EVENT, TYPE_USER} from '../constants/enum';
+import {Home, Order, User, Notification} from '../screens';
 import {clearUserData} from '../stores/reducers/userReducer';
 import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';
@@ -47,4 +48,127 @@ const CusTomTabBar = memo((props: BottomTabBarProps) => {
 	if (isShowKeyBoard) {
 		return <></>;
 	}
+
+	return (
+		<View style={styles.tabBar}>
+			{state.routes.map((r, i) => {
+				const isFocused = state.index === i;
+				const icon = getIcon(i);
+				return (
+					<TouchableOpacity key={JSON.stringify(r)} onPress={() => !isFocused && navigation.navigate(r.name)} style={styles.viewIcon}>
+						<View
+							style={[
+								styles.pressIcon,
+								{
+									backgroundColor: isFocused ? colors.appColor : undefined,
+								},
+							]}>
+							<Image
+								style={[
+									styles.icon,
+									{
+										tintColor: isFocused ? colors.white : colors.black,
+									},
+								]}
+								source={icon}
+								resizeMode={'contain'}
+							/>
+						</View>
+					</TouchableOpacity>
+				);
+			})}
+		</View>
+	);
+});
+
+const BottomTab = (props: RootStackScreenProps<'BottomTab'>) => {
+	const {navigation} = props;
+	const dispatch = useAppDispatch();
+
+	const appState = useRef(AppState.currentState);
+	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
+
+	const renderTabBar = useCallback((props: BottomTabBarProps) => <CusTomTabBar {...props} />, []);
+
+	useEffect(() => {
+		const sub = AppState.addEventListener('change', async nextAppState => {
+			if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+			} else {
+			}
+			appState.current = nextAppState;
+		});
+
+		return () => sub.remove();
+	}, []);
+
+	useEffect(() => {
+		DeviceEventEmitter.addListener(EMIT_EVENT.LOGOUT, logout);
+	}, []);
+
+	const logout = () => {
+		navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.Login}]}));
+		setTimeout(() => {
+			dispatch(clearUserData());
+		}, 600);
+	};
+
+	const HOME = useMemo(() => {
+		switch (userInfo?.type) {
+			case TYPE_USER.USER:
+				return Home;
+			default:
+				return Home;
+		}
+	}, [userInfo]);
+
+	const ORDER = useMemo(() => {
+		switch (userInfo?.type) {
+			case TYPE_USER.USER:
+				return Order;
+			default:
+				return Order;
+		}
+	}, [userInfo]);
+
+	const USER = useMemo(() => {
+		return User;
+	}, [userInfo]);
+
+	return (
+		<FixedContainer>
+			<Tab.Navigator tabBar={renderTabBar} screenOptions={{tabBarShowLabel: false, headerShown: false}}>
+				<Tab.Screen name="Home" component={Home} />
+				<Tab.Screen name="Notification" component={Notification} />
+				<Tab.Screen name="Order" component={Order} />
+				<Tab.Screen name="User" component={User} />
+			</Tab.Navigator>
+		</FixedContainer>
+	);
+};
+
+export default memo(BottomTab);
+const styles = StyleSheet.create({
+	tabBar: {
+		flexDirection: 'row',
+		width: WIDTH,
+		height: heightScale(60),
+		backgroundColor: colors.white,
+		borderTopColor: colors.grayLine,
+		borderTopWidth: 1,
+	},
+	icon: {width: widthScale(25), height: widthScale(25)},
+	viewIcon: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	pressIcon: {
+		width: widthScale(43),
+		height: widthScale(43),
+		paddingHorizontal: widthScale(10),
+		paddingVertical: heightScale(10),
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 100,
+	},
 });

@@ -1,13 +1,19 @@
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import { UserProps } from '../constants/types';
+import {NotificationItemProps, ServiceProps} from '../constants/types';
+import {UserProps} from '../constants/types';
 
 export type RootStackScreensParams = {
 	Splash: undefined;
 	Login: undefined;
 	Onboarding: undefined;
-	SignUp: undefined,
-	SignUpServices: undefined,
-	ForgotPass: undefined,
+	Home: undefined;
+	Search: undefined;
+	ServiceDetail: {serviceData: ServiceProps};
+	NotificationDetail: {notificationData: NotificationItemProps};
+	Notification: undefined;
+	SignUp: undefined;
+	SignUpServices: undefined;
+	ForgotPass: undefined;
 	Otp: {confirm: FirebaseAuthTypes.ConfirmationResult; userPhone: UserProps};
 	ChangePasswordForgot: {userPhone: UserProps};
 	Home: undefined;

@@ -13,7 +13,7 @@ interface Props {
 	rightContent?: JSX.Element;
 }
 const CustomText = (props: Props & TextProps) => {
-	const {text = '', color = colors.black, font = FONT_FAMILY.REGULAR, size = 16, style, rightContent, ...rest} = props;
+	const {text = '', color = colors.black, font = FONT_FAMILY.REGULAR, size = 15, style, rightContent, ...rest} = props;
 
 	return (
 		<Text

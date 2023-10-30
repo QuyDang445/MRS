@@ -1,4 +1,4 @@
-import React, {memo, /*useState*/} from 'react';
+import React, {memo /*useState*/} from 'react';
 import {StyleProp, StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
 import {FONT_FAMILY} from '../constants/enum';
 import {colors} from '../styles/colors';

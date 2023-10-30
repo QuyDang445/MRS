@@ -1,15 +1,14 @@
 import {CardStyleInterpolators, createStackNavigator, StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import React, {memo} from 'react';
 import {StyleSheet} from 'react-native';
+import {Onboarding, Splash, Home, Search, Notification, NotificationDetail, ServiceDetail} from '../screens';
+import BottomTab from './bottom-tab';
 import Login from '../screens/login';
-import Onboarding from '../screens/onboarding';
 import SignUp from '../screens/sign-up';
 import ForgotPass from '../screens/forgot-pass';
 import Otp from '../screens/otp';
-import Home from '../screens/home';
 import ChangePasswordForgot from '../screens/change-password-forgot';
 import SignUpServices from '../screens/sign-up-servives';
-import Splash from '../screens/splash';
 import {RootStackScreensParams} from './params';
 import {ROUTE_KEY} from './routers';
 
@@ -28,7 +27,12 @@ const Stacks = () => {
 			}}>
 			<Screen name={ROUTE_KEY.Splash} component={Splash} />
 			<Screen name={ROUTE_KEY.Onboarding} component={Onboarding} />
-			<Screen name={ROUTE_KEY.Login} component={Login} />
+			<Screen name={ROUTE_KEY.Home} component={Home} />
+			<Screen name={ROUTE_KEY.Search} component={Search} />
+			<Screen name={ROUTE_KEY.Notification} component={Notification} />
+			<Screen name={ROUTE_KEY.NotificationDetail} component={NotificationDetail} />
+			<Screen name={ROUTE_KEY.BottomTab} component={BottomTab} />
+			<Screen name={ROUTE_KEY.ServiceDetail} component={ServiceDetail} />
 			<Screen name={ROUTE_KEY.SignUp} component={SignUp} />
 			<Screen name={ROUTE_KEY.SignUpServices} component={SignUpServices} />
 			<Screen name={ROUTE_KEY.ForgotPass} component={ForgotPass} />
