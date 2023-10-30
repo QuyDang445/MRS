@@ -35,11 +35,25 @@ export interface NotificationItemProps {
 }
 export interface ServiceProps {
 	id: string;
-	image: string;
 	name: string;
+	category: string;
+	servicer: string;
 	description: string;
-	averageRating: number;
-	serviceProviderName: string;
-	serviceProviderPhoneNumber: string;
-	serviceProviderId: string;
+	image: string;
+	categoryObject: {idCategoryService: string; name: string};
+	servicerObject: UserProps;
+	evaluate: EvaluateProps[];
+	star: number;
+}
+export interface EvaluateProps {
+	id: string;
+	id_service: string;
+	star: number;
+	images: string[];
+	user_id: string;
+}
+export interface Category {
+	id: string;
+	name: string;
+	idCategoryService: string;
 }
