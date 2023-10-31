@@ -7,10 +7,11 @@ import {TABLE} from '../constants/enum';
 import {ROUTE_KEY} from '../navigator/routers';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
-import {updateUserInfo} from '../stores/reducers/userReducer';
+import {updateNotificationList, updateUserInfo} from '../stores/reducers/userReducer';
 import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
 import {widthScale} from '../styles/scaling-utils';
 import {sleep} from '../utils/time';
+import {NotificationItemProps} from '../constants/types';
 
 const Splash = (props: RootStackScreenProps<'Splash'>) => {
 	const {navigation} = props;
@@ -22,30 +23,32 @@ const Splash = (props: RootStackScreenProps<'Splash'>) => {
 	// console.log('Userinfo', JSON.stringify(userInfo));
 
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
+
 	const updateTokenDevice = async () => {
 		const userCurrent = await API.get(`${TABLE.USERS}/${userInfo?.id}`);
-		// const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
 
-		const updateTokenDevice = async () => {
-			const userCurrent = await API.get(`${TABLE.USERS}/${userInfo?.id}`);
+		const token = await messaging().getToken();
+		const newUser = await API.put(`${TABLE.USERS}/${userInfo?.id}`, {...userCurrent, tokenDevice: token});
 
-			const token = await messaging().getToken();
-			const newUser = await API.put(`${TABLE.USERS}/${userInfo?.id}`, {...userCurrent, tokenDevice: token});
+		dispatch(updateUserInfo(newUser));
+	};
 
-			dispatch(updateUserInfo(newUser));
-		};
+	const getNotificationList = async () => {
+		console.log('User info: ' + userInfo?.id);
+		await API.get(`${TABLE.NOTIFICATION}`)
+			.then(result => {
+				if (result) {
+					const filterNotification = result.filter(item => item != null && item.userId == userInfo.id);
+					console.log('noti' + JSON.stringify(filterNotification));
 
-		// const getNotificationList = async () => {
-		// 	const notificationList: NotificationItemProps[] = await API.get(`${TABLE.NOTIFICATION}`)
-		// 		.then(result => {
-		// 			const filterNotification = result.filter(item => item != null && item.userId == userInfo.id);
-		// 			dispatch(updateNotificationList(filterNotification));
-		// 		})
-		// 		.catch(error => {
-		// 			console.log(error.message);
-		// 		});
-		// };
-		// dispatch(updateUserInfo(newUser));
+					dispatch(updateNotificationList(filterNotification));
+				}
+			})
+			.catch(error => {
+				console.log(error.message);
+			});
+
+		dispatch(updateUserInfo(userInfo));
 	};
 
 	useEffect(() => {
@@ -56,7 +59,7 @@ const Splash = (props: RootStackScreenProps<'Splash'>) => {
 			const token = await messaging().getToken();
 			console.log('Device token: ', token);
 
-			// await getNotificationList();
+			await getNotificationList();
 
 			if (userInfo) {
 				await updateTokenDevice();

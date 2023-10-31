@@ -10,6 +10,7 @@ import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {ROUTE_KEY} from '../navigator/routers';
+import {clearUserData, updateUserInfo} from '../stores/reducers/userReducer';
 
 const User = (props: RootStackScreenProps<'User'>) => {
 	const {navigation} = props;
@@ -26,7 +27,10 @@ const User = (props: RootStackScreenProps<'User'>) => {
 
 	const onPressFAQs = () => navigation.navigate(ROUTE_KEY.FAQs);
 
-	const onPressLogout = () => DeviceEventEmitter.emit(EMIT_EVENT.LOGOUT);
+	const onPressLogout = () => {
+		DeviceEventEmitter.emit(EMIT_EVENT.LOGOUT);
+		dispatch(clearUserData());
+	};
 
 	const ProfileButton = ({buttonName, onClick}: {buttonName: string; onClick: () => void}) => {
 		return (

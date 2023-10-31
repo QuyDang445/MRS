@@ -49,6 +49,7 @@ export interface EvaluateProps {
 	id: string;
 	id_service: string;
 	star: number;
+	review: string;
 	images: string[];
 	user_id: string;
 }

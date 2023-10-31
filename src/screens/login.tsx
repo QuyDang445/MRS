@@ -7,16 +7,17 @@ import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
 import Spinner from '../components/spinner';
 import {EMIT_EVENT, FONT_FAMILY, TABLE, TYPE_USER} from '../constants/enum';
-import {UserProps} from '../constants/types';
+import {NotificationItemProps, UserProps} from '../constants/types';
 import {ROUTE_KEY} from '../navigator/routers';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
-import {cacheUserInfo} from '../stores/reducers/userReducer';
+import {cacheUserInfo, updateNotificationList, updateUserInfo} from '../stores/reducers/userReducer';
 import {useAppDispatch} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import messaging from '@react-native-firebase/messaging';
 import {showMessage} from '../utils';
+import {string} from 'yup';
 
 const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 	const {navigation} = props;
@@ -40,6 +41,25 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 	const onPressSignUp = () => navigation.navigate(ROUTE_KEY.SignUp);
 
 	const [passwordVisible, setPasswordVisible] = useState(false);
+
+	const getNotificationList = async (user: UserProps) => {
+		console.log('Log notification for user: ' + user?.id);
+		await API.get(`${TABLE.NOTIFICATION}`)
+			.then(result => {
+				if (result) {
+					console.log('Notilist' + JSON.stringify(result));
+
+					const filterNotification = result.filter(item => item != null && item.userId == user.id);
+					console.log('Notilist after filter' + JSON.stringify(filterNotification));
+					dispatch(updateNotificationList(filterNotification));
+				}
+			})
+			.catch(error => {
+				console.log(error.message);
+			});
+
+		dispatch(updateUserInfo(user));
+	};
 
 	const onPressLogin = async () => {
 		if (!phone.trim()) {
@@ -76,7 +96,9 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 				// if (users[i].type === TYPE_USER.SERVICER && !users[i]?.isAccept) {
 				// 	return showMessage('Tài khoản của bạn đang chờ admin sét duyệt');
 				// } else {
+				console.log('user log in: ' + JSON.stringify(newUser));
 				dispatch(cacheUserInfo(newUser));
+				getNotificationList(newUser);
 				return navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.BottomTab}]}));
 				// }
 			}
