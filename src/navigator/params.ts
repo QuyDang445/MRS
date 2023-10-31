@@ -26,6 +26,6 @@ export type RootStackScreensParams = {
 	Privacypolicy: undefined;
 	Termsandconditions: undefined;
 	ChangePassword: undefined;
-	ListAddress: undefined;
+	ListAddress: undefined | {onChoose: (text: string) => void};
 	DetailOrder: {data: OrderProps};
 };

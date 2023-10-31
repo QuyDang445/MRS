@@ -82,10 +82,6 @@ export interface OrderProps {
 	userObject: UserProps;
 	statusCancel: string;
 }
-export interface Category {
-	id: string;
-	name: string;
-	idCategoryService: string;
-}
+
 
 

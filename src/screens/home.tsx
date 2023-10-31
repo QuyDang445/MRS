@@ -19,7 +19,7 @@ import API from '../services/api';
 const Home = (props: RootStackScreenProps<'Home'>) => {
 	const {navigation} = props;
 
-	const [filterCategory, setFilterCategory] = useState<Category>();
+	const [filterCategory, setFilterCategory] = useState<String>();
 	const [refreshing, setRefreshing] = useState(false);
 	const allServiceRef = useRef<ServiceProps[]>([]);
 	const [outstandingService, setOutstandingService] = useState<ServiceProps[]>([]);
