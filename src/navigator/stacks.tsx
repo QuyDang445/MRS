@@ -1,6 +1,6 @@
 import {CardStyleInterpolators, createStackNavigator, StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import React, {memo} from 'react';
-import {StyleSheet} from 'react-native';
+import {Settings, StyleSheet} from 'react-native';
 import {Onboarding, Splash, Home, Search, Notification, NotificationDetail, ServiceDetail, LogIn, ForgotPass, SignUp, Otp} from '../screens';
 import BottomTab from './bottom-tab';
 import ChangePasswordForgot from '../screens/change-password-forgot';
@@ -9,7 +9,13 @@ import {RootStackScreensParams} from './params';
 import {ROUTE_KEY} from './routers';
 import UpdateInformation from '../screens/update-infomation';
 import Booking from '../screens/booking';
-
+import Setting from '../screens/setting';
+import FAQs from '../screens/FAQs';
+import Privacypolicy from '../screens/Privacy policy';
+import Termsandconditions from '../screens/Termsandconditions';
+import ChangePassword from '../screens/change-password';
+import ListAddress from '../screens/list-address';
+import Order from '../screens/order';
 export type RootStackScreens = keyof RootStackScreensParams;
 export type RootStackScreenProps<T extends RootStackScreens> = StackScreenProps<RootStackScreensParams, T>;
 export type UseRootStackNavigation<T extends RootStackScreens = 'Splash'> = StackNavigationProp<RootStackScreensParams, T>;
@@ -39,6 +45,13 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.Otp} component={Otp} />
 			<Screen name={ROUTE_KEY.ChangePasswordForgot} component={ChangePasswordForgot} />
 			<Screen name={ROUTE_KEY.Booking} component={Booking} />
+			<Screen name={ROUTE_KEY.Setting} component={Setting} />
+			<Screen name={ROUTE_KEY.FAQs} component={FAQs} />
+			<Screen name={ROUTE_KEY.Privacypolicy} component={Privacypolicy} />
+			<Screen name={ROUTE_KEY.Termsandconditions} component={Termsandconditions} />
+			<Screen name={ROUTE_KEY.ChangePassword} component={ChangePassword} />
+			<Screen name={ROUTE_KEY.ListAddress} component={ListAddress} />
+			<Screen name={ROUTE_KEY.Order} component={Order} />
 		</Navigator>
 	);
 };

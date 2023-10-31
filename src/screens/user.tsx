@@ -9,7 +9,7 @@ import {RootStackScreenProps} from '../navigator/stacks';
 import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
-import { ROUTE_KEY } from '../navigator/routers';
+import {ROUTE_KEY} from '../navigator/routers';
 
 const User = (props: RootStackScreenProps<'User'>) => {
 	const {navigation} = props;
@@ -18,12 +18,13 @@ const User = (props: RootStackScreenProps<'User'>) => {
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
 
 	const onPressChangePassword = () => console.log('On press change password');
-	const onPressSetting = () => console.log('On press Settings');
-	const onPressTermsAndConditions = () => console.log('On press T&C');
+	const onPressSetting = () => navigation.navigate(ROUTE_KEY.Setting);
+	const onPressTermsAndConditions = () => navigation.navigate(ROUTE_KEY.Termsandconditions);
 	const onPressUpdateInformation = () => navigation.navigate(ROUTE_KEY.UpdateInformation);
 	const onPressListAddress = () => console.log('On press list address');
-	const onPressDataPrivacy = () => console.log('On press data privacy');
-	const onPressFAQs = () => console.log('On press FAQs');
+	const onPressDataPrivacy = () => navigation.navigate(ROUTE_KEY.Privacypolicy);
+
+	const onPressFAQs = () => navigation.navigate(ROUTE_KEY.FAQs);
 
 	const onPressLogout = () => DeviceEventEmitter.emit(EMIT_EVENT.LOGOUT);
 
