@@ -6,9 +6,10 @@ import {PROVINCE} from '../../constants/province';
 //import {AddressProps} from '../../constants/types';
 import {colors} from '../../styles/colors';
 import {heightScale, widthScale} from '../../styles/scaling-utils';
-import {parseObjectToArray} from '../../utils';
+import {parseObjectToArray, showMessage} from '../../utils';
 import CustomButton from '../custom-button';
 import CustomText from '../custom-text';
+import { AddressProps } from '../../constants/types';
 
 export interface ModalObject {
 	show: (data?: any) => void;
@@ -40,20 +41,20 @@ const ModalChooseProvince = forwardRef((props: Props, ref: Ref<ModalObject>) => 
 
 	const address = province ? (district ? (ward ? [] : wardAll) : districtAll) : PROVINCE_ALL;
 
-	// const show = ({address, id, name, phone}: AddressProps) => {
-	// 	setVisible(true);
-	// 	setIdEdit(id);
+	const show = ({address, id, name, phone}: AddressProps) => {
+		setVisible(true);
+		setIdEdit(id);
 
-	// 	if (address) {
-	// 		setFullAddress(address.split(',')[0]);
-	// 		setName(name);
-	// 		setPhone(phone);
+		if (address) {
+			setFullAddress(address.split(',')[0]);
+			setName(name);
+			setPhone(phone);
 
-	// 		setProvince(true);
-	// 		setDistrict(true);
-	// 		setWard({path_with_type: address.replace(address.split(',')[0] + ', ', '')});
-	// 	}
-	// };
+			setProvince(true);
+			setDistrict(true);
+			setWard({path_with_type: address.replace(address.split(',')[0] + ', ', '')});
+		}
+	};
 
 	const hide = () => {
 		setVisible(false);
@@ -69,7 +70,7 @@ const ModalChooseProvince = forwardRef((props: Props, ref: Ref<ModalObject>) => 
 		setWard(undefined);
 	};
 
-	//useImperativeHandle(ref, () => ({show, hide}), []);
+	useImperativeHandle(ref, () => ({show, hide}), []);
 
 	const onPressBack = () => {
 		if (idEdit) {
@@ -104,7 +105,20 @@ const ModalChooseProvince = forwardRef((props: Props, ref: Ref<ModalObject>) => 
 		}
 	};
 
+	const phoneRegex = /(0)+([0-9]{9})\b/;
+	const [errorPhone, setErrorPhone] = useState('');
+
 	const onPressDone = () => {
+		if (!phone.trim()) {
+			setErrorPhone('Thiếu số điện thoại!');
+			return showMessage('Thiếu số điện thoại.');
+		} else if (phoneRegex.test(phone) == false) {
+			setErrorPhone('Số điện thoại không hợp lệ!');
+			return showMessage('Số điện thoại không hợp lệ.');
+		} else {
+			setErrorPhone('');
+		}
+
 		if (idEdit) {
 			onEdit?.(fullAddress + ',' + ' ' + ward?.path_with_type, name, phone, idEdit);
 		} else {
@@ -176,6 +190,7 @@ const ModalChooseProvince = forwardRef((props: Props, ref: Ref<ModalObject>) => 
 													placeholderTextColor={colors.grayText}
 												/>
 											</View>
+											<CustomText text={errorPhone} style={{color: colors.red, marginLeft: 20}} size={10} />
 										</>
 									)}
 								</View>

@@ -17,11 +17,11 @@ const User = (props: RootStackScreenProps<'User'>) => {
 
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
 
-	const onPressChangePassword = () => console.log('On press change password');
+	const onPressChangePassword = () =>  navigation.navigate(ROUTE_KEY.ChangePassword);
 	const onPressSetting = () => navigation.navigate(ROUTE_KEY.Setting);
 	const onPressTermsAndConditions = () => navigation.navigate(ROUTE_KEY.Termsandconditions);
 	const onPressUpdateInformation = () => navigation.navigate(ROUTE_KEY.UpdateInformation);
-	const onPressListAddress = () => console.log('On press list address');
+	const onPressListAddress = () =>  navigation.navigate(ROUTE_KEY.ListAddress);
 	const onPressDataPrivacy = () => navigation.navigate(ROUTE_KEY.Privacypolicy);
 
 	const onPressFAQs = () => navigation.navigate(ROUTE_KEY.FAQs);
