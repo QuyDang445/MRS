@@ -8,9 +8,11 @@ import { colors } from "../../styles/colors";
 //xét thuộc tính Props
 interface Props{
     title: String;
-    filter: String[];
+    filter: Sort[];
     isOn: boolean;
 	onPressShow?: () => void;
+	textButton: string;
+	onPressSort: (data: Sort) => void;
 }
 //xét thuộc tính Sort
 export interface Sort {

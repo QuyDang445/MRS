@@ -1,13 +1,13 @@
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {NotificationItemProps, OrderProps, ServiceProps} from '../constants/types';
-import {UserProps} from '../constants/types';
+import {NotificationItemProps, OrderProps, ServiceProps ,Category,UserProps} from '../constants/types';
+
 
 export type RootStackScreensParams = {
 	Splash: undefined;
 	LogIn: undefined;
 	Onboarding: undefined;
 	Home: undefined;
-	Search: undefined;
+	Search:  {data: ServiceProps[]; categories: Category[]};
 	ServiceDetail: {serviceData: ServiceProps};
 	NotificationDetail: {notificationData: NotificationItemProps};
 	Notification: undefined;
@@ -26,6 +26,6 @@ export type RootStackScreensParams = {
 	Privacypolicy: undefined;
 	Termsandconditions: undefined;
 	ChangePassword: undefined;
-	ListAddress: undefined;
+	ListAddress: undefined | {onChoose: (text: string) => void};
 	DetailOrder: {data: OrderProps};
 };
