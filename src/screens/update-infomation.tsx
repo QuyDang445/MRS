@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {ActivityIndicator, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View, ToastAndroid} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import CustomButton from '../components/custom-button';
 import CustomHeader from '../components/custom-header';
@@ -58,8 +58,10 @@ const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => 
 		if (res) {
 			dispatch(cacheUserInfo(res));
 			showMessage('Đã lưu thành công');
+			ToastAndroid.show('Lưu thông tin thành công', ToastAndroid.SHORT);
 		} else {
 			showMessage('Lưu thông tin thất bại');
+		
 		}
 	};
 

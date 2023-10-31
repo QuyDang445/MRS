@@ -79,7 +79,7 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 			navigation.goBack();
 		} else {
 			showMessage('Đăng ký tài khoản thất bại.');
-			ToastAndroid.show('Đăng ký tài khoản thành công!', ToastAndroid.SHORT);
+			ToastAndroid.show('Đăng ký tài khoản không thành công!', ToastAndroid.SHORT);
 		}
 	};
 

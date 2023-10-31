@@ -27,7 +27,7 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 	const [serviceAll, setServiceAll] = useState<ServiceProps[]>([]);
 
 	const onFocusSearch = () => {
-		navigation.navigate(ROUTE_KEY.Search);
+		navigation.navigate(ROUTE_KEY.Search, {data: allServiceRef.current, categories: categories});
 	};
 	const onRefresh = async () => {
 		setRefreshing(true);
