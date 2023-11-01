@@ -29,4 +29,5 @@ export type RootStackScreensParams = {
 	ListAddress: undefined | {onChoose: (text: string) => void};
 	DetailOrder: {data: OrderProps};
 	InfoServicer: {idServicer: string};
+	Listblock: undefined;
 };

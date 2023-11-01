@@ -24,7 +24,7 @@ const User = (props: RootStackScreenProps<'User'>) => {
 	const onPressListAddress = () => navigation.navigate(ROUTE_KEY.ListAddress);
 	const onPressDataPrivacy = () => navigation.navigate(ROUTE_KEY.Privacypolicy);
 	const onPressServiceFree = () => console.log('onPressservicefree');
-	const onPressserListBlock = () => console.log('onPressserListBlock');
+	const onPressserListBlock = () => navigation.navigate(ROUTE_KEY.Listblock);
 	const onPressFAQs = () => navigation.navigate(ROUTE_KEY.FAQs);
 
 	const onPressLogout = () => DeviceEventEmitter.emit(EMIT_EVENT.LOGOUT);
