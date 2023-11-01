@@ -4,7 +4,7 @@ import {ICONS} from '../assets/image-paths';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
-import {EMIT_EVENT, FONT_FAMILY} from '../constants/enum';
+import {EMIT_EVENT, FONT_FAMILY,TYPE_USER} from '../constants/enum';
 import {RootStackScreenProps} from '../navigator/stacks';
 import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';
@@ -23,7 +23,8 @@ const User = (props: RootStackScreenProps<'User'>) => {
 	const onPressUpdateInformation = () => navigation.navigate(ROUTE_KEY.UpdateInformation);
 	const onPressListAddress = () => navigation.navigate(ROUTE_KEY.ListAddress);
 	const onPressDataPrivacy = () => navigation.navigate(ROUTE_KEY.Privacypolicy);
-
+	const onPressServiceFree = () => console.log('onPressservicefree');
+	const onPressserListBlock = () => console.log('onPressserListBlock');
 	const onPressFAQs = () => navigation.navigate(ROUTE_KEY.FAQs);
 
 	const onPressLogout = () => DeviceEventEmitter.emit(EMIT_EVENT.LOGOUT);
@@ -42,15 +43,31 @@ const User = (props: RootStackScreenProps<'User'>) => {
 		<FixedContainer>
 			<CustomHeader title="Hồ Sơ" hideBack />
 			{/* Avatar  */}
-			<Image style={styles.avatar} source={userInfo?.avatar ? {uri: userInfo?.avatar} : ICONS.user_default_avatar} />
+			<Image style={styles.avatar} source={userInfo?.avatar ? {uri: userInfo?.avatar} : ICONS.user} />
 
 			<CustomText text={userInfo?.name} font={FONT_FAMILY.BOLD} style={{textAlign: 'center'}} />
+			{userInfo?.type === TYPE_USER.SERVICER && (
 			<View style={styles.viewContent}>
-				<CustomText text={'QUẢN LÝ TÀI KHOẢN:'} font={FONT_FAMILY.BOLD} size={15} />
+				<CustomText text={'Trạng thái hoạt động'} font={FONT_FAMILY.BOLD} size={15} />
+			</View>
+			)}
+			<View style={styles.viewContent}>
+				<CustomText text={'QUẢN LÝ TÀI KHOẢN'} font={FONT_FAMILY.BOLD} size={15} />
 				<ProfileButton buttonName="Cập nhật thông tin" onClick={onPressUpdateInformation} />
-				<ProfileButton buttonName="Địa chỉ" onClick={onPressListAddress} />
+				{userInfo?.type === TYPE_USER.USER && (
+					<ProfileButton buttonName="Địa chỉ" onClick={onPressListAddress} />
+				)}
+				
 				<ProfileButton buttonName="Đổi mật khẩu" onClick={onPressChangePassword} />
 			</View>
+			{userInfo?.type === TYPE_USER.SERVICER && (
+			<View style={styles.viewContent}>
+				<CustomText text={'Dịch Vụ'} font={FONT_FAMILY.BOLD} size={15} />
+				<ProfileButton buttonName="Phí Dịch Vụ" onClick={onPressServiceFree} />
+				<ProfileButton buttonName="Danh sách chặn" onClick={onPressserListBlock} />
+				
+			</View>
+			)}
 			<View style={styles.viewContent}>
 				<CustomText text={'THÔNG TIN KHÁC'} font={FONT_FAMILY.BOLD} size={14} />
 				<ProfileButton buttonName="Quy định điều khoản" onClick={onPressTermsAndConditions} />
