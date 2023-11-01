@@ -4,7 +4,8 @@ import { ICONS } from "../../assets/image-paths";
 import { heightScale,widthScale } from "../../styles/scaling-utils";
 import CustomText from "../custom-text";
 import { colors } from "../../styles/colors";
-
+import {FONT_FAMILY} from '../../constants/enum';
+import {generateRandomId} from '../../utils';
 //xét thuộc tính Props
 interface Props{
     title: String;
@@ -22,15 +23,32 @@ export interface Sort {
 	name?: string;
 }
 const Filter = (props: Props) =>{
-    const {title, filter, isOn, onPressShow} = props;
+    const {title, filter, isOn, onPressShow,textButton, onPressSort} = props;
     const rotateAnim = useState(new Animated.Value(0))[0];
+	const dropdownHeight = useState(new Animated.Value(0))[0];
     const interpolatedRotateAnimation = rotateAnim.interpolate({inputRange: [0, 1], outputRange: ['0deg', '180deg']});
+	useEffect(() => {
+		onRunAnimation(isOn);
+	}, [isOn]);
+	const onRunAnimation = (isOnNew: boolean) => {
+		Animated.timing(dropdownHeight, {
+			toValue: isOnNew ? filter.length * heightScale(40) : 0,
+			duration: 200,
+			useNativeDriver: false,
+		}).start();
+
+		Animated.timing(rotateAnim, {
+			toValue: isOnNew ? 1 : 0,
+			duration: 200,
+			useNativeDriver: true,
+		}).start();
+	};
     return (
 		<>
 			<View style={styles.view}>
-				<CustomText text={title} />
+				<CustomText font={FONT_FAMILY.BOLD} text={title} />
 				<TouchableOpacity onPress={onPressShow} style={styles.button}>
-					<CustomText text={title} />
+					<CustomText text={textButton} />
 					<Animated.Image
 						source={ICONS.bottom}
 						style={[
@@ -43,16 +61,16 @@ const Filter = (props: Props) =>{
 				</TouchableOpacity>
 			</View>
 
-			<Animated.View style={[styles.viewBottom, {height: 123, overflow: 'hidden'}]}>
+			<Animated.View style={[styles.viewBottom, {height: dropdownHeight, overflow: 'hidden'}]}>
 				{filter.map(item => (
-					<TouchableOpacity style={styles.viewItem}>
-						<CustomText text={item} />
+					<TouchableOpacity onPress={() => onPressSort(item)} key={generateRandomId()} style={styles.viewItem}>
+						<CustomText text={item?.title || item?.name} />
 					</TouchableOpacity>
 				))}
 			</Animated.View>
 		</>
 	);
-}
+};
 export default memo(Filter);
 
 const styles = StyleSheet.create({
