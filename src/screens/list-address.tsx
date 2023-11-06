@@ -17,7 +17,9 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo} from '../utils';
 
 const ListAddress = (props: RootStackScreenProps<'ListAddress'>) => {
-	const {navigation} = props;
+	const {navigation, route} = props;
+	const onChooseAddress = route.params?.onChoose;
+
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
 
 	const modalChooseProvinceRef = useRef<ModalObject>(null);
@@ -69,23 +71,34 @@ const ListAddress = (props: RootStackScreenProps<'ListAddress'>) => {
 				refreshing={refreshing}
 				onRefresh={onRefresh}
 				renderItem={({item}) => (
-					<View style={styles.item}>
+					<TouchableOpacity
+						onPress={() => {
+							onChooseAddress?.(item.address);
+							navigation.goBack();
+						}}
+						disabled={!onChooseAddress}
+						style={styles.item}>
 						<View style={{width: widthScale(280), paddingVertical: heightScale(10), paddingLeft: widthScale(10)}}>
 							<CustomText text={`Họ tên: ${item.name}`} />
 							<CustomText text={`Số điện thoại: ${item.phone}`} />
 							<CustomText text={`Địa chỉ: ${item.address}`} />
 						</View>
-						<View style={{flex: 1}}>
-							<TouchableOpacity onPress={() => handleDeleteAddress(item.id)} style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-								<Image style={styles.icon} source={ICONS.delete} />
-							</TouchableOpacity>
-							<TouchableOpacity
-								onPress={() => modalChooseProvinceRef.current?.show(item)}
-								style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-								<Image style={styles.icon} source={ICONS.edit} />
-							</TouchableOpacity>
-						</View>
-					</View>
+
+						{!onChooseAddress && (
+							<View style={{flex: 1}}>
+								<TouchableOpacity
+									onPress={() => handleDeleteAddress(item.id)}
+									style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+									<Image style={styles.icon} source={ICONS.delete} />
+								</TouchableOpacity>
+								<TouchableOpacity
+									onPress={() => modalChooseProvinceRef.current?.show(item)}
+									style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+									<Image style={styles.icon} source={ICONS.edit} />
+								</TouchableOpacity>
+							</View>
+						)}
+					</TouchableOpacity>
 				)}
 				ListEmptyComponent={
 					<View style={{alignItems: 'center', marginTop: heightScale(20)}}>
@@ -95,9 +108,12 @@ const ListAddress = (props: RootStackScreenProps<'ListAddress'>) => {
 				contentContainerStyle={styles.view}
 				data={data}
 			/>
-			<View style={{padding: widthScale(20)}}>
-				<CustomButton onPress={onPressAddAddress} text="THÊM ĐỊA CHỈ" />
-			</View>
+			{!onChooseAddress && (
+				<View style={{padding: widthScale(20)}}>
+					<CustomButton onPress={onPressAddAddress} text="THÊM ĐỊA CHỈ" />
+				</View>
+			)}
+
 			<ModalChooseProvince onEdit={handleEditAddress} isInputName ref={modalChooseProvinceRef} onPressSave={handleAddAddress} />
 		</FixedContainer>
 	);

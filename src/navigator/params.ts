@@ -28,4 +28,6 @@ export type RootStackScreensParams = {
 	ChangePassword: undefined;
 	ListAddress: undefined | {onChoose: (text: string) => void};
 	DetailOrder: {data: OrderProps};
+	InfoServicer: {idServicer: string};
+	Listblock: undefined;
 };

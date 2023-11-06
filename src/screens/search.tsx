@@ -29,11 +29,11 @@ const Search = (props: RootStackScreenProps<'Search'>) => {
 	const [serviceAll, setServiceAll] = useState<ServiceProps[]>(route.params.data);
 	const [refreshing, setRefreshing] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [sortData, setSortData] = useState('');
+	const [sortData, setSortData] = useState<Sort>();
 
-	const [filter, setFilter] = useState('');
+	const [filter, setFilter] = useState<Sort[]>([]);
 	const [isShowFilter, setIsShowFilter] = useState(false);
-
+	const [filterData, setFilterData] = useState<Sort>();
 
 	const allServiceRef = useRef<ServiceProps[]>(route.params.data);
 
@@ -48,6 +48,28 @@ const Search = (props: RootStackScreenProps<'Search'>) => {
 		const data = await getServiceAll();
 		allServiceRef.current = data;
 		setRefreshing(false);
+	};
+	const onPressFilter = (data: Sort) => {
+		setFilterData(data);
+		setIsShowFilter(false);
+
+		if (data.id === 'ALL') {
+			return setServiceAll(allServiceRef.current);
+		}
+
+		const newData = [];
+		for (let i = 0; i < allServiceRef.current.length; i++) {
+			if (allServiceRef.current[i].category === data.id) {
+				newData.push(allServiceRef.current[i]);
+			}
+		}
+		setServiceAll(newData);
+	};
+	const onPressSort = (data: Sort) => {
+		setSortData(data);
+		setIsShow(false);
+		const newData = [...allServiceRef.current];
+		setServiceAll(newData.sort(data.function));
 	};
 	
 	const onSearch = (text: string) => {
@@ -100,19 +122,22 @@ const Search = (props: RootStackScreenProps<'Search'>) => {
 				</View>
 
 				<Filter
+					onPressSort={onPressSort}
 					onPressShow={() => setIsShow(!isShow)}
 					isOn={isShow}
 					title="SẮP XẾP"
-					filter={['Sắp xếp theo giá', 'Sắp xếp theo đánh giá', 'Sắp xếp theo']}
+					textButton={sortData?.title!}
+					filter={sort}
 				/>
 
 				<Filter
+					onPressSort={onPressFilter}
 					onPressShow={() => setIsShowFilter(!isShowFilter)}
 					isOn={isShowFilter}
 					title="LỌC"
-					filter={['Sắp xếp theo giá', 'Sắp xếp theo đánh giá', 'Sắp xếp theo']}
+					textButton={filterData?.name!}
+					filter={filter}
 				/>
-
 				{loading ? (
 					<View style={{width: '100%', height: heightScale(200), justifyContent: 'center', alignItems: 'center'}}>
 						<ActivityIndicator />

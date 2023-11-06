@@ -10,46 +10,36 @@ const API_AXIOS = initializeAxios();
 API_AXIOS.interceptors.response.use(response => response.data);
 
 const API = {
-	get: async (url: string, isParseArray?: boolean) => {
+	get: async (url: string, isParseArray?: boolean, isNoLogAPI?: boolean) => {
 		try {
-			logAPI('GET', url);
+			!isNoLogAPI && logAPI('GET', url);
 			const data = await API_AXIOS.get(url + '.json');
-			return isParseArray ? parseObjectToArray(data) : data;
+			return (isParseArray ? parseObjectToArray(data) : data) as any;
 		} catch (error) {
 			console.error(error);
-			return isParseArray ? [] : undefined;
+			return (isParseArray ? [] : undefined) as any;
 		}
 	},
 
-	post: async (url: string, data?: any, isParseArray?: boolean) => {
+	post: async (url: string, data?: any, isParseArray?: boolean, isNoLogAPI?: boolean) => {
 		try {
-			logAPI('POST', url, data);
+			!isNoLogAPI && logAPI('POST', url, data);
 			const res = await API_AXIOS.post(url + '.json', data);
-			return isParseArray ? parseObjectToArray(res) : res;
+			return (isParseArray ? parseObjectToArray(res) : res) as any;
 		} catch (error) {
 			console.error(error);
-			return isParseArray ? [] : undefined;
+			return (isParseArray ? [] : undefined) as any;
 		}
 	},
 
-	put: async (url: string, data?: any, isParseArray?: boolean) => {
+	put: async (url: string, data?: any, isParseArray?: boolean, isNoLogAPI?: boolean) => {
 		try {
-			logAPI('PUT', url, data);
+			!isNoLogAPI && logAPI('PUT', url, data);
 			const res = await API_AXIOS.put(url + '.json', data);
-			return isParseArray ? parseObjectToArray(res) : res;
+			return (isParseArray ? parseObjectToArray(res) : res) as any;
 		} catch (error) {
 			console.error(error);
-			return isParseArray ? [] : undefined;
-		}
-	},
-	delete: async (url: string, data?: any, isParseArray?: boolean) => {
-		try {
-			logAPI('DELETE', url, data);
-			const res = await API_AXIOS.delete(url + '.json', data);
-			return isParseArray ? parseObjectToArray(res) : res;
-		} catch (error) {
-			console.error(error);
-			return isParseArray ? [] : undefined;
+			return (isParseArray ? [] : undefined) as any;
 		}
 	},
 };
