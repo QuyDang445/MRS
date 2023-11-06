@@ -38,7 +38,6 @@ export enum TABLE {
 	EVALUATE = 'EVALUATE',
 }
 
-
 export enum TYPE_BLOCK_SERVICER {
 	ReportedManyTimes = 'ReportedManyTimes',
 	LatePaymentOfFees = 'LatePaymentOfFees',
