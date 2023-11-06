@@ -82,6 +82,11 @@ export interface OrderProps {
 	userObject: UserProps;
 	statusCancel: string;
 }
+export interface ServicerBlockUser {
+	idServicer: string;
+	phone: string;
+	id: string;
+}
 
 
 

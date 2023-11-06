@@ -2,7 +2,7 @@ import {Alert, Linking, PermissionsAndroid, ToastAndroid} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {PERMISSIONS, request} from 'react-native-permissions';
 import API from '../services/api';
-import {EvaluateProps, ServiceProps} from '../constants/types';
+import {EvaluateProps, ServiceProps, UserProps} from '../constants/types';
 import {TABLE, TYPE_ORDER_SERVICE, TYPE_USER} from '../constants/enum';
 import {colors} from '../styles/colors';
 
@@ -70,6 +70,7 @@ export const requestLocationPermission = () => {
 		}
 	});
 };
+
 export const getLocationMyDevice = async () => {
 	try {
 		const check = await requestLocationPermission();
@@ -78,6 +79,7 @@ export const getLocationMyDevice = async () => {
 		}
 	} catch (error) {}
 };
+
 export const getMyLocation = () =>
 	new Promise((resolve, reject) =>
 		Geolocation.getCurrentPosition(
@@ -96,7 +98,17 @@ export const generateRandomId = () => {
 		return v.toString(16);
 	});
 };
+export const getServicerALl = async () => {
+	const data = (await API.get(`${TABLE.USERS}`, true)) as UserProps[];
+	const newData = [];
 
+	for (let i = 0; i < data.length; i++) {
+		if (data[i].type === TYPE_USER.SERVICER) {
+			newData.push(data[i]);
+		}
+	}
+	return newData;
+};
 export const getStatusOrder = (status: TYPE_ORDER_SERVICE) => {
 	switch (status) {
 		case TYPE_ORDER_SERVICE.OrderPending:

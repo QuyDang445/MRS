@@ -1,5 +1,5 @@
-import React, {memo} from 'react';
-import {DeviceEventEmitter, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {memo,useState} from 'react';
+import {DeviceEventEmitter, Image, StyleSheet, TouchableOpacity, View, Switch} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
@@ -27,6 +27,9 @@ const User = (props: RootStackScreenProps<'User'>) => {
 	const onPressserListBlock = () => navigation.navigate(ROUTE_KEY.Listblock);
 	const onPressFAQs = () => navigation.navigate(ROUTE_KEY.FAQs);
 
+	const [isEnabled, setIsEnabled] = useState(false);
+	const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
 	const onPressLogout = () => DeviceEventEmitter.emit(EMIT_EVENT.LOGOUT);
 
 	const ProfileButton = ({buttonName, onClick}: {buttonName: string; onClick: () => void}) => {
@@ -48,7 +51,18 @@ const User = (props: RootStackScreenProps<'User'>) => {
 			<CustomText text={userInfo?.name} font={FONT_FAMILY.BOLD} style={{textAlign: 'center'}} />
 			{userInfo?.type === TYPE_USER.SERVICER && (
 			<View style={styles.viewContent}>
-				<CustomText text={'Trạng thái hoạt động'} font={FONT_FAMILY.BOLD} size={15} />
+				
+				<CustomText text={'TRẠNG THÁI HOẠT ĐỘNG'} font={FONT_FAMILY.BOLD} size={15} />
+				<Switch
+       			 trackColor={{false: '#767577', true: '#81b0ff'}}
+        			thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+        			ios_backgroundColor="#3e3e3e"
+        			onValueChange={toggleSwitch}
+        			value={isEnabled}
+     			 />
+			
+				
+
 			</View>
 			)}
 			<View style={styles.viewContent}>
@@ -95,6 +109,8 @@ const styles = StyleSheet.create({
 	viewContent: {
 		paddingHorizontal: widthScale(20),
 		marginTop: heightScale(20),
+		
+
 	},
 	button: {
 		height: heightScale(40),
@@ -103,4 +119,5 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 		borderBottomColor: colors.grayLine,
 	},
+	
 });
