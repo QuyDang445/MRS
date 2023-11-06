@@ -51,6 +51,8 @@ export interface EvaluateProps {
 	star: number;
 	images: string[];
 	user_id: string;
+	userObject?: UserProps;
+	content?: string;
 }
 export interface Category {
 	id: string;
