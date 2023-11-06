@@ -15,7 +15,6 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {generateRandomId, getServiceAll} from '../utils';
 import {ServiceProps, Category} from '../constants/types';
 import API from '../services/api';
-import notifee from '@notifee/react-native';
 
 const Home = (props: RootStackScreenProps<'Home'>) => {
 	const {navigation} = props;

@@ -21,7 +21,6 @@ export enum TYPE_USER {
 	SERVICER = 'SERVICER',
 }
 
-
 export enum TABLE {
 	USERS = 'USERS',
 	ADDRESS = 'ADDRESS',
@@ -39,4 +38,11 @@ export enum TYPE_BLOCK_SERVICER {
 	LatePaymentOfFees = 'LatePaymentOfFees',
 	Other = 'Other',
 	ThereIsUnusualSpamBehavior = 'ThereIsUnusualSpamBehavior',
+}
+
+export enum TYPE_ORDER_SERVICE {
+	OrderPending = 'OrderPending',
+	OrderCanceled = 'OrderCanceled',
+	OrderInProcess = 'OrderInProcess',
+	OrderCompleted = 'OrderCompleted',
 }

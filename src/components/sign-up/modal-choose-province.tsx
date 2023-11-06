@@ -9,7 +9,6 @@ import {heightScale, widthScale} from '../../styles/scaling-utils';
 import {parseObjectToArray, showMessage} from '../../utils';
 import CustomButton from '../custom-button';
 import CustomText from '../custom-text';
-import { AddressProps } from '../../constants/types';
 
 export interface ModalObject {
 	show: (data?: any) => void;
