@@ -1,12 +1,18 @@
 import {BottomTabBarProps, createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CommonActions} from '@react-navigation/native';
 import React, {memo, useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {AppState, DeviceEventEmitter, Image, Keyboard, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {AppState, DeviceEventEmitter, Image, Keyboard, StyleSheet, ToastAndroid, TouchableOpacity, View} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import FixedContainer from '../components/fixed-container';
 import {WIDTH} from '../constants/constants';
-import {EMIT_EVENT, TYPE_USER} from '../constants/enum';
-import {Home, Order, User, Notification} from '../screens';
+import {EMIT_EVENT, TABLE, TYPE_USER} from '../constants/enum';
+import {UserProps} from '../constants/types';
+import Home from '../screens/home';
+import HomeServicer from '../screens/home-servicer';
+import Notification from '../screens/notification';
+import Order from '../screens/order';
+import User from '../screens/user';
+import API from '../services/api';
 import {clearUserData} from '../stores/reducers/userReducer';
 import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';
@@ -14,6 +20,11 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {RootStackScreensParams} from './params';
 import {ROUTE_KEY} from './routers';
 import {RootStackScreenProps} from './stacks';
+import notifee, {AndroidImportance, EventType} from '@notifee/react-native';
+import messaging from '@react-native-firebase/messaging';
+import Logger from '../utils/logger';
+import CustomText from '../components/custom-text';
+import {sendNotificationToDevices} from '../utils/notification';
 
 const Tab = createBottomTabNavigator<RootStackScreensParams>();
 
@@ -105,8 +116,11 @@ const BottomTab = (props: RootStackScreenProps<'BottomTab'>) => {
 		DeviceEventEmitter.addListener(EMIT_EVENT.LOGOUT, logout);
 	}, []);
 
-	const logout = () => {
+
+	const logout = async () => {
 		navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.LogIn}]}));
+		await API.put(`${TABLE.USERS}/${userInfo?.id}`, {...userInfo, tokenDevice: ''});
+
 		setTimeout(() => {
 			dispatch(clearUserData());
 		}, 600);
@@ -117,7 +131,7 @@ const BottomTab = (props: RootStackScreenProps<'BottomTab'>) => {
 			case TYPE_USER.USER:
 				return Home;
 			default:
-				return Home;
+				return HomeServicer;
 		}
 	}, [userInfo]);
 
@@ -126,21 +140,24 @@ const BottomTab = (props: RootStackScreenProps<'BottomTab'>) => {
 			case TYPE_USER.USER:
 				return Order;
 			default:
-				return Order;
+				return Notification;
 		}
 	}, [userInfo]);
 
 	const USER = useMemo(() => {
-		return User;
+		switch (userInfo?.type) {
+			default:
+				return User;
+		}
 	}, [userInfo]);
 
 	return (
 		<FixedContainer>
 			<Tab.Navigator tabBar={renderTabBar} screenOptions={{tabBarShowLabel: false, headerShown: false}}>
-				<Tab.Screen name="Home" component={Home} />
+				<Tab.Screen name="Home" component={HOME} />
 				<Tab.Screen name="Notification" component={Notification} />
-				<Tab.Screen name="Order" component={Order} />
-				<Tab.Screen name="User" component={User} />
+				<Tab.Screen name="Order" component={ORDER} />
+				<Tab.Screen name="User" component={USER} />
 			</Tab.Navigator>
 		</FixedContainer>
 	);

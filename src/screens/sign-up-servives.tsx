@@ -23,11 +23,20 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 
 	const modalChooseProvinceRef = useRef<ModalObject>(null);
 	const innerRefFormik = useRef<FormikProps<any>>(null);
-
+	const phoneRegex = /^0[0-9]{9}$/;
+	const cccdRegex = /[0-9]{12}$/;
+	const phoneInputRef = useRef<TextInput>(null);
+	//const phone = phoneInputRef.current?.state?.values;
+	// const users = (await API.get(TABLE.USERS, true)) as UserProps[];
+	// 	let check = false; // 	for (let i = 0; i < users.length; i++) {
+		// 		if (users[i].phone === phone) {
+			// 			check = true;
+			// 		}
+			// 	}		
 	const SignUpSchema = Yup.object().shape({
 		name: Yup.string().required('Thiếu tên'),
-		phone: Yup.string().required('Thiếu số điện thoại'),
-		cccd: Yup.string().required('Thiếu căn cước công dân'),
+		phone: Yup.string().matches(phoneRegex, 'Số điện thoại không hợp lệ!').required('Thiếu số điện thoại'),
+		cccd: Yup.string().matches(cccdRegex, 'Số căn cước công dân không hợp lệ!').required('Thiếu căn cước công dân'),
 		image: Yup.string().required('Thiếu hình ảnh căn cước công dân'),
 		address: Yup.string().required('Thiếu địa chỉ'),
 		pass: Yup.string().required('Thiếu mật khẩu'),
@@ -54,10 +63,11 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 				CCCD: {id: value.cccd, image: imageCccd},
 				address: value.address,
 				password: value.pass,
-				avatar: '',
+				avatar: 'https://assets.stickpng.com/images/585e4bcdcb11b227491c3396.png',
 				type: TYPE_USER.SERVICER,
 				isBlocked: false,
 				isAccept: false,
+				dateRegister: new Date().valueOf(),
 			};
 			const res = await API.post(`${TABLE.USERS}`, body);
 			if (res) {
@@ -111,6 +121,8 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 								<View style={styles.input}>
 									<TextInput
 										value={values.cccd}
+										maxLength={12}
+										keyboardType={'numeric'}
 										onChangeText={handleChange('cccd')}
 										placeholder="Căn cước công dân"
 										placeholderTextColor={colors.grayText}
@@ -232,6 +244,7 @@ const styles = StyleSheet.create({
 	viewCheck: {
 		marginHorizontal: widthScale(20),
 		marginTop: heightScale(10),
+		justifyContent: 'center',
 	},
 	button: {
 		width: widthScale(150),
