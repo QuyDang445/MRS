@@ -218,3 +218,39 @@ export const getOrderAllFromIDServicer = async (idServicer: string) => {
 
 	return newData;
 };
+export const getServiceFromID = async (id: string) => {
+	const result = (await API.get(`${TABLE.SERVICE}`, true)) as ServiceProps[];
+
+	const arr = [];
+
+	for (let i = 0; i < result.length; i++) {
+		result[i].servicer === id && arr.push(result[i]);
+	}
+
+	// get info category
+	for (let i = 0; i < arr.length; i++) {
+		const category = (await API.get(`${TABLE.CATEGORY}/${arr[i].category}`, undefined, true)) as any;
+		arr[i].categoryObject = category;
+	}
+
+	// get info service
+	for (let i = 0; i < arr.length; i++) {
+		const service = (await API.get(`${TABLE.USERS}/${arr[i].servicer}`, undefined, true)) as any;
+		arr[i].servicerObject = service;
+	}
+
+	// get info star evalute
+	for (let i = 0; i < arr.length; i++) {
+		const evaluate = (await API.get(`${TABLE.EVALUATE}/${arr[i].id}`, true, true)) as EvaluateProps[];
+		arr[i].evaluate = evaluate;
+
+		// get info star
+		let totalStar = 0;
+		for (let j = 0; j < evaluate.length; j++) {
+			totalStar += evaluate[j].star;
+		}
+		arr[i].star = totalStar / (evaluate.length || 1);
+	}
+
+	return arr;
+};

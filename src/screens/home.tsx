@@ -1,4 +1,5 @@
 import React, {memo, useState, useRef, useEffect} from 'react';
+import notifee from '@notifee/react-native';
 import {FlatList, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View, RefreshControl} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import CustomHeader from '../components/custom-header';
@@ -27,7 +28,7 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 	const [serviceAll, setServiceAll] = useState<ServiceProps[]>([]);
 
 	const onFocusSearch = () => {
-		navigation.navigate(ROUTE_KEY.Search);
+		navigation.navigate(ROUTE_KEY.Search, {data: allServiceRef.current, categories: categories});
 	};
 	const onRefresh = async () => {
 		setRefreshing(true);
@@ -108,7 +109,7 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 				refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
 				showsVerticalScrollIndicator={false}
 				style={styles.view}>
-				<TouchableOpacity disabled={refreshing} onPress={onFocusSearch} style={styles.viewInput}>
+				<TouchableOpacity disabled={refreshing || !serviceAll.length} onPress={onFocusSearch} style={styles.viewInput}>
 					<Image source={ICONS.search} style={styles.iconSearch} />
 					<TextInput editable={false} style={styles.input} />
 				</TouchableOpacity>
