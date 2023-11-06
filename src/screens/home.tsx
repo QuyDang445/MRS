@@ -14,11 +14,12 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {generateRandomId, getServiceAll} from '../utils';
 import {ServiceProps, Category} from '../constants/types';
 import API from '../services/api';
+import notifee from '@notifee/react-native';
 
 const Home = (props: RootStackScreenProps<'Home'>) => {
 	const {navigation} = props;
 
-	const [filterCategory, setFilterCategory] = useState<string>();
+	const [filterCategory, setFilterCategory] = useState<Category>();
 	const [refreshing, setRefreshing] = useState(false);
 	const allServiceRef = useRef<ServiceProps[]>([]);
 	const [outstandingService, setOutstandingService] = useState<ServiceProps[]>([]);
@@ -55,12 +56,13 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 			setServiceAll(allServiceRef.current);
 		}
 	};
-	// useEffect(() => {
-	// 	onRefresh();
-	// 	setTimeout(() => {
-	// 		requestGiveNotification();
-	// 	}, 1000);
-	// }, []);
+	const requestGiveNotification = () => notifee.requestPermission();
+	useEffect(() => {
+		onRefresh();
+		setTimeout(() => {
+			requestGiveNotification();
+		}, 1000);
+	}, []);
 	const renderItemCategories = ({item}: {item: Category}) => {
 		return (
 			<TouchableOpacity
