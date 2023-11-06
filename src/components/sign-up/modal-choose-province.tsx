@@ -3,13 +3,12 @@ import {FlatList, Image, Modal, ScrollView, StyleSheet, TextInput, TouchableOpac
 import {ICONS} from '../../assets/image-paths';
 import {FONT_FAMILY} from '../../constants/enum';
 import {PROVINCE} from '../../constants/province';
-//import {AddressProps} from '../../constants/types';
+import {AddressProps} from '../../constants/types';
 import {colors} from '../../styles/colors';
 import {heightScale, widthScale} from '../../styles/scaling-utils';
 import {parseObjectToArray, showMessage} from '../../utils';
 import CustomButton from '../custom-button';
 import CustomText from '../custom-text';
-import { AddressProps } from '../../constants/types';
 
 export interface ModalObject {
 	show: (data?: any) => void;
