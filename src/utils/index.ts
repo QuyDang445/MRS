@@ -2,10 +2,8 @@ import {Alert, Linking, PermissionsAndroid, ToastAndroid} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {PERMISSIONS, request} from 'react-native-permissions';
 import API from '../services/api';
-import {EvaluateProps, ServiceProps, UserProps} from '../constants/types';
 import {TABLE, TYPE_ORDER_SERVICE, TYPE_USER} from '../constants/enum';
-
-
+import {EvaluateProps, OrderProps, ServiceProps, UserProps} from '../constants/types';
 import {colors} from '../styles/colors';
 
 export const parseObjectToArray = (object: any) => {
@@ -146,7 +144,6 @@ export const getMyLocation = () =>
 			{accuracy: {android: 'high', ios: 'best'}},
 		),
 	);
-
 
 export const getStatusOrder = (status: TYPE_ORDER_SERVICE) => {
 	switch (status) {
