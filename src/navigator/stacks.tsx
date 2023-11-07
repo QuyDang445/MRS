@@ -16,6 +16,8 @@ import Termsandconditions from '../screens/Termsandconditions';
 import ChangePassword from '../screens/change-password';
 import ListAddress from '../screens/list-address';
 import Order from '../screens/order';
+import Listblock from '../screens/listblock';
+import DetailOrder from '../screens/detail-order';
 import Payment from '../screens/payment';
 export type RootStackScreens = keyof RootStackScreensParams;
 export type RootStackScreenProps<T extends RootStackScreens> = StackScreenProps<RootStackScreensParams, T>;
@@ -53,6 +55,8 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.ChangePassword} component={ChangePassword} />
 			<Screen name={ROUTE_KEY.ListAddress} component={ListAddress} />
 			<Screen name={ROUTE_KEY.Order} component={Order} />
+			<Screen name={ROUTE_KEY.DetailOrder} component={DetailOrder} />
+			<Screen name={ROUTE_KEY.Listblock} component={Listblock} />
 			<Screen name={ROUTE_KEY.Payment} component={Payment} />
 		</Navigator>
 	);

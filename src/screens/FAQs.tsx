@@ -6,6 +6,8 @@ import CustomHeader from '../components/custom-header';
 const FAQs = () => {
   return (
     <FixedContainer>
+       {/* giới hạn chiều rộng nội dung để hiển thị trên màn hình */}
+          {/* chinh tiêu đề ở đầu trang */}
       <CustomHeader title="FAQs" />
       <ScrollView style={styles.scrollView}>
         <Text style={styles.paragraph}>
