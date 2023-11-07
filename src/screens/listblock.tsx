@@ -135,6 +135,7 @@ const Listblock = (props: RootStackScreenProps<'Listblock'>) => {
 									flex: 1,
 									marginLeft: widthScale(10),
 									paddingHorizontal: 10,
+									color: colors.black,
 								}}
 							/>
 						</View>
