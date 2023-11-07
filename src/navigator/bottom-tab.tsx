@@ -25,6 +25,7 @@ import messaging from '@react-native-firebase/messaging';
 import Logger from '../utils/logger';
 import CustomText from '../components/custom-text';
 import {sendNotificationToDevices} from '../utils/notification';
+import orderService from '../screens/order-service';
 
 const Tab = createBottomTabNavigator<RootStackScreensParams>();
 
@@ -140,7 +141,7 @@ const BottomTab = (props: RootStackScreenProps<'BottomTab'>) => {
 			case TYPE_USER.USER:
 				return Order;
 			default:
-				return Notification;
+				return orderService;
 		}
 	}, [userInfo]);
 
