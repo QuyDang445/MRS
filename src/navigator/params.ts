@@ -28,4 +28,5 @@ export type RootStackScreensParams = {
 	ChangePassword: undefined;
 	ListAddress: undefined;
 	DetailOrder: {data: OrderProps};
+	Payment: undefined;
 };
