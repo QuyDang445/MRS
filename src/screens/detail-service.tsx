@@ -7,15 +7,15 @@ import FixedContainer from '../components/fixed-container';
 import Star from '../components/star';
 import {WIDTH} from '../constants/constants';
 import {FONT_FAMILY, TABLE, TYPE_USER} from '../constants/enum';
-import {EvaluateProps, UserProps} from '../constants/types';
+import {EvaluateProps, UserProps,ServicerBlockUser} from '../constants/types';
 import {ROUTE_KEY} from '../navigator/routers';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
 import {useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
-import {generateRandomId} from '../utils';
-
+import {generateRandomId, showMessage} from '../utils';
+import Spinner from '../components/spinner';
 
 const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 	const {navigation, route} = props;
@@ -54,7 +54,25 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 		})();
 	}, []);
 
-	const onPressBooking = () => navigation.navigate(ROUTE_KEY.Booking, {service: data});
+	const onPressBooking = () => {
+		Spinner.show();
+		API.get(`${TABLE.SERVICE_BLOCK_USER}`, true)
+			.then((res: ServicerBlockUser[]) => {
+				let check = false;
+				for (let i = 0; i < res.length; i++) {
+					if (res[i].phone === userInfo?.phone) {
+						check = true;
+					}
+				}
+
+				if (check) {
+					showMessage('Bạn đã bị người dùng này chặn!');
+				} else {
+					navigation.navigate(ROUTE_KEY.Booking, {service: data});
+				}
+			})
+			.finally(() => Spinner.hide());
+	};
 
 	const onPressViewInfoServicer = () => {
 		navigation.navigate(ROUTE_KEY.InfoServicer, {idServicer: data.servicer});

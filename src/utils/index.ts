@@ -4,8 +4,8 @@ import {PERMISSIONS, request} from 'react-native-permissions';
 import API from '../services/api';
 import {EvaluateProps, ServiceProps, UserProps} from '../constants/types';
 import {TABLE, TYPE_ORDER_SERVICE, TYPE_USER} from '../constants/enum';
-import {EvaluateProps, OrderProps, ServiceProps, UserProps} from '../constants/types';
-import API from '../services/api';
+
+
 import {colors} from '../styles/colors';
 
 export const parseObjectToArray = (object: any) => {
@@ -146,17 +146,8 @@ export const getMyLocation = () =>
 			{accuracy: {android: 'high', ios: 'best'}},
 		),
 	);
-export const getServicerALl = async () => {
-	const data = (await API.get(`${TABLE.USERS}`, true)) as UserProps[];
-	const newData = [];
 
-	for (let i = 0; i < data.length; i++) {
-		if (data[i].type === TYPE_USER.SERVICER) {
-			newData.push(data[i]);
-		}
-	}
-	return newData;
-};
+
 export const getStatusOrder = (status: TYPE_ORDER_SERVICE) => {
 	switch (status) {
 		case TYPE_ORDER_SERVICE.OrderPending:
