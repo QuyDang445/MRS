@@ -1,5 +1,5 @@
 import {Formik, FormikProps} from 'formik';
-import React, {memo, useRef} from 'react';
+import React, {memo, useRef, useState} from 'react';
 import {DeviceEventEmitter, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import * as Yup from 'yup';
 import {ICONS, IMAGES} from '../assets/image-paths';
@@ -21,18 +21,23 @@ import {getImageFromDevice, uploadImage} from '../utils/image';
 const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 	const {navigation} = props;
 
+	const [passwordVisible, setPasswordVisible] = useState(false);
+	const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 	const modalChooseProvinceRef = useRef<ModalObject>(null);
 	const innerRefFormik = useRef<FormikProps<any>>(null);
 	const phoneRegex = /^0[0-9]{9}$/;
 	const cccdRegex = /[0-9]{12}$/;
-	const phoneInputRef = useRef<TextInput>(null);
-	//const phone = phoneInputRef.current?.state?.values;
+
+	//const phoneInputRef = useRef<TextInput>(null);
+	//const phone = phoneInputRef.current?.get;
 	// const users = (await API.get(TABLE.USERS, true)) as UserProps[];
 	// 	let check = false; // 	for (let i = 0; i < users.length; i++) {
 		// 		if (users[i].phone === phone) {
 			// 			check = true;
 			// 		}
-			// 	}		
+			// 	}
+
+
 	const SignUpSchema = Yup.object().shape({
 		name: Yup.string().required('Thiếu tên'),
 		phone: Yup.string().matches(phoneRegex, 'Số điện thoại không hợp lệ!').required('Thiếu số điện thoại'),
@@ -152,23 +157,31 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 
 								<View style={styles.input}>
 									<TextInput
+										secureTextEntry={!passwordVisible}
 										value={values.pass}
 										onChangeText={handleChange('pass')}
 										placeholder="Mật khẩu"
 										placeholderTextColor={colors.grayText}
 										style={styles.inputText}
 									/>
+									<TouchableOpacity style={styles.eyeIcon} onPress={() => setPasswordVisible(!passwordVisible)}>
+										<Image source={ICONS.eye} style={styles.eyeIcon} />
+									</TouchableOpacity>
 								</View>
 								{errors.pass && <CustomText text={errors.pass} color={colors.red} size={12} style={{marginHorizontal: widthScale(20)}} />}
 
 								<View style={styles.input}>
 									<TextInput
+										secureTextEntry={!confirmPasswordVisible}
 										value={values.rePass}
 										onChangeText={handleChange('rePass')}
 										placeholder="Nhập lại mật khẩu"
 										placeholderTextColor={colors.grayText}
 										style={styles.inputText}
 									/>
+									<TouchableOpacity style={styles.eyeIcon} onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}>
+										<Image source={ICONS.eye} style={styles.eyeIcon} />
+									</TouchableOpacity>
 								</View>
 								{errors.rePass && <CustomText text={errors.rePass} color={colors.red} size={12} style={{marginHorizontal: widthScale(20)}} />}
 
@@ -249,5 +262,12 @@ const styles = StyleSheet.create({
 	button: {
 		width: widthScale(150),
 		marginTop: heightScale(100),
+	},
+	eyeIcon: {
+		position: 'absolute',
+		top: heightScale(5),
+		right: widthScale(10),
+		width: 20,
+		height: 30,
 	},
 });
