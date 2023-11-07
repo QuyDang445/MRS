@@ -58,7 +58,7 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 		Spinner.hide();
 	};
 
-	//const onPressChooseAddress = () => navigation.navigate(ROUTE_KEY.FAQs, {onChoose: (newAddress: string) => setAddress(newAddress)});
+	const onPressChooseAddress = () => navigation.navigate(ROUTE_KEY.ListAddress, {onChoose: (newAddress: string) => setAddress(newAddress)});
 
 	const onPressOrder = () => {
 		AlertYesNo(undefined, 'Bạn đã kiểm tra kĩ thông tin?', async () => {
@@ -124,7 +124,7 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 					</TouchableOpacity>
 					</View>
 					<View style={styles.addressButton}>
-					<TouchableOpacity style={styles.buttonChooseAddress}>
+					<TouchableOpacity style={styles.buttonChooseAddress} onPress={onPressChooseAddress}>
 					<View style={{ flexDirection: 'row', alignItems: 'center'  }}>
 						<Image source={ICONS.bookaddress} style={styles.icon} />
 						<CustomText style={styles.textChooseAddress} size={12} text={'Chọn địa chỉ'} />
