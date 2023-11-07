@@ -4,18 +4,16 @@ import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
-import {FONT_FAMILY} from '../constants/enum';
+import RenderListService from '../components/render-list-service';
+import {FONT_FAMILY, TYPE_ORDER_SERVICE} from '../constants/enum';
+import {RootStackScreenProps} from '../navigator/stacks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
-import OrderAll from './order-all';
-import OrderCanceled from './order-canceled';
-import OrderCompleted from './order-completed';
-import OrderInProcess from './order-in-process';
-import OrderPending from './order-pending';
 
 const Tab = createMaterialTopTabNavigator();
 
-const Order = () => {
+const HomeServicer = (props: RootStackScreenProps<'Home'>) => {
+	const {navigation} = props;
 	const renderTapBarItem = useCallback(
 		(props: MaterialTopTabBarProps) => (
 			<View style={styles.viewTab}>
@@ -36,21 +34,27 @@ const Order = () => {
 		[],
 	);
 
+	const render = (type: TYPE_ORDER_SERVICE) => <RenderListService navigation={navigation} type={type} />;
+
+	const OrderPending = () => render(TYPE_ORDER_SERVICE.OrderPending);
+	const OrderCanceled = () => render(TYPE_ORDER_SERVICE.OrderCanceled);
+	const OrderInProcess = () => render(TYPE_ORDER_SERVICE.OrderInProcess);
+	const OrderCompleted = () => render(TYPE_ORDER_SERVICE.OrderCompleted);
+
 	return (
 		<FixedContainer>
-			<CustomHeader title="ĐƠN ĐẶT HÀNG" hideBack />
+			<CustomHeader title="ĐƠN HÀNG" hideBack />
 			<Tab.Navigator screenOptions={{lazy: true, swipeEnabled: false}} tabBar={renderTapBarItem}>
-				<Tab.Screen key={'OrderAll'} name={'Tất cả'} component={OrderAll} />
-				<Tab.Screen key={'OrderPending'} name={'Đang chờ'} component={OrderPending} />
-				<Tab.Screen key={'OrderInProcess'} name={'Tiến hành'} component={OrderInProcess} />
-				<Tab.Screen key={'OrderCompleted'} name={'Hoàn thành'} component={OrderCompleted} />
-				<Tab.Screen key={'OrderCanceled'} name={'Huỷ'} component={OrderCanceled} />
+				<Tab.Screen key={TYPE_ORDER_SERVICE.OrderPending} name={'Chờ xác nhận'} component={OrderPending} />
+				<Tab.Screen key={TYPE_ORDER_SERVICE.OrderInProcess} name={'Tiến hành'} component={OrderInProcess} />
+				<Tab.Screen key={TYPE_ORDER_SERVICE.OrderCompleted} name={'Hoàn thành'} component={OrderCompleted} />
+				<Tab.Screen key={TYPE_ORDER_SERVICE.OrderCanceled} name={'Đã huỷ'} component={OrderCanceled} />
 			</Tab.Navigator>
 		</FixedContainer>
 	);
 };
 
-export default memo(Order);
+export default memo(HomeServicer);
 const styles = StyleSheet.create({
 	viewTab: {
 		height: heightScale(55),
