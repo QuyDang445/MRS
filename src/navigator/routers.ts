@@ -31,4 +31,5 @@ export const ROUTE_KEY = createEnum({
 	DetailOrder: 'DetailOrder',
 	EvaluateService: 'EvaluateService',
 	Listblock: 'Listblock',
+	AddService: 'AddService',
 });
