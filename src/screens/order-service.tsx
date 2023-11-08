@@ -24,9 +24,9 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 	const [data, setData] = useState<ServiceProps[]>([]);
 	const [refreshing, setRefreshing] = useState(false);
 
-	const onPressDetail = (item: ServiceProps) => console.log('onPressDetail');
+	const onPressDetail = (item: ServiceProps) => navigation.navigate(ROUTE_KEY.ServiceDetail,{serviceData: item});
 
-	const onPressAddService = () => console.log('onPressAddService');
+	const onPressAddService = () => navigation.navigate(ROUTE_KEY.AddService);
 
 	const onRefresh = async () => {
 		setRefreshing(true);
@@ -40,7 +40,7 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 		DeviceEventEmitter.addListener(EMIT_EVENT.LOAD_SERVICE, onRefresh);
 	}, []);
 
-	const onPressEdit = (item: ServiceProps) => console.log('onPressEdit');
+	const onPressEdit = (item: ServiceProps) => navigation.navigate(ROUTE_KEY.AddService, {data: item});
 
 	const onPressDelete = (item: ServiceProps) => {
 		AlertYesNo(undefined, 'Bạn chắc chắn muốn xoá?', () => {

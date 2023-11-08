@@ -18,6 +18,8 @@ import ListAddress from '../screens/list-address';
 import Order from '../screens/order';
 import Listblock from '../screens/listblock';
 import DetailOrder from '../screens/detail-order';
+import EvaluateService from '../screens/EvaluateService';
+import AddService from '../screens/add-service';
 export type RootStackScreens = keyof RootStackScreensParams;
 export type RootStackScreenProps<T extends RootStackScreens> = StackScreenProps<RootStackScreensParams, T>;
 export type UseRootStackNavigation<T extends RootStackScreens = 'Splash'> = StackNavigationProp<RootStackScreensParams, T>;
@@ -56,6 +58,8 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.Order} component={Order} />
 			<Screen name={ROUTE_KEY.DetailOrder} component={DetailOrder} />
 			<Screen name={ROUTE_KEY.Listblock} component={Listblock} />
+			<Screen name={ROUTE_KEY.EvaluateService} component={EvaluateService} />
+			<Screen name={ROUTE_KEY.AddService} component={AddService} />
 		</Navigator>
 	);
 };

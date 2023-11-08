@@ -1,23 +1,21 @@
-import {Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, Vibration, View} from 'react-native';
 import React, {memo, useState} from 'react';
-import {RootStackScreenProps} from '../navigator/stacks';
-import FixedContainer from '../components/fixed-container';
-import CustomHeader from '../components/custom-header';
-import {heightScale, widthScale} from '../styles/scaling-utils';
-import CustomText from '../components/custom-text';
-import {FONT_FAMILY, TABLE} from '../constants/enum';
-import {colors} from '../styles/colors';
+import {Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import {ICONS} from '../assets/image-paths';
-import {getImageFromDevice, uploadImage} from '../utils/image';
-import {EvaluateProps, ImageProps} from '../constants/types';
 import CustomButton from '../components/custom-button';
+import CustomHeader from '../components/custom-header';
+import CustomText from '../components/custom-text';
+import FixedContainer from '../components/fixed-container';
 import Spinner from '../components/spinner';
+import {FONT_FAMILY, TABLE} from '../constants/enum';
+import {ImageProps} from '../constants/types';
+import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
 import {useAppSelector} from '../stores/store/storeHooks';
-import {showMessage} from '../utils';
-import {OrderProps} from '../constants/types';
-import {TYPE_ORDER_SERVICE} from '../constants/enum';
-import Logger from '../utils/logger';
+import {colors} from '../styles/colors';
+import {heightScale, widthScale} from '../styles/scaling-utils';
+import {generateRandomId, showMessage} from '../utils';
+import {getImageFromDevice, uploadImage} from '../utils/image';
+
 
 const EvaluateService = (props: RootStackScreenProps<'EvaluateService'>) => {
 	const {navigation, route} = props;
