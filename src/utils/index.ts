@@ -5,7 +5,6 @@ import API from '../services/api';
 import {EvaluateProps, ServiceProps, UserProps,OrderProps} from '../constants/types';
 import {TABLE, TYPE_ORDER_SERVICE, TYPE_USER} from '../constants/enum';
 
-
 import {colors} from '../styles/colors';
 
 export const parseObjectToArray = (object: any) => {
@@ -146,7 +145,6 @@ export const getMyLocation = () =>
 			{accuracy: {android: 'high', ios: 'best'}},
 		),
 	);
-
 
 export const getStatusOrder = (status: TYPE_ORDER_SERVICE) => {
 	switch (status) {

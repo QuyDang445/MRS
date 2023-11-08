@@ -214,7 +214,3 @@ const styles = StyleSheet.create({
 		height: 30,
 	},
 });
-
-function messaging() {
-	throw new Error('Function not implemented.');
-}

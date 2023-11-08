@@ -10,6 +10,7 @@ import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {ROUTE_KEY} from '../navigator/routers';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const User = (props: RootStackScreenProps<'User'>) => {
 	const {navigation} = props;
@@ -49,49 +50,45 @@ const User = (props: RootStackScreenProps<'User'>) => {
 			<Image style={styles.avatar} source={userInfo?.avatar ? {uri: userInfo?.avatar} : ICONS.user} />
 
 			<CustomText text={userInfo?.name} font={FONT_FAMILY.BOLD} style={{textAlign: 'center'}} />
-			{userInfo?.type === TYPE_USER.SERVICER && (
-			<View style={styles.viewContent}>
-				
-				<CustomText text={'TRẠNG THÁI HOẠT ĐỘNG'} font={FONT_FAMILY.BOLD} size={15} />
-				<Switch
-       			 trackColor={{false: '#767577', true: '#81b0ff'}}
-        			thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-        			ios_backgroundColor="#3e3e3e"
-        			onValueChange={toggleSwitch}
-        			value={isEnabled}
-     			 />
-			
-				
-
-			</View>
-			)}
-			<View style={styles.viewContent}>
-				<CustomText text={'QUẢN LÝ TÀI KHOẢN'} font={FONT_FAMILY.BOLD} size={15} />
-				<ProfileButton buttonName="Cập nhật thông tin" onClick={onPressUpdateInformation} />
-				{userInfo?.type === TYPE_USER.USER && (
-					<ProfileButton buttonName="Địa chỉ" onClick={onPressListAddress} />
+			<ScrollView>
+				{userInfo?.type === TYPE_USER.SERVICER && (
+					<View style={styles.viewContent}>
+						<CustomText text={'TRẠNG THÁI HOẠT ĐỘNG'} font={FONT_FAMILY.BOLD} size={15} />
+						<Switch
+							trackColor={{false: '#767577', true: '#81b0ff'}}
+							thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+							ios_backgroundColor="#3e3e3e"
+							onValueChange={toggleSwitch}
+							value={isEnabled}
+						/>
+					</View>
 				)}
-				
-				<ProfileButton buttonName="Đổi mật khẩu" onClick={onPressChangePassword} />
-			</View>
-			{userInfo?.type === TYPE_USER.SERVICER && (
-			<View style={styles.viewContent}>
-				<CustomText text={'Dịch Vụ'} font={FONT_FAMILY.BOLD} size={15} />
-				<ProfileButton buttonName="Phí Dịch Vụ" onClick={onPressServiceFree} />
-				<ProfileButton buttonName="Danh sách chặn" onClick={onPressserListBlock} />
-				
-			</View>
-			)}
-			<View style={styles.viewContent}>
-				<CustomText text={'THÔNG TIN KHÁC'} font={FONT_FAMILY.BOLD} size={14} />
-				<ProfileButton buttonName="Quy định điều khoản" onClick={onPressTermsAndConditions} />
-				<ProfileButton buttonName="Chính sách quyền riêng tư" onClick={onPressDataPrivacy} />
-				<ProfileButton buttonName="FAQs" onClick={onPressFAQs} />
-				<ProfileButton buttonName="Cài đặt" onClick={onPressSetting} />
-			</View>
-			<View style={styles.viewContent}>
-				<ProfileButton buttonName="Đăng xuất" onClick={onPressLogout} />
-			</View>
+				<View style={styles.viewContent}>
+					<CustomText text={'QUẢN LÝ TÀI KHOẢN'} font={FONT_FAMILY.BOLD} size={15} />
+					<ProfileButton buttonName="Cập nhật thông tin" onClick={onPressUpdateInformation} />
+					{userInfo?.type === TYPE_USER.USER && <ProfileButton buttonName="Địa chỉ" onClick={onPressListAddress} />}
+
+					<ProfileButton buttonName="Đổi mật khẩu" onClick={onPressChangePassword} />
+				</View>
+				{userInfo?.type === TYPE_USER.SERVICER && (
+					<View style={styles.viewContent}>
+						<CustomText text={'Dịch Vụ'} font={FONT_FAMILY.BOLD} size={15} />
+						<ProfileButton buttonName="Phí Dịch Vụ" onClick={onPressServiceFree} />
+						<ProfileButton buttonName="Danh sách chặn" onClick={onPressserListBlock} />
+					</View>
+				)}
+
+				<View style={styles.viewContent}>
+					<CustomText text={'THÔNG TIN KHÁC'} font={FONT_FAMILY.BOLD} size={14} />
+					<ProfileButton buttonName="Quy định điều khoản" onClick={onPressTermsAndConditions} />
+					<ProfileButton buttonName="Chính sách quyền riêng tư" onClick={onPressDataPrivacy} />
+					<ProfileButton buttonName="FAQs" onClick={onPressFAQs} />
+					<ProfileButton buttonName="Cài đặt" onClick={onPressSetting} />
+				</View>
+				<View style={styles.viewContent}>
+					<ProfileButton buttonName="Đăng xuất" onClick={onPressLogout} />
+				</View>
+			</ScrollView>
 		</FixedContainer>
 	);
 };
