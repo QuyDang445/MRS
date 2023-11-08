@@ -30,4 +30,5 @@ export type RootStackScreensParams = {
 	DetailOrder: {data: OrderProps};
 	InfoServicer: {idServicer: string};
 	Listblock: undefined;
+	Payment: undefined;
 };

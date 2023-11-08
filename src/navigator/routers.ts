@@ -1,3 +1,5 @@
+import payment from "../screens/payment";
+
 function createEnum<T extends {[P in keyof T]: P}>(o: T) {
 	return o;
 }
@@ -31,4 +33,5 @@ export const ROUTE_KEY = createEnum({
 	DetailOrder: 'DetailOrder',
 	EvaluateService: 'EvaluateService',
 	Listblock: 'Listblock',
+	Payment: 'Payment',
 });

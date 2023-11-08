@@ -63,7 +63,7 @@ const Splash = (props: RootStackScreenProps<'Splash'>) => {
 				navigation.replace(ROUTE_KEY.BottomTab);
 				await updateTokenDevice();
 			} else {
-				navigation.replace(ROUTE_KEY.Payment);
+				navigation.replace(ROUTE_KEY.LogIn);
 			}
 		})();
 	}, []);
