@@ -41,7 +41,7 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 		(async () => {
 			const evaluate = (await API.get(`${TABLE.EVALUATE}/${data.id}`, true)) as EvaluateProps[];
 			for (let i = 0; i < evaluate.length; i++) {
-				evaluate[i].userObject = (await API.get(`${TABLE.USERS}/${evaluate[i].user_id}`)) as UserProps;
+				evaluate[i].userObject = (await API.get(`${TABLE.USERS}/${evaluate[i].user_id}`)) as unknown as UserProps;
 			}
 			setEvaluates(evaluate);
 
