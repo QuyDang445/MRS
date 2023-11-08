@@ -27,6 +27,7 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 	const [errorPhone, setErrorPhone] = useState('');
 	const [errorPass, setErrorPass] = useState('');
 	const phoneRegex = /(0)+([0-9]{9})\b/;
+	const [passwordVisible, setPasswordVisible] = useState(false);
 
 	useEffect(() => {
 		DeviceEventEmitter.addListener(EMIT_EVENT.DATA_LOGIN, ({phone: newPhone, password: newPassword}) => {
@@ -38,8 +39,6 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 	const onPressForgotPass = () => navigation.navigate(ROUTE_KEY.ForgotPass);
 
 	const onPressSignUp = () => navigation.navigate(ROUTE_KEY.SignUp);
-
-	const [passwordVisible, setPasswordVisible] = useState(false);
 
 	const onPressLogin = async () => {
 		if (!phone.trim()) {
@@ -58,29 +57,34 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 		} else {
 			setErrorPass('');
 		}
-
+		if (!phone || !password) {
+			return;
+		}
 		Spinner.show();
 		const users = (await API.get(TABLE.USERS, true)) as UserProps[];
-		Spinner.hide();
-
+		
 		for (let i = 0; i < users.length; i++) {
 			if (users[i].phone === phone && users[i].password === password) {
 				// update token user:
 				const tokenDevice = await messaging().getToken();
 				const newUser = await API.put(`${TABLE.USERS}/${users[i]?.id}`, {...users[i], tokenDevice: tokenDevice});
-
-				// Test
+				Spinner.hide();
+				//// Test
 				// navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.BottomTab}]}));
-				ToastAndroid.show('Đăng nhập thành công!', ToastAndroid.SHORT);
-				//Main when have home screen
-				// if (users[i].type === TYPE_USER.SERVICER && !users[i]?.isAccept) {
-				// 	return showMessage('Tài khoản của bạn đang chờ admin sét duyệt');
-				// } else {
-				dispatch(cacheUserInfo(newUser));
-				return navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.BottomTab}]}));
-				// }
+				// ToastAndroid.show('Đăng nhập thành công!', ToastAndroid.SHORT);
+
+				//// Main when have home screen
+				if (users[i].type === TYPE_USER.SERVICER && !users[i]?.isAccept) {
+					ToastAndroid.show('Tài khoản của bạn đang chờ admin sét duyệt', ToastAndroid.SHORT);
+					//return showMessage('Tài khoản của bạn đang chờ admin sét duyệt');
+				} else {
+					dispatch(cacheUserInfo(newUser));
+					navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.BottomTab}]}));
+					return ToastAndroid.show('Đăng nhập thành công!', ToastAndroid.SHORT);
+				}
 			}
 		}
+		Spinner.hide();
 		ToastAndroid.show('Sai thông tin đăng nhập!', ToastAndroid.SHORT);
 		showMessage('Sai thông tin đăng nhập!');
 	};

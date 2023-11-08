@@ -1,4 +1,5 @@
 import React, {memo, useState, useRef, useEffect} from 'react';
+import notifee from '@notifee/react-native';
 import {FlatList, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View, RefreshControl} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import CustomHeader from '../components/custom-header';
@@ -18,7 +19,7 @@ import API from '../services/api';
 const Home = (props: RootStackScreenProps<'Home'>) => {
 	const {navigation} = props;
 
-	const [filterCategory, setFilterCategory] = useState<string>();
+	const [filterCategory, setFilterCategory] = useState<Category>();
 	const [refreshing, setRefreshing] = useState(false);
 	const allServiceRef = useRef<ServiceProps[]>([]);
 	const [outstandingService, setOutstandingService] = useState<ServiceProps[]>([]);
@@ -26,7 +27,7 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 	const [serviceAll, setServiceAll] = useState<ServiceProps[]>([]);
 
 	const onFocusSearch = () => {
-		navigation.navigate(ROUTE_KEY.Search);
+		navigation.navigate(ROUTE_KEY.Search, {data: allServiceRef.current, categories: categories});
 	};
 	const onRefresh = async () => {
 		setRefreshing(true);
@@ -55,12 +56,13 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 			setServiceAll(allServiceRef.current);
 		}
 	};
-	// useEffect(() => {
-	// 	onRefresh();
-	// 	setTimeout(() => {
-	// 		requestGiveNotification();
-	// 	}, 1000);
-	// }, []);
+	const requestGiveNotification = () => notifee.requestPermission();
+	useEffect(() => {
+		onRefresh();
+		setTimeout(() => {
+			requestGiveNotification();
+		}, 1000);
+	}, []);
 	const renderItemCategories = ({item}: {item: Category}) => {
 		return (
 			<TouchableOpacity
@@ -106,7 +108,7 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 				refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
 				showsVerticalScrollIndicator={false}
 				style={styles.view}>
-				<TouchableOpacity disabled={refreshing} onPress={onFocusSearch} style={styles.viewInput}>
+				<TouchableOpacity disabled={refreshing || !serviceAll.length} onPress={onFocusSearch} style={styles.viewInput}>
 					<Image source={ICONS.search} style={styles.iconSearch} />
 					<TextInput editable={false} style={styles.input} />
 				</TouchableOpacity>

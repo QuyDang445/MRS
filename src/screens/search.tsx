@@ -1,46 +1,165 @@
-import {Image, ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
-import React, {useState} from 'react';
+import {Image, ScrollView, StyleSheet, Text, TextInput, View,RefreshControl,ActivityIndicator,FlatList,TouchableOpacity} from 'react-native';
+import React, {useState, useRef,useEffect} from 'react';
 import FixedContainer from '../components/fixed-container';
 import CustomHeader from '../components/custom-header';
+import CustomText from '../components/custom-text';
 import {RootStackScreenProps} from '../navigator/stacks';
 import Filter,{Sort} from '../components/search/filter';
+import Star from '../components/star';
 import {colors} from '../styles/colors';
 import {ICONS} from '../assets/image-paths';
-import {widthScale} from '../styles/scaling-utils';
-
+import {widthScale,heightScale} from '../styles/scaling-utils';
+import {generateRandomId, getServiceAll} from '../utils';
+import Logger from '../utils/logger';
+import {ROUTE_KEY} from '../navigator/routers';
 import {FONT_FAMILY} from '../constants/enum';
+import {ServiceProps} from '../constants/types';
+import {sleep} from '../utils/time';
+
 const sort = [
 	{title: 'Đánh giá tăng dần', id: '333', function: (a: any, b: any) => a?.star - b?.star},
 	{title: 'Đánh giá giảm dần', id: '444', function: (a: any, b: any) => b?.star - a?.star},
 ];
 const Search = (props: RootStackScreenProps<'Search'>) => {
-	const {navigation} = props;
+	const {navigation, route} = props;
+	const categories = route.params.categories;
 
 	const [textSearch, setTextSearch] = useState('');
 	const [isShow, setIsShow] = useState(false);
+	const [serviceAll, setServiceAll] = useState<ServiceProps[]>(route.params.data);
+	const [refreshing, setRefreshing] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [sortData, setSortData] = useState<Sort>();
 
+	const [filter, setFilter] = useState<Sort[]>([]);
+	const [isShowFilter, setIsShowFilter] = useState(false);
+	const [filterData, setFilterData] = useState<Sort>();
+
+	const allServiceRef = useRef<ServiceProps[]>(route.params.data);
+
+	useEffect(() => {
+		const all = {id: 'ALL', name: 'Tất cả'};
+		const newCategories = [all, ...categories] as any;
+		setFilter(newCategories);
+	}, []);
+
+	const onRefresh = async () => {
+		setRefreshing(true);
+		const data = await getServiceAll();
+		allServiceRef.current = data;
+		setRefreshing(false);
+	};
+	const onPressFilter = (data: Sort) => {
+		setFilterData(data);
+		setIsShowFilter(false);
+
+		if (data.id === 'ALL') {
+			return setServiceAll(allServiceRef.current);
+		}
+
+		const newData = [];
+		for (let i = 0; i < allServiceRef.current.length; i++) {
+			if (allServiceRef.current[i].category === data.id) {
+				newData.push(allServiceRef.current[i]);
+			}
+		}
+		setServiceAll(newData);
+	};
+	const onPressSort = (data: Sort) => {
+		setSortData(data);
+		setIsShow(false);
+		const newData = [...allServiceRef.current];
+		setServiceAll(newData.sort(data.function));
+	};
+	
+	const onSearch = (text: string) => {
+		setLoading(true);
+		setTextSearch(text);
+
+		const changeText = (_: string) =>
+			_.toLowerCase()
+				.normalize('NFD')
+				.replace(/[\u0300-\u036f]/g, '');
+
+		const newText = changeText(text);
+
+		const newArr = [...allServiceRef.current];
+		setServiceAll(newArr.filter(item => changeText(item?.name).includes(newText)));
+
+		sleep(500).finally(() => setLoading(false));
+	};
+	const renderItemOutstandingService = ({item}: {item: ServiceProps}) => {
+		return (
+			<TouchableOpacity onPress={() => navigation.navigate(ROUTE_KEY.ServiceDetail, {serviceData: item})} style={[styles.itemService, {marginRight: 0}]}>
+				<Image source={{uri: item?.image}} style={styles.imageService} />
+
+				<View style={{flex: 1, padding: widthScale(15)}}>
+					<CustomText numberOfLines={1} font={FONT_FAMILY.BOLD} text={item?.name} />
+					<Star star={item.star} />
+					<CustomText text={item.servicerObject.name} />
+					<CustomText text={item.servicerObject.phone} />
+				</View>
+			</TouchableOpacity>
+		);
+	};
 	return (
 		<FixedContainer>
 			<CustomHeader title="TÌM KIẾM" />
-			<ScrollView showsVerticalScrollIndicator={false} style={styles.view}>
+			<ScrollView
+				refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />}
+				showsVerticalScrollIndicator={false}
+				style={styles.view}>
 				<View style={styles.viewInput}>
 					<Image source={ICONS.search} style={styles.iconSearch} />
-					<TextInput autoFocus onChangeText={setTextSearch} style={styles.input} value={textSearch} placeholderTextColor={colors.grayText}
-						placeholder="Nhập thông tin cần tìm kiếm" />
+					<TextInput
+						placeholderTextColor={colors.grayText}
+						placeholder="Nhập thông tin cần tìm kiếm"
+						autoFocus
+						onChangeText={onSearch}
+						style={styles.input}
+						value={textSearch}
+					/>
 				</View>
 
 				<Filter
+					onPressSort={onPressSort}
 					onPressShow={() => setIsShow(!isShow)}
 					isOn={isShow}
-					title="Sắp xếp"
-					filter={['Sắp xếp theo giá', 'Sắp xếp theo đánh giá', 'Sắp xếp theo']}
+					title="SẮP XẾP"
+					textButton={sortData?.title!}
+					filter={sort}
 				/>
+
 				<Filter
-					onPressShow={() => setIsShow(!isShow)}
-					isOn={isShow}
-					title="Lọc"
-					filter={['Sắp xếp theo giá', 'Sắp xếp theo đánh giá', 'Sắp xếp theo']}
+					onPressSort={onPressFilter}
+					onPressShow={() => setIsShowFilter(!isShowFilter)}
+					isOn={isShowFilter}
+					title="LỌC"
+					textButton={filterData?.name!}
+					filter={filter}
 				/>
+				{loading ? (
+					<View style={{width: '100%', height: heightScale(200), justifyContent: 'center', alignItems: 'center'}}>
+						<ActivityIndicator />
+					</View>
+				) : (
+					<FlatList
+						contentContainerStyle={{marginTop: heightScale(20)}}
+						scrollEnabled={false}
+						columnWrapperStyle={{justifyContent: 'space-between', marginBottom: heightScale(20)}}
+						numColumns={2}
+						keyExtractor={generateRandomId}
+						showsHorizontalScrollIndicator={false}
+						data={serviceAll}
+						renderItem={renderItemOutstandingService}
+						ListEmptyComponent={
+							<View style={{marginTop: heightScale(50)}}>
+								<CustomText style={{textAlign: 'center'}} color={colors.grayText} text={'Không có dịch vụ nào'} />
+							</View>
+						}
+						showsVerticalScrollIndicator={false}
+					/>
+				)}
 			</ScrollView>
 		</FixedContainer>
 	);

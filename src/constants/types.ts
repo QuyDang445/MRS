@@ -67,6 +67,7 @@ export interface AddressProps {
 }
 
 export interface OrderProps {
+	isEvaluate: any;
 	id: string;
 	idService: string;
 	idUser: string;
@@ -83,6 +84,11 @@ export interface OrderProps {
 	categoryObject: Category;
 	userObject: UserProps;
 	statusCancel: string;
+}
+export interface ServicerBlockUser {
+	idServicer: string;
+	phone: string;
+	id: string;
 }
 export interface Category {
 	id: string;
