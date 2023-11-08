@@ -24,7 +24,7 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 	const [data, setData] = useState<ServiceProps[]>([]);
 	const [refreshing, setRefreshing] = useState(false);
 
-	const onPressDetail = (item: ServiceProps) => console.log('onPressDetail');
+	const onPressDetail = (item: ServiceProps) => navigation.navigate(ROUTE_KEY.ServiceDetail,{serviceData: item});
 
 	const onPressAddService = () => console.log('onPressAddService');
 
