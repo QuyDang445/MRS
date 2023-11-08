@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
-import {ActivityIndicator, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View, ToastAndroid} from 'react-native';
+import {ActivityIndicator, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import CustomButton from '../components/custom-button';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
 import Spinner from '../components/spinner';
-import {FONT_FAMILY, TABLE, TYPE_USER} from '../constants/enum';
-import {WIDTH} from '../constants/constants';
+import {FONT_FAMILY, TABLE} from '../constants/enum';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
 import {cacheUserInfo} from '../stores/reducers/userReducer';
@@ -16,7 +15,7 @@ import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {showMessage} from '../utils';
 import {getImageFromDevice, uploadImage} from '../utils/image';
-import Toast from 'react-native-toast-message';
+
 const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => {
 	const {navigation} = props;
 	const dispatch = useAppDispatch();
@@ -28,7 +27,8 @@ const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => 
 	const [loading, setLoading] = useState(false);
 
 
-    //Chọn và cập nhập ảnh
+
+	//chọn ảnh và cập nhập ảnh
 	const onPressUpdateAvatar = async () => {
 		Spinner.show();
 
@@ -58,10 +58,9 @@ const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => 
 		if (res) {
 			dispatch(cacheUserInfo(res));
 			showMessage('Đã lưu thành công');
-			ToastAndroid.show('Lưu thông tin thành công', ToastAndroid.SHORT);
+			navigation.goBack();
 		} else {
 			showMessage('Lưu thông tin thất bại');
-		
 		}
 	};
 
@@ -98,9 +97,8 @@ const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => 
 				<TextInput onChangeText={setName} value={name} style={styles.input} />
 				<CustomText text={'SỐ ĐIỆN THOẠI'} font={FONT_FAMILY.BOLD} size={14} />
 				<TextInput keyboardType="numeric" onChangeText={setPhone} value={phone} style={styles.input} />
-				<View style={{ alignItems: 'center'}}>
-				<CustomButton onPress={onPressSave} style={{width: WIDTH / 2.5}}  text="LƯU"  />
-				</View>
+
+				<CustomButton onPress={onPressSave} text="LƯU" />
 			</ScrollView>
 		</FixedContainer>
 	);
@@ -118,7 +116,7 @@ const styles = StyleSheet.create({
 		paddingLeft: widthScale(10),
 		marginTop: heightScale(5),
 		marginBottom: heightScale(20),
-        color: 'black',
+		color: colors.black,
 	},
 	avatar: {
 		width: widthScale(100),

@@ -9,9 +9,11 @@ export const YOUR_SERVER_KEY =
 
 export const API_GET_INFO_COORDINATE = (lat: number, long: number) =>
 	`${BASE_URL_MAP}geocode/json?latlng=${lat},${long}&language=ja&key=${WEB_API_KEY}`;
+
 export const IS_ANDROID = Platform.OS === 'android';
 export const IS_IOS = Platform.OS === 'ios';
 
-
 export const baseWidth = 375;
 export const baseHeight = 812;
+
+export const CHANNEL_ID = 'SRM_MAIN';

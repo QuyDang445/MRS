@@ -11,7 +11,7 @@ export interface ImageProps {
 export interface UserProps {
 	id: string;
 	name: string;
-	address: string;
+	address: string[];
 	avatar: string;
 	phone: string;
 	tokenDevice: string;
@@ -23,6 +23,7 @@ export interface UserProps {
 		image: string;
 	};
 	isAccept?: boolean;
+	dateRegister?: number;
 }
 
 export interface NotificationItemProps {

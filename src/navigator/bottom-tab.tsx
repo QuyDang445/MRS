@@ -114,12 +114,15 @@ const BottomTab = (props: RootStackScreenProps<'BottomTab'>) => {
 
 	useEffect(() => {
 		DeviceEventEmitter.addListener(EMIT_EVENT.LOGOUT, logout);
-	}, []);
+	}, [userInfo]);
 
 
 	const logout = async () => {
 		navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.LogIn}]}));
-		await API.put(`${TABLE.USERS}/${userInfo?.id}`, {...userInfo, tokenDevice: ''});
+
+		const infoUser = await API.get(`${TABLE.USERS}/${userInfo?.id}`);
+
+		await API.put(`${TABLE.USERS}/${userInfo?.id}`, {...infoUser, tokenDevice: ''});
 
 		setTimeout(() => {
 			dispatch(clearUserData());

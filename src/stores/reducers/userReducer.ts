@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {NotificationItemProps, UserProps} from '../../constants/types';
-import {TYPE_USER} from '../../constants/enum';
+
 
 interface userInfoState {
 	userInfo?: UserProps;

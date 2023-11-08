@@ -60,7 +60,7 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 			.then((res: ServicerBlockUser[]) => {
 				let check = false;
 				for (let i = 0; i < res.length; i++) {
-					if (res[i].phone === userInfo?.phone) {
+					if (res[i].phone === userInfo?.phone && data.servicer === res[i].idServicer) {
 						check = true;
 					}
 				}
