@@ -32,4 +32,5 @@ export type RootStackScreensParams = {
 	Listblock: undefined;
 	EvaluateService:  {data: OrderProps};
 	AddService: undefined | {data: ServiceProps};
+	Payment: undefined;
 };
