@@ -75,10 +75,10 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 	};
 
 	const onPressViewInfoServicer = () => {
-		navigation.navigate(ROUTE_KEY.InfoServicer, {idServicer: data.servicer});
+		//navigation.navigate(ROUTE_KEY.InfoServicer, {idServicer: data.servicer});
 	};
 
-	const onPressViewAllReview = () => navigation.navigate(ROUTE_KEY.AllReview, {idService: data.id});
+	//const onPressViewAllReview = () => navigation.navigate(ROUTE_KEY.AllReview, {idService: data.id});
 	return (
 		<FixedContainer>
 			<CustomHeader title="CHI TIẾT DỊCH VỤ" />
@@ -111,14 +111,14 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 				</View>
 
 				<CustomText text={'Đánh giá'} font={FONT_FAMILY.BOLD} />
-				<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+				{/* <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
 					<Star star={starTotal} isShowNumber />
 					{!!evaluates.length && (
 						<TouchableOpacity onPress={onPressViewAllReview}>
 							<CustomText style={{textDecorationLine: 'underline'}} size={13} text={'Xem tất cả đánh giá'} font={FONT_FAMILY.BOLD} />
 						</TouchableOpacity>
 					)}
-				</View>
+				</View> */}
 
 				<View style={styles.line} />
 

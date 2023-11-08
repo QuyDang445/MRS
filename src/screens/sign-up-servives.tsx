@@ -26,7 +26,7 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 	const modalChooseProvinceRef = useRef<ModalObject>(null);
 	const innerRefFormik = useRef<FormikProps<any>>(null);
 	const phoneRegex = /^0[0-9]{9}$/;
-	const cccdRegex = /[0-9]{12}$/;
+	const cccdRegex = /^0[0-9]{11}$/;
 
 	//const phoneInputRef = useRef<TextInput>(null);
 	//const phone = phoneInputRef.current?.get;
