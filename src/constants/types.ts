@@ -67,6 +67,7 @@ export interface AddressProps {
 }
 
 export interface OrderProps {
+	imageDone: any;
 	isEvaluate: any;
 	id: string;
 	idService: string;
@@ -89,28 +90,4 @@ export interface ServicerBlockUser {
 	idServicer: string;
 	phone: string;
 	id: string;
-}
-export interface Category {
-	id: string;
-	name: string;
-	idCategoryService: string;
-}
-export interface ServiceProps {
-	id: string;
-	name: string;
-	category: string;
-	servicer: string;
-	description: string;
-	image: string;
-	categoryObject: {idCategoryService: string; name: string};
-	servicerObject: UserProps;
-	evaluate: EvaluateProps[];
-	star: number;
-}
-export interface EvaluateProps {
-	id: string;
-	id_service: string;
-	star: number;
-	images: string[];
-	user_id: string;
 }
