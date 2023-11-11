@@ -7,8 +7,7 @@ import {ICONS} from '../assets/image-paths';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import CustomText from '../components/custom-text';
 import {FONT_FAMILY} from '../constants/enum';
-import {colors} from '../styles/colors';
-import {convertDateTime} from '../utils/time';
+import moment from 'moment';
 
 const NotificationDetail = ({navigation, route}: RootStackScreenProps<'NotificationDetail'>) => {
 	const {notificationData} = route.params;
@@ -21,11 +20,11 @@ const NotificationDetail = ({navigation, route}: RootStackScreenProps<'Notificat
 					<Image style={styles.notificationIcon} source={ICONS.notification_read} />
 					<View style={{flexDirection: 'column', gap: heightScale(10)}}>
 						<CustomText font={FONT_FAMILY.BOLD} text={notificationData.title} />
-						<CustomText size={12} color={colors.grayText} text={notificationData.sendTime} />
+						<CustomText text={moment(notificationData.time).format('hh:mm:ss - DD/MM/YYYY')} />
 					</View>
 				</View>
 				<View style={{width: '100%'}}>
-					<CustomText text={notificationData.message} />
+					<CustomText text={notificationData.body} />
 				</View>
 			</View>
 		</FixedContainer>

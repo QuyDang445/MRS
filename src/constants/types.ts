@@ -26,13 +26,16 @@ export interface UserProps {
 	dateRegister?: number;
 }
 
-export interface NotificationItemProps {
+export interface NotificationProps {
 	id: string;
 	title: string;
-	message: string;
-	sendTime: string;
+	body: string;
+	time: string;
 	isRead: boolean;
-	userId: string;
+	data: {
+		idUser: string;
+		status: string;
+	};
 }
 export interface ServiceProps {
 	id: string;
