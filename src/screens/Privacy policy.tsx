@@ -5,8 +5,11 @@ import CustomHeader from '../components/custom-header';
 
 const PrivacyPolicy = () => {
   return (
-    <FixedContainer>
+    <FixedContainer> 
+      {/* giới hạn chiều rộng nội dung để hiển thị trên màn hình */}
+          {/* chinh tiêu đề ở đầu trang */}
       <CustomHeader title="Chính Sách Quyền Riêng Tư của Ứng Dụng RMS" />
+   
       <ScrollView style={styles.scrollView}>
         <Text style={styles.paragraph}>
           Ngày có hiệu lực: 01/01/2023

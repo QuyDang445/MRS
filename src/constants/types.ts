@@ -11,7 +11,7 @@ export interface ImageProps {
 export interface UserProps {
 	id: string;
 	name: string;
-	address: string;
+	address: string[];
 	avatar: string;
 	phone: string;
 	tokenDevice: string;
@@ -23,6 +23,7 @@ export interface UserProps {
 		image: string;
 	};
 	isAccept?: boolean;
+	dateRegister?: number;
 }
 
 export interface NotificationItemProps {
@@ -52,6 +53,8 @@ export interface EvaluateProps {
 	review: string;
 	images: string[];
 	user_id: string;
+	userObject?: UserProps;
+	content?: string;
 }
 export interface Category {
 	id: string;
@@ -66,6 +69,8 @@ export interface AddressProps {
 }
 
 export interface OrderProps {
+	imageDone: any;
+	isEvaluate: any;
 	id: string;
 	idService: string;
 	idUser: string;
@@ -83,6 +88,8 @@ export interface OrderProps {
 	userObject: UserProps;
 	statusCancel: string;
 }
-
-
-
+export interface ServicerBlockUser {
+	idServicer: string;
+	phone: string;
+	id: string;
+}

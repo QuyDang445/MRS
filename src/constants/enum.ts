@@ -12,18 +12,13 @@ export enum EMIT_EVENT {
 	DATA_LOGIN = 'DATA_LOGIN',
 	CHECK_SCREEN_ORDER = 'CHECK_SCREEN_ORDER',
 	LOGOUT = 'LOGOUT',
+	LOAD_SERVICE = 'LOAD_SERVICE',
 }
 
 export enum TYPE_USER {
 	USER = 'USER',
 	ADMIN = 'ADMIN',
 	SERVICER = 'SERVICER',
-}
-export enum TYPE_ORDER_SERVICE {
-	OrderPending = 'OrderPending',
-	OrderCanceled = 'OrderCanceled',
-	OrderInProcess = 'OrderInProcess',
-	OrderCompleted = 'OrderCompleted',
 }
 
 export enum TABLE {
@@ -35,13 +30,20 @@ export enum TABLE {
 	SERVICE = 'SERVICE',
 	CATEGORY = 'CATEGORY',
 	NOTIFICATION = 'NOTIFICATION',
+	SERVICE_BLOCK_USER = 'SERVICE_BLOCK_USER',
 	EVALUATE = 'EVALUATE',
 }
-
 
 export enum TYPE_BLOCK_SERVICER {
 	ReportedManyTimes = 'ReportedManyTimes',
 	LatePaymentOfFees = 'LatePaymentOfFees',
 	Other = 'Other',
 	ThereIsUnusualSpamBehavior = 'ThereIsUnusualSpamBehavior',
+}
+
+export enum TYPE_ORDER_SERVICE {
+	OrderPending = 'OrderPending',
+	OrderCanceled = 'OrderCanceled',
+	OrderInProcess = 'OrderInProcess',
+	OrderCompleted = 'OrderCompleted',
 }

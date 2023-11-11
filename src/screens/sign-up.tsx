@@ -13,6 +13,8 @@ import API from '../services/api';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {showMessage} from '../utils';
+import Spinner from '../components/spinner';
+import { UserProps } from '../constants/types';
 
 const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 	const {navigation} = props;
@@ -29,9 +31,9 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 	const [errorPass, setErrorPass] = useState('');
 	const [errorConfirmPass, setErrorConfirmPass,] = useState('');
 	const phoneRegex = /(0)+([0-9]{9})\b/;
-	
+	const [exists, setExists] = useState(false);
 
-	//const onPressSignUp = () => navigation.replace(ROUTE_KEY.SignUpServices);
+	const onPressSignUp = () => navigation.replace(ROUTE_KEY.SignUpServices);
 
 	const handleSignUp = async () => {
 		if (!name.trim()) {
@@ -41,13 +43,25 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 			setErrorName('');
 		}
 
+		const users = (await API.get(TABLE.USERS, true)) as UserProps[];
+		let check = false;
+		for (let i = 0; i < users.length; i++) {
+			if (users[i].phone === phone) {
+				check = true;
+			}
+		}
+
 		if (!phone.trim()) {
 			setErrorPhone('Thiếu số điện thoại!');
 			return showMessage('Thiếu số điện thoại.');
 		} else if (phoneRegex.test(phone) == false) {
 			setErrorPhone('Số điện thoại không hợp lệ!');
 			return showMessage('Số điện thoại không hợp lệ.');
-		} else {
+		} else if (check === true) {
+			setErrorPhone('Số điện thoại đã tồn tại!');
+			return showMessage('Số điện thoại đã tồn tại!');
+		}
+		else {
 			setErrorPhone('');
 		}
 
@@ -86,9 +100,8 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 	return (
 		<FixedContainer>
 			<CustomHeader title="ĐĂNG KÝ TÀI KHOẢN" />
+			<Image source={IMAGES.LOGO} style={styles.logo} />
 			<ScrollView>
-				<Image source={IMAGES.LOGO} style={styles.logo} />
-
 				<View style={styles.input}>
 					<TextInput
 						value={name}
@@ -149,9 +162,9 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 					style={styles.viewCheck}
 					text={'Tôi đồng ý với Điều Khoản Sử Dụng'}				/>
 
-				{/* <TouchableOpacity style={styles.signUp} onPress={onPressSignUp}> */}
+				<TouchableOpacity style={styles.signUp} onPress={onPressSignUp}>
 					<CustomText text={'Đăng ký tài dành cho nhà cung cấp dịch vụ?'} size={13} font={FONT_FAMILY.BOLD} style={{ textAlign: 'center', marginTop: 10 }}/>
-				{/* </TouchableOpacity> */}
+				</TouchableOpacity>
 
 				<View style={{alignSelf: 'center', marginBottom: heightScale(20)}}>
 					<CustomButton onPress={handleSignUp} text="ĐĂNG KÝ" style={styles.button}/>
