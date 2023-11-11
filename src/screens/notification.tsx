@@ -4,7 +4,7 @@ import CustomHeader from '../components/custom-header';
 import FixedContainer from '../components/fixed-container';
 import {RootStackScreenProps} from '../navigator/stacks';
 import {heightScale, widthScale} from '../styles/scaling-utils';
-import {generateRandomId, showMessage} from '../utils';
+import {generateRandomId, parseObjectToArray, showMessage} from '../utils';
 import {NotificationItem} from '../components';
 import {NotificationProps} from '../constants/types';
 import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
@@ -14,6 +14,7 @@ import Spinner from '../components/spinner';
 import {ROUTE_KEY} from '../navigator/routers';
 import CustomText from '../components/custom-text';
 import {colors} from '../styles/colors';
+import database from '@react-native-firebase/database';
 
 const Notification = (props: RootStackScreenProps<'Notification'>) => {
 	const dispatch = useAppDispatch();
@@ -46,7 +47,7 @@ const Notification = (props: RootStackScreenProps<'Notification'>) => {
 		navigation.navigate(ROUTE_KEY.NotificationDetail, {data: notificationData} as any);
 	};
 
-	const onNotificationItemDelete = async (notificationItem: NotificationItemProps) => {
+	const onNotificationItemDelete = async (notificationItem: NotificationProps) => {
 		Spinner.show();
 		API.put(`${TABLE.NOTIFICATION}/${userInfo?.id}/${notificationItem.id}`, {})
 			.then(() => {
@@ -58,7 +59,12 @@ const Notification = (props: RootStackScreenProps<'Notification'>) => {
 
 	useEffect(() => {
 		onRefresh();
-	}, []);
+		database()
+			.ref(`${TABLE.NOTIFICATION}/${userInfo?.id}/`)
+			.on('value', snapshot => {
+				setData(parseObjectToArray(snapshot.val()));
+			});
+	}, [userInfo?.id]);
 
 	return (
 		<FixedContainer>
