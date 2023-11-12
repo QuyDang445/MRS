@@ -32,4 +32,5 @@ export type RootStackScreensParams = {
 	EvaluateService: {data: OrderProps};
 	AddService: undefined | {data: ServiceProps};
 	Payment: undefined;
+	AllReview: {idService: string};
 };

@@ -11,4 +11,22 @@ import Otp from './otp';
 import Notification from './notification';
 import NotificationDetail from './notification-detail';
 import ServiceDetail from './detail-service';
-export {Home, LogIn, Onboarding, Splash, Search, Order, User, Notification, NotificationDetail, ServiceDetail, SignUp, ForgotPass, Otp};
+import AllReview from './all-review';
+import InfoServicer from './info-servicer';
+export {
+	Home,
+	LogIn,
+	Onboarding,
+	Splash,
+	Search,
+	Order,
+	User,
+	Notification,
+	NotificationDetail,
+	ServiceDetail,
+	AllReview,
+	SignUp,
+	ForgotPass,
+	Otp,
+	InfoServicer,
+};
