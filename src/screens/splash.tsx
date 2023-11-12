@@ -7,6 +7,7 @@ import {RootStackScreenProps} from '../navigator/stacks';
 import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
 import {widthScale} from '../styles/scaling-utils';
 import {sleep} from '../utils/time';
+import notifee from '@notifee/react-native';
 
 const Splash = (props: RootStackScreenProps<'Splash'>) => {
 	const {navigation} = props;
@@ -16,6 +17,8 @@ const Splash = (props: RootStackScreenProps<'Splash'>) => {
 	useEffect(() => {
 		(async () => {
 			await sleep(2000);
+			await notifee.requestPermission();
+
 			if (userInfo) {
 				navigation.replace(ROUTE_KEY.BottomTab);
 			} else {

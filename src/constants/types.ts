@@ -27,7 +27,7 @@ export interface UserProps {
 }
 
 export interface NotificationProps {
-	id: string;
+	// id: string;
 	title: string;
 	body: string;
 	time: string;
