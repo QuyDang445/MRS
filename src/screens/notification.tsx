@@ -29,21 +29,26 @@ const Notification = (props: RootStackScreenProps<'Notification'>) => {
 		API.get(`${TABLE.NOTIFICATION}/${userInfo?.id}`, true)
 			.then((res: NotificationProps[]) => {
 				console.log('data res: ' + JSON.stringify(res));
-				setData(res);
+				setData(res.sort((a, b) => b.time - a.time));
 			})
 			.finally(() => setRefreshing(false));
 	};
 
 	const onNotificationItemClick = async (notificationData: NotificationProps) => {
-		data?.forEach(async item => {
-			if (item.id == notificationData.id && item.isRead == false) {
+		data.map(async item => {
+			if (item.id == notificationData.id) {
 				item.isRead = true;
-				console.log('notificationItem', JSON.stringify(item));
 				await API.put(`${TABLE.NOTIFICATION}/${userInfo?.id}/${notificationData.id}`, item);
 			}
 		});
-		const updateData = [...data];
-		setData(updateData);
+		// data?.forEach(async item => {
+		// 	if (item.id == notificationData.id && item.isRead == false) {
+		// 		item.isRead = true;
+		// 		console.log('notificationItem', JSON.stringify(item));
+		// 	}
+		// });
+		// const updateData = [...data];
+		setData([...data]);
 		navigation.navigate(ROUTE_KEY.NotificationDetail, {data: notificationData} as any);
 	};
 
@@ -62,7 +67,7 @@ const Notification = (props: RootStackScreenProps<'Notification'>) => {
 		database()
 			.ref(`${TABLE.NOTIFICATION}/${userInfo?.id}/`)
 			.on('value', snapshot => {
-				setData(parseObjectToArray(snapshot.val()));
+				setData(parseObjectToArray(snapshot.val()).sort((a, b) => b.time - a.time));
 			});
 	}, [userInfo?.id]);
 

@@ -16,9 +16,9 @@ const NotificationDetail = ({navigation, route}: RootStackScreenProps<'Notificat
 		<FixedContainer>
 			<CustomHeader title="Chi tiết thông báo" hideBack={false} />
 			<View style={{paddingHorizontal: widthScale(20), flexDirection: 'column', gap: heightScale(10)}}>
-				<View style={{width: '100%', flexDirection: 'row', gap: widthScale(10)}}>
+				<View style={{flexDirection: 'row', gap: widthScale(10), width: '100%'}}>
 					<Image style={styles.notificationIcon} source={ICONS.notification_read} />
-					<View style={{flexDirection: 'column', gap: heightScale(10)}}>
+					<View style={{flexDirection: 'column', gap: heightScale(10), width: '80%'}}>
 						<CustomText font={FONT_FAMILY.BOLD} text={notificationData.title} />
 						<CustomText text={moment(notificationData.time).format('hh:mm:ss - DD/MM/YYYY')} />
 					</View>
