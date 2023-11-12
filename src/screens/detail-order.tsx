@@ -21,7 +21,7 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo, generateRandomId, getColorStatusOrder, getStatusOrder, showMessage} from '../utils';
 import {getImageFromDevice, uploadImage} from '../utils/image';
 import Logger from '../utils/logger';
-import {pushNotificationToServiceCancelOrder} from '../utils/notification';
+import {pushNotificationToServiceCancelOrder, pushNotificationToUserCancelOrder, pushNotificationToUserConfirmOrder} from '../utils/notification';
 
 const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 	const {navigation, route} = props;
@@ -71,6 +71,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 									status: TYPE_ORDER_SERVICE.OrderCanceled,
 									statusCancel: reasonCancel,
 								}).then(() => {
+									pushNotificationToServiceCancelOrder(data.idService, data.idUser, data.id);
 									showMessage('Huỷ đơn hàng thành công!');
 									navigation.goBack();
 								});
@@ -93,6 +94,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 									status: TYPE_ORDER_SERVICE.OrderCanceled,
 									statusCancel: reasonCancel,
 								}).then(() => {
+									pushNotificationToUserCancelOrder(data.idService, data.idUser, data.id);
 									showMessage('Huỷ đơn hàng thành công!');
 									navigation.goBack();
 								});
@@ -114,6 +116,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 				.then(async (newData: any) => {
 					if (newData?.status !== TYPE_ORDER_SERVICE.OrderCanceled) {
 						await API.put(`${TABLE.ORDERS}/${data.id}`, {...newData, status: TYPE_ORDER_SERVICE.OrderInProcess}).then(() => {
+							pushNotificationToUserConfirmOrder(data.idService, data.idUser, data.id);
 							showMessage('Xác nhận thành công!');
 						});
 					} else {
@@ -322,65 +325,64 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 						<View style={{padding: widthScale(10)}}>
 							<CustomText text={'Vui lòng tải lên hình ảnh kết quả để đối chiếu khi có vấn đề phát sinh'} size={14} />
 							<ScrollView style={{height: heightScale(150), marginTop: heightScale(10)}}>
-									<FlatList
-										scrollEnabled={false}
-										renderItem={({item, index}) => {
-											if (index === 0) {
-												return (
+								<FlatList
+									scrollEnabled={false}
+									renderItem={({item, index}) => {
+										if (index === 0) {
+											return (
+												<TouchableOpacity
+													onPress={async () => {
+														const image = await getImageFromDevice(10);
+														setImageDone([...imageDone, ...image]);
+													}}
+													style={{
+														width: widthScale(80),
+														height: widthScale(80),
+														borderRadius: 5,
+														justifyContent: 'center',
+														alignItems: 'center',
+														borderWidth: 1,
+													}}>
+													<Image style={{width: widthScale(25), height: widthScale(25)}} source={ICONS.camera} />
+												</TouchableOpacity>
+											);
+										} else {
+											return (
+												<View>
 													<TouchableOpacity
-														onPress={async () => {
-															const image = await getImageFromDevice(10);
-															setImageDone([...imageDone, ...image]);
+														onPress={() => {
+															const newImages = [...imageDone];
+															newImages.splice(index - 1, 1);
+															setImageDone(newImages);
 														}}
 														style={{
-															width: widthScale(80),
-															height: widthScale(80),
-															borderRadius: 5,
+															position: 'absolute',
+															zIndex: 10,
+															right: 0,
+															backgroundColor: colors.white,
+															borderRadius: 100,
+															width: widthScale(25),
+															height: widthScale(25),
 															justifyContent: 'center',
 															alignItems: 'center',
-															borderWidth: 1,
 														}}>
-														<Image style={{width: widthScale(25), height: widthScale(25)}} source={ICONS.camera} />
-													</TouchableOpacity>
-												);
-											} else {
-												return (
-													<View>
-														<TouchableOpacity
-															onPress={() => {
-																const newImages = [...imageDone];
-																newImages.splice(index - 1, 1);
-																setImageDone(newImages);
-															}}
-															
+														<Image
+															source={ICONS.delete}
 															style={{
-																position: 'absolute',
-																zIndex: 10,
-																right: 0,
-																backgroundColor: colors.white,
-																borderRadius: 100,
-																width: widthScale(25),
-																height: widthScale(25),
-																justifyContent: 'center',
-																alignItems: 'center',
-															}}>
-															<Image
-																source={ICONS.delete}
-																style={{
-																	width: widthScale(18),
-																	height: widthScale(18),
-																}}
-															/>
-														</TouchableOpacity>
-														<Image style={{width: widthScale(80), height: widthScale(80), borderRadius: 5}} source={item} />
-													</View>
-												);
-											}
-										}}
-										numColumns={3}
-										columnWrapperStyle={{justifyContent: 'space-evenly', marginBottom: heightScale(10)}}
-										data={[1, ...imageDone]}
-									/>
+																width: widthScale(18),
+																height: widthScale(18),
+															}}
+														/>
+													</TouchableOpacity>
+													<Image style={{width: widthScale(80), height: widthScale(80), borderRadius: 5}} source={item} />
+												</View>
+											);
+										}
+									}}
+									numColumns={3}
+									columnWrapperStyle={{justifyContent: 'space-evenly', marginBottom: heightScale(10)}}
+									data={[1, ...imageDone]}
+								/>
 							</ScrollView>
 						</View>
 						<View style={styles.viewButton}>
@@ -391,7 +393,6 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 				</Pressable>
 			</Modal>
 
-			
 			<Modal
 				statusBarTranslucent
 				transparent

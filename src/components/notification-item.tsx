@@ -25,7 +25,7 @@ export const NotificationItem =
 					marginVertical: heightScale(12),
 					gap: 10,
 					width: '100%',
-					height: heightScale(100),
+					height: heightScale(120),
 					alignItems: 'center',
 					borderRadius: 8,
 				}}>
@@ -39,7 +39,7 @@ export const NotificationItem =
 
 				<View style={{flex: 1, height: '100%', justifyContent: 'space-between'}}>
 					<CustomText font={FONT_FAMILY.BOLD} text={item.title} />
-					<CustomText text={item.body} />
+					<CustomText text={item.body} numberOfLines={2} />
 					<CustomText text={moment(item.time).format('hh:mm:ss - DD/MM/YYYY')} />
 				</View>
 
