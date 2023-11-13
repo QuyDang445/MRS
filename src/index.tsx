@@ -7,6 +7,7 @@ import {RootStackScreensParams} from './navigator/params';
 import Stacks from './navigator/stacks';
 import store, {persistor} from './stores/store/store';
 import notifee, {AndroidImportance} from '@notifee/react-native';
+import {CHANNEL_ID} from './constants/constants';
 
 const App = () => {
 	const navigationRef = useRef<NavigationContainerRef<RootStackScreensParams>>(null);
@@ -22,6 +23,14 @@ const App = () => {
 		}
 	};
 
+	useEffect(() => {
+		notifee.createChannel({
+			id: CHANNEL_ID,
+			importance: AndroidImportance.HIGH,
+			name: CHANNEL_ID,
+			sound: 'custom_sound',
+		});
+	}, []);
 	
 
 	return (

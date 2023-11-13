@@ -78,7 +78,7 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 				]}>
 				<Image
 					style={styles.imageCategory}
-					source={{uri: 'https://top10dongnai.com/wp-content/uploads/2019/12/Vi-t%C3%ADnh-%C4%90%E1%BB%93ng-Nai.jpg'}}
+					source={{uri: item?.uri}}
 				/>
 				<CustomText style={{width: '100%', textAlign: 'center'}} size={10} text={item?.name} />
 			</TouchableOpacity>

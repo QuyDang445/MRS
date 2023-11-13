@@ -146,6 +146,7 @@ export const getMyLocation = () =>
 		),
 	);
 
+
 export const getStatusOrder = (status: TYPE_ORDER_SERVICE) => {
 	switch (status) {
 		case TYPE_ORDER_SERVICE.OrderPending:
