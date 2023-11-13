@@ -16,18 +16,23 @@ import { heightScale, widthScale } from '../styles/scaling-utils';
 import { showMessage } from '../utils';
 import { getImageFromDevice, uploadImage } from '../utils/image';
 import ModalChooseProvince, { ModalObject } from '../components/sign-up/modal-choose-province';
+import { FormikProps } from 'formik';
 
 const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => {
 	const { navigation } = props;
 	const dispatch = useAppDispatch();
-
+	//const innerRefFormik = useRef<FormikProps<any>>(null);
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
 
 	const [name, setName] = useState(userInfo?.name);
 	const [phone, setPhone] = useState(userInfo?.phone);
 	const [address, setAddress] = useState(userInfo?.address);
 	const [loading, setLoading] = useState(false);
-	const onChangeAddress = (text: string) => innerRefFormik.current?.setFieldValue('address', text);
+	// const onChangeAddress = (text: string) => innerRefFormik.current?.setFieldValue('address', text);
+	const onChangeAddress = (text: string) => {
+		console.log("Adress: " + text)
+		setAddress(text)
+	};
 	const modalChooseProvinceRef = useRef<ModalObject>(null);
 
 	//chọn ảnh và cập nhập ảnh
@@ -48,17 +53,18 @@ const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => 
 	};
 
 	const onPressSave = async () => {
-		if (!name?.trim()) {
+	if (!name?.trim()) {
 			return showMessage('Thiếu tên');
 		}
-
+		
 		if (!phone?.trim()) {
 			return showMessage('Thiếu số điện thoại');
 		}
 		Spinner.show();
-		const res = await API.put(`${TABLE.USERS}/${userInfo?.id}`, { ...userInfo, name: name, phone: phone });
+		const res = await API.put(`${TABLE.USERS}/${userInfo?.id}`, { ...userInfo, name: name, phone: phone, address: address });
 		Spinner.hide();
 		if (res) {
+			
 			dispatch(cacheUserInfo(res));
 			showMessage('Đã lưu thành công');
 			navigation.goBack();
@@ -110,7 +116,7 @@ const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => 
 					<TextInput keyboardType="numeric" onChangeText={setPhone} editable={false} value={phone} style={styles.input} />
 					<CustomText text={'ĐỊA CHỈ'} font={FONT_FAMILY.BOLD} size={14} />
 					<TouchableOpacity onPress={() => modalChooseProvinceRef.current?.show({})} style={styles.buttonProvince}>
-						<CustomText color={address ? colors.black : colors.grayText} text={setAddress || 'Địa chỉ'} />
+						<CustomText color={address ? colors.black : colors.grayText} text={address || 'Địa chỉ'} />
 					</TouchableOpacity>
 				</View>
 			)}
