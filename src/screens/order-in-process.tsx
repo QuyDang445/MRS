@@ -78,7 +78,7 @@ const OrderInProcess = () => {
 			)}
 			ListEmptyComponent={
 				<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-					<CustomText color={colors.grayText} text={'Không có đơn hàng!'} />
+					<CustomText color={colors.grayText} text={'Không có đơn đặt hàng!'} />
 				</View>
 			}
 			data={data}

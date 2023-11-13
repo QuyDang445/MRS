@@ -19,13 +19,13 @@ const Listblock = (props: RootStackScreenProps<'Listblock'>) => {
 	const {navigation} = props;
 
 	const [showBlock, setShowBlock] = useState(false);
-
+	const phoneRegex = /(0)+([0-9]{9})\b/;
 	const [phone, setPhone] = useState('');
 	const [refreshing, setRefreshing] = useState(false);
 
 	const [data, setData] = useState<ServicerBlockUser[]>([]);
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
-
+	const [error, setError] = useState<string>('');
 	useEffect(() => {
 		onRefresh();
 	}, []);
@@ -44,18 +44,28 @@ const Listblock = (props: RootStackScreenProps<'Listblock'>) => {
 	};
 
 	const handleAddBlock = () => {
-		if (phone) {
-			setShowBlock(false);
-			Spinner.show();
-			API.post(`${TABLE.SERVICE_BLOCK_USER}`, {idServicer: userInfo?.id, phone: phone})
-				.then(() => {
-					showMessage('Block số điện thoại thành công!');
-					onRefresh();
-					setPhone('');
-				})
-				.finally(() => Spinner.hide());
+		setError('');
+		if (!phone.trim()) {
+		  setError('Vui lòng nhập số điện thoại.');
+		  return showMessage('Vui lòng nhập số điện thoại..');
+		} else if (phoneRegex.test(phone) == false) {
+		  setError('Số điện thoại không hợp lệ..');
+		  return showMessage('Số điện thoại không hợp lệ..');
+		} else {
+		  setShowBlock(false);
+		  Spinner.show();
+		  API.post(`${TABLE.SERVICE_BLOCK_USER}`, { idServicer: userInfo?.id, phone: phone })
+			.then(() => {
+			  showMessage('Block số điện thoại thành công!');
+			  onRefresh();
+			  setPhone('');
+			})
+			.catch((error) => {
+			  console.error('Error posting data:', error);
+			})
+			.finally(() => Spinner.hide());
 		}
-	};
+	  };
 
 	const deleteBlock = (id: string) => {
 		AlertYesNo(undefined, 'Bạn chắc chắn muốn xoá?', () => {
