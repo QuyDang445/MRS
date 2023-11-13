@@ -22,8 +22,8 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 	const {navigation} = props;
 	const dispatch = useAppDispatch();
 
-	const [phone, setPhone] = useState(__DEV__ ? '' : '');
-	const [password, setPassword] = useState(__DEV__ ? '' : '');
+	const [phone, setPhone] = useState('');
+	const [password, setPassword] = useState('');
 	const [errorPhone, setErrorPhone] = useState('');
 	const [errorPass, setErrorPass] = useState('');
 	const phoneRegex = /(0)+([0-9]{9})\b/;
@@ -43,19 +43,16 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 	const onPressLogin = async () => {
 		if (!phone.trim()) {
 			setErrorPhone('Thiếu số điện thoại!');
-			return showMessage('Thiếu số điện thoại.');
 		} else if (phoneRegex.test(phone) == false) {
 			setErrorPhone('Số điện thoại không hợp lệ!');
-			return showMessage('Số điện thoại không hợp lệ.');
 		} else {
-			setErrorPhone('');
+			return setErrorPhone('');
 		}
 
 		if (!password.trim()) {
 			setErrorPass('Thiếu mật khẩu!');
-			return showMessage('Thiếu mật khẩu.');
 		} else {
-			setErrorPass('');
+			return setErrorPass('');
 		}
 		if (!phone || !password) {
 			return;
@@ -99,6 +96,7 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 					<TextInput
 						value={phone}
 						onChangeText={setPhone}
+						maxLength={10}
 						keyboardType="numeric"
 						placeholder="Số điện thoại"
 						placeholderTextColor={colors.grayText}

@@ -1,5 +1,5 @@
 import React, {memo, useEffect, useState} from 'react';
-import {DeviceEventEmitter, FlatList, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {DeviceEventEmitter, FlatList, Image, RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
@@ -65,47 +65,47 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 					</TouchableOpacity>
 				}
 			/>
-
-			<FlatList
-				refreshing={refreshing}
-				onRefresh={onRefresh}
-				contentContainerStyle={{padding: widthScale(20)}}
-				renderItem={({item}) => {
-					return (
-						<TouchableOpacity
-							onPress={() => onPressDetail(item)}
-							style={{
-								padding: widthScale(10),
-								flexDirection: 'row',
-								marginBottom: widthScale(10),
-								borderRadius: 10,
-								borderWidth: 1,
-								borderColor: colors.gray,
-							}}>
-							<Image style={styles.image} source={{uri: item.image}} />
-							<View style={{flex: 1, marginLeft: widthScale(10)}}>
-								<CustomText font={FONT_FAMILY.BOLD} text={item.name} />
-								<CustomText text={item?.categoryObject?.name} />
-								<Star star={item?.star || 0} />
-								<View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center', flexDirection: 'row', gap: 10}}>
-									<TouchableOpacity onPress={() => onPressEdit(item)}>
-										<Image source={ICONS.edit} style={styles.icon} />
-									</TouchableOpacity>
-									<TouchableOpacity onPress={() => onPressDelete(item)}>
-										<Image source={ICONS.delete} style={styles.icon} />
-									</TouchableOpacity>
+			<ScrollView refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />} style={styles.view}>
+				<FlatList
+					scrollEnabled={false}
+					contentContainerStyle={{padding: widthScale(20)}}
+					renderItem={({item}) => {
+						return (
+							<TouchableOpacity
+								onPress={() => onPressDetail(item)}
+								style={{
+									padding: widthScale(10),
+									flexDirection: 'row',
+									marginBottom: widthScale(10),
+									borderRadius: 10,
+									borderWidth: 1,
+									borderColor: colors.gray,
+								}}>
+								<Image style={styles.image} source={{uri: item.image}} />
+								<View style={{flex: 1, marginLeft: widthScale(10)}}>
+									<CustomText font={FONT_FAMILY.BOLD} text={item.name} />
+									<CustomText text={item?.categoryObject?.name} />
+									<Star star={item?.star || 0} />
+									<View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center', flexDirection: 'row', gap: 10}}>
+										<TouchableOpacity onPress={() => onPressEdit(item)}>
+											<Image source={ICONS.edit} style={styles.icon} />
+										</TouchableOpacity>
+										<TouchableOpacity onPress={() => onPressDelete(item)}>
+											<Image source={ICONS.delete} style={styles.icon} />
+										</TouchableOpacity>
+									</View>
 								</View>
-							</View>
-						</TouchableOpacity>
-					);
-				}}
-				ListEmptyComponent={
-					<View style={{marginTop: heightScale(50)}}>
-						<CustomText style={{textAlign: 'center'}} color={colors.grayText} text={'Bạn không có dịch vụ nào'} />
-					</View>
-				}
-				data={data}
-			/>
+							</TouchableOpacity>
+						);
+					}}
+					ListEmptyComponent={
+						<View style={{marginTop: heightScale(50)}}>
+							<CustomText style={{textAlign: 'center'}} color={colors.grayText} text={'Bạn không có dịch vụ nào'} />
+						</View>
+					}
+					data={data}
+				/>
+			</ScrollView>
 		</FixedContainer>
 	);
 };
@@ -124,5 +124,10 @@ const styles = StyleSheet.create({
 	icon: {
 		width: widthScale(25),
 		height: widthScale(25),
+	},
+	view: {
+		flex: 1,
+		backgroundColor: colors.white,
+		paddingHorizontal: widthScale(20),
 	},
 });

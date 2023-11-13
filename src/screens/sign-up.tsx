@@ -37,8 +37,7 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 
 	const handleSignUp = async () => {
 		if (!name.trim()) {
-			setErrorName('Thiếu tên!');
-			return showMessage('Thiếu tên.');
+			return setErrorName('Thiếu tên!');
 		} else {
 			setErrorName('');
 		}
@@ -52,35 +51,28 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 		}
 
 		if (!phone.trim()) {
-			setErrorPhone('Thiếu số điện thoại!');
-			return showMessage('Thiếu số điện thoại.');
+			return setErrorPhone('Thiếu số điện thoại!');
 		} else if (phoneRegex.test(phone) == false) {
-			setErrorPhone('Số điện thoại không hợp lệ!');
-			return showMessage('Số điện thoại không hợp lệ.');
+			return setErrorPhone('Số điện thoại không hợp lệ!');
 		} else if (check === true) {
-			setErrorPhone('Số điện thoại đã tồn tại!');
-			return showMessage('Số điện thoại đã tồn tại!');
+			return setErrorPhone('Số điện thoại đã tồn tại!');
 		}
 		else {
 			setErrorPhone('');
 		}
 
 		if (!pass.trim()) {
-			setErrorPass('Thiếu mật khẩu!');
-			return showMessage('Thiếu mật khẩu.');
+			return setErrorPass('Thiếu mật khẩu!');
 		} else {
 			setErrorPass('');
 		}
 
 		if (pass !== rePass) {
-			setErrorConfirmPass('Mật khẩu nhập lại không đúng!');
-			return showMessage('Mật khẩu nhập lại không đúng.');
-		} else {
+			return setErrorConfirmPass('Mật khẩu nhập lại không đúng!');
 			setErrorConfirmPass('');
 		}
 
 		if (!isCheck) {
-			ToastAndroid.show('Bạn chưa đồng ý điều khoản sử dụng!', ToastAndroid.SHORT);
 			return showMessage('Bạn chưa đồng ý điều khoản sử dụng.');
 		}
 

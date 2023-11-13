@@ -21,7 +21,6 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo, generateRandomId, getColorStatusOrder, getStatusOrder, showMessage} from '../utils';
 import {getImageFromDevice, uploadImage} from '../utils/image';
 import Logger from '../utils/logger';
-import {pushNotificationToServiceCancelOrder} from '../utils/notification';
 
 const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 	const {navigation, route} = props;
@@ -211,7 +210,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 				</View>
 
 				<View style={{marginTop: heightScale(15)}}>
-					<CustomText font={FONT_FAMILY.BOLD} text={'ĐỊA CHỈ'} />
+					<CustomText font={FONT_FAMILY.BOLD} text={'THÔNG TIN NGƯỜI ĐẶT'} />
 					<View style={{padding: 10, borderWidth: 1, borderRadius: 5, marginTop: heightScale(5)}}>
 						<CustomText text={data?.userObject?.name} />
 						<CustomText text={data?.userObject?.phone} />
@@ -221,7 +220,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 
 				<View style={{marginTop: heightScale(15)}}>
 					<CustomText font={FONT_FAMILY.BOLD} text={'MÔ TẢ'} />
-					<View style={{padding: 10, marginTop: heightScale(5)}}>
+					<View style={{padding: 10, marginTop: heightScale(5), borderWidth: 1, borderRadius: 5}}>
 						<CustomText text={data?.description} />
 					</View>
 				</View>
