@@ -63,7 +63,7 @@ const RenderListService = (props: Props) => {
 		<FlatList
 			onRefresh={onRefresh}
 			refreshing={refreshing}
-			contentContainerStyle={styles.view}
+			style={styles.view}
 			data={data}
 			renderItem={({item}) => (
 				<TouchableOpacity onPress={() => onPressDetail(item)} style={{marginBottom: heightScale(20), flexDirection: 'row'}}>

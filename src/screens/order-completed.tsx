@@ -64,7 +64,7 @@ const OrderCompleted = () => {
 		<FlatList
 			onRefresh={onRefresh}
 			refreshing={refreshing}
-			contentContainerStyle={styles.view}
+			style={styles.view}
 			renderItem={({item}) => (
 				<TouchableOpacity onPress={() => onPressDetail(item)} style={{flexDirection: 'row', marginBottom: heightScale(20)}}>
 					<Image style={{width: widthScale(120), height: '100%', borderRadius: 5}} source={{uri: item?.serviceObject?.image}} />
@@ -72,7 +72,7 @@ const OrderCompleted = () => {
 						<CustomText font={FONT_FAMILY.BOLD} text={item?.serviceObject?.name} />
 						<CustomText text={item?.servicerObject.name} />
 						<CustomText text={moment(item?.timeBooking).format('hh:mm - DD/MM/YYYY')} />
-						<CustomText font={FONT_FAMILY.BOLD} color={getColorStatusOrder(item.status)} text={getStatusOrder(item.status)} />
+						<CustomText font={FONT_FAMILY.BOLD} color={getColorStatusOrder(item?.status)} text={getStatusOrder(item?.status)} />
 					</View>
 				</TouchableOpacity>
 			)}
