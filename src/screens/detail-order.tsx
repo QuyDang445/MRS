@@ -390,7 +390,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 				</Pressable>
 			</Modal>
 
-			{/* REPORT  */}
+			
 			<Modal
 				statusBarTranslucent
 				transparent
