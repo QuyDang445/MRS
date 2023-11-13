@@ -40,7 +40,7 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 
 	const SignUpSchema = Yup.object().shape({
 		name: Yup.string().required('Thiếu tên'),
-		phone: Yup.string().matches(phoneRegex, 'Số điện thoại không hợp lệ!').required('Thiếu số điện thoại'),
+		phone: Yup.string().matches(phoneRegex, 'Số điện thoại không hợp lệ!').required('thiếu số điện !'),
 		cccd: Yup.string().matches(cccdRegex, 'Số căn cước công dân không hợp lệ!').required('Thiếu căn cước công dân'),
 		image: Yup.string().required('Thiếu hình ảnh căn cước công dân'),
 		address: Yup.string().required('Thiếu địa chỉ'),

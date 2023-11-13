@@ -1,4 +1,4 @@
-import {FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, Image, RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {memo, useCallback, useState} from 'react';
 import {colors} from '../styles/colors';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
@@ -61,10 +61,9 @@ const OrderCanceled = () => {
 	const onPressDetail = (item: OrderProps) => navigation.navigate(ROUTE_KEY.DetailOrder, {data: item});
 
 	return (
+		<ScrollView refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />} style={styles.view}>
 		<FlatList
-			onRefresh={onRefresh}
-			refreshing={refreshing}
-			contentContainerStyle={styles.view}
+			scrollEnabled={false}
 			renderItem={({item}) => (
 				<TouchableOpacity onPress={() => onPressDetail(item)} style={{flexDirection: 'row', marginBottom: heightScale(20)}}>
 					<Image style={{width: widthScale(120), height: '100%', borderRadius: 5}} source={{uri: item?.serviceObject?.image}} />
@@ -83,6 +82,7 @@ const OrderCanceled = () => {
 			}
 			data={data}
 		/>
+		</ScrollView>
 	);
 };
 

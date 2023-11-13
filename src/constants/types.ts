@@ -22,8 +22,10 @@ export interface UserProps {
 		id: string;
 		image: string;
 	};
+	receiveBooking?: boolean;
 	isAccept?: boolean;
 	dateRegister?: number;
+	reasonBlock: string;
 }
 
 export interface NotificationItemProps {

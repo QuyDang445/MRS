@@ -54,7 +54,11 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 		})();
 	}, []);
 
-	const onPressBooking = () => {
+	const onPressBooking = async () => {
+		const servicer = (await API.get(`${TABLE.USERS}/${data.servicer}`)) as UserProps;
+		if (!servicer?.receiveBooking) {
+			return showMessage('Thợ này hiện không hoạt động!');
+		}
 		Spinner.show();
 		API.get(`${TABLE.SERVICE_BLOCK_USER}`, true)
 			.then((res: ServicerBlockUser[]) => {
