@@ -1,5 +1,5 @@
 import React, {memo, useEffect, useState} from 'react';
-import {DeviceEventEmitter, FlatList, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Button, DeviceEventEmitter, FlatList, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
@@ -24,7 +24,7 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 	const [data, setData] = useState<ServiceProps[]>([]);
 	const [refreshing, setRefreshing] = useState(false);
 
-	const onPressDetail = (item: ServiceProps) => navigation.navigate(ROUTE_KEY.ServiceDetail,{serviceData: item});
+	const onPressDetail = (item: ServiceProps) => navigation.navigate(ROUTE_KEY.ServiceDetail, {serviceData: item});
 
 	const onPressAddService = () => navigation.navigate(ROUTE_KEY.AddService);
 
@@ -65,6 +65,12 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 					</TouchableOpacity>
 				}
 			/>
+			<TouchableOpacity
+				onPress={() => {
+					navigation.navigate(ROUTE_KEY.AdminServiceAndServiceType);
+				}}>
+				<CustomText font={FONT_FAMILY.BOLD} text={'Navigate to admin add new service screen'} style={{textAlign: 'center', color: colors.red}} />
+			</TouchableOpacity>
 
 			<FlatList
 				refreshing={refreshing}

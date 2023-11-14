@@ -15,6 +15,7 @@ import {
 	Otp,
 	AllReview,
 	InfoServicer,
+	AdminServiceAndServiceType,
 } from '../screens';
 import BottomTab from './bottom-tab';
 import ChangePasswordForgot from '../screens/change-password-forgot';
@@ -35,6 +36,7 @@ import DetailOrder from '../screens/detail-order';
 import EvaluateService from '../screens/EvaluateService';
 import AddService from '../screens/add-service';
 import Payment from '../screens/payment';
+import AddCategory from '../screens/add-category';
 export type RootStackScreens = keyof RootStackScreensParams;
 export type RootStackScreenProps<T extends RootStackScreens> = StackScreenProps<RootStackScreensParams, T>;
 export type UseRootStackNavigation<T extends RootStackScreens = 'Splash'> = StackNavigationProp<RootStackScreensParams, T>;
@@ -78,6 +80,8 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.Payment} component={Payment} />
 			<Screen name={ROUTE_KEY.AllReview} component={AllReview} />
 			<Screen name={ROUTE_KEY.InfoServicer} component={InfoServicer} />
+			<Screen name={ROUTE_KEY.AdminServiceAndServiceType} component={AdminServiceAndServiceType} />
+			<Screen name={ROUTE_KEY.AddCategory} component={AddCategory} />
 		</Navigator>
 	);
 };
