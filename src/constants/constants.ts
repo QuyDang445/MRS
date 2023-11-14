@@ -17,3 +17,4 @@ export const baseWidth = 375;
 export const baseHeight = 812;
 
 export const CHANNEL_ID = 'SRM_MAIN';
+export const CHANNEL_NAME = 'SRM MAIN';

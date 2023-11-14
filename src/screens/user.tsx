@@ -1,16 +1,17 @@
-import React, {memo,useState} from 'react';
+import React, {memo, useState} from 'react';
 import {DeviceEventEmitter, Image, StyleSheet, TouchableOpacity, View, Switch} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
-import {EMIT_EVENT, FONT_FAMILY,TYPE_USER} from '../constants/enum';
+import {EMIT_EVENT, FONT_FAMILY, TYPE_USER} from '../constants/enum';
 import {RootStackScreenProps} from '../navigator/stacks';
 import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {ROUTE_KEY} from '../navigator/routers';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
+import {clearUserData, updateUserInfo} from '../stores/reducers/userReducer';
 
 const User = (props: RootStackScreenProps<'User'>) => {
 	const {navigation} = props;
@@ -106,8 +107,6 @@ const styles = StyleSheet.create({
 	viewContent: {
 		paddingHorizontal: widthScale(20),
 		marginTop: heightScale(20),
-		
-
 	},
 	button: {
 		height: heightScale(40),
@@ -116,5 +115,4 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 		borderBottomColor: colors.grayLine,
 	},
-	
 });

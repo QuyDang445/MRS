@@ -2,7 +2,7 @@ import {Alert, Linking, PermissionsAndroid, ToastAndroid} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {PERMISSIONS, request} from 'react-native-permissions';
 import API from '../services/api';
-import {EvaluateProps, ServiceProps, UserProps,OrderProps} from '../constants/types';
+import {EvaluateProps, ServiceProps, UserProps, OrderProps} from '../constants/types';
 import {TABLE, TYPE_ORDER_SERVICE, TYPE_USER} from '../constants/enum';
 
 import {colors} from '../styles/colors';
@@ -51,23 +51,28 @@ export const getServiceFromID = async (id: string) => {
 		arr[i].categoryObject = category;
 	}
 
-	// get info service
+	// get info servicer
 	for (let i = 0; i < arr.length; i++) {
-		const service = (await API.get(`${TABLE.USERS}/${arr[i].servicer}`, undefined)) as any;
-		arr[i].servicerObject = service;
+		const servicer = (await API.get(`${TABLE.USERS}/${arr[i].servicer}`, undefined)) as any;
+		arr[i].servicerObject = servicer;
 	}
 
-	// get info star evalute
+	// get info star evaluate
 	for (let i = 0; i < arr.length; i++) {
 		const evaluate = (await API.get(`${TABLE.EVALUATE}/${arr[i].id}`, true)) as EvaluateProps[];
-		arr[i].evaluate = evaluate;
-
-		// get info star
+		// console.log('evaluate in index: ' + JSON.stringify(evaluate));
 		let totalStar = 0;
-		for (let j = 0; j < evaluate.length; j++) {
-			totalStar += evaluate[j].star;
+		if (evaluate !== undefined && evaluate.length > 0) {
+			for (let j = 0; j < evaluate.length; j++) {
+				const userData = (await API.get(`${TABLE.USERS}/${evaluate[j].user_id}`)) as unknown as UserProps;
+				console.log(`get userData ${evaluate[j].user_id} of eva ${evaluate[j].id}`);
+				evaluate[j].userObject = userData;
+				totalStar += evaluate[j].star;
+			}
+			arr[i].star = totalStar / (evaluate.length || 1);
+			// console.log('evaluate in index2: ' + JSON.stringify([...evaluate]));
+			arr[i].evaluate = [...evaluate];
 		}
-		arr[i].star = totalStar / (evaluate.length || 1);
 	}
 
 	return arr;

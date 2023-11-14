@@ -36,7 +36,6 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 	const [description, setDescription] = useState('');
 	const [images, setImages] = useState<ImageProps[]>([]);
 
-
 	const onPressGetMyAddress = async () => {
 		Spinner.show();
 		const location = await getLocationMyDevice();
@@ -85,7 +84,7 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 
 			API.post(`${TABLE.ORDERS}`, body)
 				.then((res: any) => {
-					showMessage('Tạo đơn đặt hàng thành công!');
+					showMessage('Tạo đơn đặt hàng thành công!' + JSON.stringify(res));
 					pushNotificationToServiceNewOrder(service.id, userInfo?.id!, res?.name!);
 					navigation.goBack();
 				})
@@ -96,7 +95,7 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 	return (
 		<FixedContainer>
 			<CustomHeader title="ĐẶT LỊCH" />
-			<CustomText style={{textAlign: 'center'}}  font={FONT_FAMILY.BOLD} />
+			<CustomText style={{textAlign: 'center'}} font={FONT_FAMILY.BOLD} />
 
 			<ScrollView style={styles.view}>
 				{/* NAME  */}
@@ -113,28 +112,27 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 
 				{/* ADDRESS  */}
 				<View style={styles.viewInput}>
-				<CustomText text={'ĐỊA CHỈ'} font={FONT_FAMILY.BOLD} />
-				<View style={styles.addressButtonsContainer}>
-					<View style={styles.addressButton}>
-					<TouchableOpacity onPress={onPressGetMyAddress} style={styles.buttonUseCurrentLocation}>
-					<View style={{ flexDirection: 'row', alignItems: 'center'  }}>
-						<Image source={ICONS.location} style={styles.icon} />
-						<CustomText style={styles.textUseCurrentLocation} text={'Sử dụng vị trí hiện tại'} />
+					<CustomText text={'ĐỊA CHỈ'} font={FONT_FAMILY.BOLD} />
+					<View style={styles.addressButtonsContainer}>
+						<View style={styles.addressButton}>
+							<TouchableOpacity onPress={onPressGetMyAddress} style={styles.buttonUseCurrentLocation}>
+								<View style={{flexDirection: 'row', alignItems: 'center'}}>
+									<Image source={ICONS.location} style={styles.icon} />
+									<CustomText style={styles.textUseCurrentLocation} text={'Sử dụng vị trí hiện tại'} />
+								</View>
+							</TouchableOpacity>
+						</View>
+						<View style={styles.addressButton}>
+							<TouchableOpacity style={styles.buttonChooseAddress} onPress={onPressChooseAddress}>
+								<View style={{flexDirection: 'row', alignItems: 'center'}}>
+									<Image source={ICONS.bookaddress} style={styles.icon} />
+									<CustomText style={styles.textChooseAddress} size={12} text={'Chọn địa chỉ'} />
+								</View>
+							</TouchableOpacity>
+						</View>
 					</View>
-					</TouchableOpacity>
-					</View>
-					<View style={styles.addressButton}>
-					<TouchableOpacity style={styles.buttonChooseAddress} onPress={onPressChooseAddress}>
-					<View style={{ flexDirection: 'row', alignItems: 'center'  }}>
-						<Image source={ICONS.bookaddress} style={styles.icon} />
-						<CustomText style={styles.textChooseAddress} size={12} text={'Chọn địa chỉ'} />
-					</View>
-					</TouchableOpacity>
-					</View>
+					<TextInput multiline value={address} editable={false} style={styles.inputAddress} />
 				</View>
-				<TextInput multiline value={address} editable={false} style={styles.inputAddress} />
-				</View>
-
 
 				{/* DATE  */}
 				<View style={styles.viewInput}>
@@ -167,7 +165,7 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 				{/* IMAGES  */}
 				<View style={styles.viewInput}>
 					<CustomText text={'CÁC HÌNH ẢNH'} font={FONT_FAMILY.BOLD} />
-					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+					<View style={{flexDirection: 'row', alignItems: 'center'}}>
 						<TouchableOpacity
 							onPress={async () => {
 								const newImages = await getImageFromDevice(10);
@@ -293,22 +291,22 @@ const styles = StyleSheet.create({
 		color: colors.blackGray,
 		fontFamily: FONT_FAMILY.BOLD,
 		fontSize: 12,
-	  },
-	  textChooseAddress: {
+	},
+	textChooseAddress: {
 		color: colors.blackGray,
 		fontFamily: FONT_FAMILY.BOLD,
 		fontSize: 12,
-	  },
-	  addressButtonsContainer: {
+	},
+	addressButtonsContainer: {
 		flexDirection: 'column',
 		marginTop: heightScale(5),
-	  },
-	  addressButton: {
+	},
+	addressButton: {
 		marginTop: heightScale(5),
-	  },
-	  icon: {
-		width: 24, 
-		height: 24, 
-		marginRight: 10
-	  },
+	},
+	icon: {
+		width: 24,
+		height: 24,
+		marginRight: 10,
+	},
 });

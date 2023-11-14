@@ -17,6 +17,7 @@ import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import messaging from '@react-native-firebase/messaging';
 import {showMessage} from '../utils';
+import {string} from 'yup';
 
 const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 	const {navigation} = props;
@@ -39,7 +40,6 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 	const onPressForgotPass = () => navigation.navigate(ROUTE_KEY.ForgotPass);
 
 	const onPressSignUp = () => navigation.navigate(ROUTE_KEY.SignUp);
-
 	const onPressLogin = async () => {
 		if (!phone.trim()) {
 			return setErrorPhone('Thiếu số điện thoại!');
@@ -59,7 +59,7 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 		}
 		Spinner.show();
 		const users = (await API.get(TABLE.USERS, true)) as UserProps[];
-		
+
 		for (let i = 0; i < users.length; i++) {
 			if (users[i].phone === phone && users[i].password === password) {
 				// update token user:
@@ -75,6 +75,7 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 					//ToastAndroid.show('Tài khoản của bạn đang chờ admin sét duyệt', ToastAndroid.SHORT);
 					return showMessage('Tài khoản của bạn đang chờ admin sét duyệt');
 				} else {
+					console.log('user log in: ' + JSON.stringify(newUser));
 					dispatch(cacheUserInfo(newUser));
 					navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.BottomTab}]}));
 					return ToastAndroid.show('Đăng nhập thành công!', ToastAndroid.SHORT);
