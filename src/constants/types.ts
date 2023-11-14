@@ -1,4 +1,4 @@
-import {TYPE_ORDER_SERVICE, TYPE_USER} from './enum';
+import {NOTIFICATION_TYPE, TYPE_ORDER_SERVICE, TYPE_USER} from './enum';
 
 export interface ImageProps {
 	name: string;

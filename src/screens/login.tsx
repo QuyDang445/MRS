@@ -17,7 +17,6 @@ import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import messaging from '@react-native-firebase/messaging';
 import {showMessage} from '../utils';
-import {string} from 'yup';
 
 const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 	const {navigation} = props;
@@ -40,20 +39,18 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 	const onPressForgotPass = () => navigation.navigate(ROUTE_KEY.ForgotPass);
 
 	const onPressSignUp = () => navigation.navigate(ROUTE_KEY.SignUp);
+
 	const onPressLogin = async () => {
 		if (!phone.trim()) {
-			setErrorPhone('Thiếu số điện thoại!');
-			return showMessage('Thiếu số điện thoại.');
+			return setErrorPhone('Thiếu số điện thoại!');
 		} else if (phoneRegex.test(phone) == false) {
-			setErrorPhone('Số điện thoại không hợp lệ!');
-			return showMessage('Số điện thoại không hợp lệ.');
+			return setErrorPhone('Số điện thoại không hợp lệ!');
 		} else {
 			setErrorPhone('');
 		}
 
 		if (!password.trim()) {
-			setErrorPass('Thiếu mật khẩu!');
-			return showMessage('Thiếu mật khẩu.');
+			return setErrorPass('Thiếu mật khẩu!');
 		} else {
 			setErrorPass('');
 		}
@@ -62,7 +59,7 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 		}
 		Spinner.show();
 		const users = (await API.get(TABLE.USERS, true)) as UserProps[];
-
+		
 		for (let i = 0; i < users.length; i++) {
 			if (users[i].phone === phone && users[i].password === password) {
 				// update token user:
@@ -75,10 +72,9 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 
 				//// Main when have home screen
 				if (users[i].type === TYPE_USER.SERVICER && !users[i]?.isAccept) {
-					ToastAndroid.show('Tài khoản của bạn đang chờ admin xét duyệt', ToastAndroid.SHORT);
-					//return showMessage('Tài khoản của bạn đang chờ admin sét duyệt');
+					//ToastAndroid.show('Tài khoản của bạn đang chờ admin sét duyệt', ToastAndroid.SHORT);
+					return showMessage('Tài khoản của bạn đang chờ admin sét duyệt');
 				} else {
-					console.log('user log in: ' + JSON.stringify(newUser));
 					dispatch(cacheUserInfo(newUser));
 					navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.BottomTab}]}));
 					return ToastAndroid.show('Đăng nhập thành công!', ToastAndroid.SHORT);

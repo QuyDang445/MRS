@@ -119,7 +119,7 @@ const AddService = (props: RootStackScreenProps<'AddService'>) => {
 				{/* DESCRIPTION  */}
 				<CustomText font={FONT_FAMILY.BOLD} text={'MÔ TẢ'} size={14} />
 				<View style={styles.viewInput}>
-					<TextInput value={description} onChangeText={setDescription} multiline />
+					<TextInput value={description} onChangeText={setDescription} style={{color: colors.black}} multiline />
 				</View>
 			</ScrollView>
 			<View style={{padding: widthScale(20)}}>
@@ -147,6 +147,7 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		paddingLeft: widthScale(10),
 		marginBottom: heightScale(20),
+		color: colors.black,
 	},
 	uploadImage: {
 		width: widthScale(200),
@@ -166,5 +167,6 @@ const styles = StyleSheet.create({
 		width: '100%',
 		borderRadius: 5,
 		borderWidth: 1,
+		color: colors.black,
 	},
 });

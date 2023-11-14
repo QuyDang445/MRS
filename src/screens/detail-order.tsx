@@ -214,7 +214,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 				</View>
 
 				<View style={{marginTop: heightScale(15)}}>
-					<CustomText font={FONT_FAMILY.BOLD} text={'ĐỊA CHỈ'} />
+					<CustomText font={FONT_FAMILY.BOLD} text={'THÔNG TIN NGƯỜI ĐẶT'} />
 					<View style={{padding: 10, borderWidth: 1, borderRadius: 5, marginTop: heightScale(5)}}>
 						<CustomText text={data?.userObject?.name} />
 						<CustomText text={data?.userObject?.phone} />
@@ -224,7 +224,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 
 				<View style={{marginTop: heightScale(15)}}>
 					<CustomText font={FONT_FAMILY.BOLD} text={'MÔ TẢ'} />
-					<View style={{padding: 10, marginTop: heightScale(5)}}>
+					<View style={{padding: 10, marginTop: heightScale(5), borderWidth: 1, borderRadius: 5}}>
 						<CustomText text={data?.description} />
 					</View>
 				</View>
