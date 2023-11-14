@@ -17,14 +17,13 @@ import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import messaging from '@react-native-firebase/messaging';
 import {showMessage} from '../utils';
-import {string} from 'yup';
 
 const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 	const {navigation} = props;
 	const dispatch = useAppDispatch();
 
-	const [phone, setPhone] = useState('');
-	const [password, setPassword] = useState('');
+	const [phone, setPhone] = useState(__DEV__ ? '' : '');
+	const [password, setPassword] = useState(__DEV__ ? '' : '');
 	const [errorPhone, setErrorPhone] = useState('');
 	const [errorPass, setErrorPass] = useState('');
 	const phoneRegex = /(0)+([0-9]{9})\b/;
@@ -40,26 +39,27 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 	const onPressForgotPass = () => navigation.navigate(ROUTE_KEY.ForgotPass);
 
 	const onPressSignUp = () => navigation.navigate(ROUTE_KEY.SignUp);
+
 	const onPressLogin = async () => {
 		if (!phone.trim()) {
 			return setErrorPhone('Thiếu số điện thoại!');
 		} else if (phoneRegex.test(phone) == false) {
 			return setErrorPhone('Số điện thoại không hợp lệ!');
 		} else {
-			return setErrorPhone('');
+			setErrorPhone('');
 		}
 
 		if (!password.trim()) {
 			return setErrorPass('Thiếu mật khẩu!');
 		} else {
-			return setErrorPass('');
+			setErrorPass('');
 		}
 		if (!phone || !password) {
 			return;
 		}
 		Spinner.show();
 		const users = (await API.get(TABLE.USERS, true)) as UserProps[];
-
+		
 		for (let i = 0; i < users.length; i++) {
 			if (users[i].phone === phone && users[i].password === password) {
 				// update token user:
@@ -75,7 +75,6 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 					//ToastAndroid.show('Tài khoản của bạn đang chờ admin sét duyệt', ToastAndroid.SHORT);
 					return showMessage('Tài khoản của bạn đang chờ admin sét duyệt');
 				} else {
-					console.log('user log in: ' + JSON.stringify(newUser));
 					dispatch(cacheUserInfo(newUser));
 					navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.BottomTab}]}));
 					return ToastAndroid.show('Đăng nhập thành công!', ToastAndroid.SHORT);
@@ -97,7 +96,6 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 					<TextInput
 						value={phone}
 						onChangeText={setPhone}
-						maxLength={10}
 						keyboardType="numeric"
 						placeholder="Số điện thoại"
 						placeholderTextColor={colors.grayText}
