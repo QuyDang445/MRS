@@ -69,6 +69,7 @@ const SignUp = (props: RootStackScreenProps<'SignUp'>) => {
 
 		if (pass !== rePass) {
 			return setErrorConfirmPass('Mật khẩu nhập lại không đúng!');
+		} else {
 			setErrorConfirmPass('');
 		}
 
@@ -187,11 +188,11 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		width: widthScale(150),
-		marginTop: heightScale(100),
+		marginTop: heightScale(40),
 	},
 	signUp: {
 		margin: widthScale(20),
-		marginTop: heightScale(40),
+		marginTop: heightScale(20),
 	},
 	viewCheck: {
 		marginHorizontal: widthScale(20),

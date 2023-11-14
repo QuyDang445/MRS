@@ -42,15 +42,15 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 
 	const onPressLogin = async () => {
 		if (!phone.trim()) {
-			setErrorPhone('Thiếu số điện thoại!');
+			return setErrorPhone('Thiếu số điện thoại!');
 		} else if (phoneRegex.test(phone) == false) {
-			setErrorPhone('Số điện thoại không hợp lệ!');
+			return setErrorPhone('Số điện thoại không hợp lệ!');
 		} else {
 			return setErrorPhone('');
 		}
 
 		if (!password.trim()) {
-			setErrorPass('Thiếu mật khẩu!');
+			return setErrorPass('Thiếu mật khẩu!');
 		} else {
 			return setErrorPass('');
 		}
@@ -72,8 +72,8 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 
 				//// Main when have home screen
 				if (users[i].type === TYPE_USER.SERVICER && !users[i]?.isAccept) {
-					ToastAndroid.show('Tài khoản của bạn đang chờ admin sét duyệt', ToastAndroid.SHORT);
-					//return showMessage('Tài khoản của bạn đang chờ admin sét duyệt');
+					//ToastAndroid.show('Tài khoản của bạn đang chờ admin sét duyệt', ToastAndroid.SHORT);
+					return showMessage('Tài khoản của bạn đang chờ admin sét duyệt');
 				} else {
 					dispatch(cacheUserInfo(newUser));
 					navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.BottomTab}]}));

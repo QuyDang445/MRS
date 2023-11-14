@@ -18,7 +18,6 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo, showMessage} from '../utils';
 import {getImageFromDevice, uploadImage} from '../utils/image';
 import { UserProps } from '../constants/types';
-import {pushNotificationAdminNewServicer} from '../utils/notification';
 
 const SignUpServices = async (props: RootStackScreenProps<'SignUpServices'>) => {
 	const {navigation} = props;
@@ -54,6 +53,7 @@ const SignUpServices = async (props: RootStackScreenProps<'SignUpServices'>) => 
 		const allUser = (await API.get(`${TABLE.USERS}`, true)) as UserProps[];
 		for (let i = 0; i < allUser.length; i++) {
 			if (allUser[i].phone === value.phone) {
+				//console.log('Số điện thoại này đã được đăng ký');
 				return showMessage('Số điện thoại này đã được đăng ký');
 			}
 		}
@@ -75,7 +75,6 @@ const SignUpServices = async (props: RootStackScreenProps<'SignUpServices'>) => 
 			};
 			const res = await API.post(`${TABLE.USERS}`, body);
 			if (res) {
-				await pushNotificationAdminNewServicer(res.id);
 				showMessage('Đăng ký tài khoản thành công, vui lòng chờ đợi admin duyệt qua thông tin!');
 				DeviceEventEmitter.emit(EMIT_EVENT.DATA_LOGIN, {phone: value.phone, password: value.pass});
 				navigation.goBack();
@@ -89,7 +88,7 @@ const SignUpServices = async (props: RootStackScreenProps<'SignUpServices'>) => 
 	return (
 		<FixedContainer>
 			<CustomHeader title="ĐĂNG KÝ TÀI KHOẢN" />
-			<ScrollView>
+			
 				<Formik
 					innerRef={innerRefFormik}
 					validationSchema={SignUpSchema}
@@ -100,6 +99,7 @@ const SignUpServices = async (props: RootStackScreenProps<'SignUpServices'>) => 
 						return (
 							<>
 								<Image source={IMAGES.LOGO} style={styles.logo} />
+								<ScrollView>
 								<View style={styles.input}>
 									<TextInput
 										value={values.name}
@@ -193,17 +193,17 @@ const SignUpServices = async (props: RootStackScreenProps<'SignUpServices'>) => 
 									text={'Tôi đồng ý với Điều Khoản Sử Dụng'}
 								/>
 								{errors.isCheck && (
-									<CustomText text={errors.isCheck} color={colors.red} size={12} style={{marginHorizontal: widthScale(20)}} />
+									<CustomText text={errors.isCheck} color={colors.red} size={12} style={{marginHorizontal: widthScale(20), alignSelf: 'center'}} />
 								)}
 
 								<View style={{alignSelf: 'center', marginBottom: heightScale(20)}}>
 									<CustomButton onPress={handleSubmit} text="ĐĂNG KÝ" style={styles.button} />
 								</View>
+								</ScrollView>
 							</>
 						);
 					}}
 				</Formik>
-			</ScrollView>
 			<ModalChooseProvince ref={modalChooseProvinceRef} onPressSave={onChangeAddress} />
 		</FixedContainer>
 	);
@@ -257,12 +257,12 @@ const styles = StyleSheet.create({
 	},
 	viewCheck: {
 		marginHorizontal: widthScale(20),
-		marginTop: heightScale(10),
+		marginTop: heightScale(20),
 		justifyContent: 'center',
 	},
 	button: {
 		width: widthScale(150),
-		marginTop: heightScale(100),
+		marginTop: heightScale(50),
 	},
 	eyeIcon: {
 		position: 'absolute',
