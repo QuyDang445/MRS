@@ -24,7 +24,7 @@ const User = (props: RootStackScreenProps<'User'>) => {
 	const onPressUpdateInformation = () => navigation.navigate(ROUTE_KEY.UpdateInformation);
 	const onPressListAddress = () => navigation.navigate(ROUTE_KEY.ListAddress);
 	const onPressDataPrivacy = () => navigation.navigate(ROUTE_KEY.Privacypolicy);
-	const onPressServiceFree = () => navigation.navigate(ROUTE_KEY.Payment);
+	const onPressServiceFree = () => navigation.navigate(ROUTE_KEY.FeeService);
 	const onPressserListBlock = () => navigation.navigate(ROUTE_KEY.Listblock);
 	const onPressFAQs = () => navigation.navigate(ROUTE_KEY.FAQs);
 

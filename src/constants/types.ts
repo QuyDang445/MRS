@@ -92,3 +92,27 @@ export interface ServicerBlockUser {
 	phone: string;
 	id: string;
 }
+export interface PaymentProps {
+	date: number;
+	id: string;
+	idServicer: string;
+	image: string;
+	servicerObject?: UserProps;
+	isAccept?: boolean;
+}
+export interface PaymentServicer {
+	idServicer: string;
+	image: string;
+	id: string;
+	date: number;
+	paymentTime: string;  //'10-2023'
+	isAccept?: boolean;
+}
+export interface InfoPaymentAdmin {
+	id: string;
+	number: number;
+	nameBank: string;
+	name: string;
+	content: string;
+	image?: string;
+}

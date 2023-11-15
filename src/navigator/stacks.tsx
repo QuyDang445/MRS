@@ -1,6 +1,6 @@
 import {CardStyleInterpolators, createStackNavigator, StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import React, {memo} from 'react';
-import {Settings, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {Onboarding, Splash, Home, Search, Notification, NotificationDetail, ServiceDetail, LogIn, ForgotPass, SignUp, Otp} from '../screens';
 import BottomTab from './bottom-tab';
 import ChangePasswordForgot from '../screens/change-password-forgot';
@@ -20,7 +20,12 @@ import Listblock from '../screens/listblock';
 import DetailOrder from '../screens/detail-order';
 import EvaluateService from '../screens/EvaluateService';
 import AddService from '../screens/add-service';
-import Payment from '../screens/payment';
+import Payment from '../screens/admin/payment';
+import AddPayment from '../screens/admin/add-payment';
+import EditPaymentFee from '../screens/admin/edit-payment-fee';
+import ManagePayment from '../screens/admin/manage-payment';
+import FeeService from '../screens/fee-service';
+
 export type RootStackScreens = keyof RootStackScreensParams;
 export type RootStackScreenProps<T extends RootStackScreens> = StackScreenProps<RootStackScreensParams, T>;
 export type UseRootStackNavigation<T extends RootStackScreens = 'Splash'> = StackNavigationProp<RootStackScreensParams, T>;
@@ -62,6 +67,10 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.EvaluateService} component={EvaluateService} />
 			<Screen name={ROUTE_KEY.AddService} component={AddService} />
 			<Screen name={ROUTE_KEY.Payment} component={Payment} />
+			<Screen name={ROUTE_KEY.EditPaymentFee} component={EditPaymentFee} />
+			<Screen name={ROUTE_KEY.AddPayment} component={AddPayment} />
+			<Screen name={ROUTE_KEY.FeeService} component={FeeService} />
+			<Screen name={ROUTE_KEY.ManagePayment} component={ManagePayment} />
 		</Navigator>
 	);
 };

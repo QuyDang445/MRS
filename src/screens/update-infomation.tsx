@@ -64,7 +64,6 @@ const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => 
 		const res = await API.put(`${TABLE.USERS}/${userInfo?.id}`, { ...userInfo, name: name, phone: phone, address: address });
 		Spinner.hide();
 		if (res) {
-			
 			dispatch(cacheUserInfo(res));
 			showMessage('Đã lưu thành công');
 			navigation.goBack();
