@@ -4,7 +4,7 @@ import {ICONS} from '../assets/image-paths';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
-import {EMIT_EVENT, FONT_FAMILY, TYPE_USER} from '../constants/enum';
+import {EMIT_EVENT, FONT_FAMILY, TABLE, TYPE_USER} from '../constants/enum';
 import {RootStackScreenProps} from '../navigator/stacks';
 import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';

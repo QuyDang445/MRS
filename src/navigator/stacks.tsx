@@ -35,6 +35,8 @@ import DetailOrder from '../screens/detail-order';
 import EvaluateService from '../screens/EvaluateService';
 import AddService from '../screens/add-service';
 import Payment from '../screens/payment';
+import AcceptServicer from '../screens/admin/accept-servicer';
+import infoAcceptServicer from '../screens/admin/info-accept-servicer';
 export type RootStackScreens = keyof RootStackScreensParams;
 export type RootStackScreenProps<T extends RootStackScreens> = StackScreenProps<RootStackScreensParams, T>;
 export type UseRootStackNavigation<T extends RootStackScreens = 'Splash'> = StackNavigationProp<RootStackScreensParams, T>;
@@ -78,6 +80,8 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.Payment} component={Payment} />
 			<Screen name={ROUTE_KEY.AllReview} component={AllReview} />
 			<Screen name={ROUTE_KEY.InfoServicer} component={InfoServicer} />
+			<Screen name={ROUTE_KEY.AcceptServicer} component={AcceptServicer} />
+			<Screen name={ROUTE_KEY.InfoAcceptServicer} component={infoAcceptServicer} />
 		</Navigator>
 	);
 };

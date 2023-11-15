@@ -16,11 +16,12 @@ import { heightScale, widthScale } from '../styles/scaling-utils';
 import { showMessage } from '../utils';
 import { getImageFromDevice, uploadImage } from '../utils/image';
 import ModalChooseProvince, { ModalObject } from '../components/sign-up/modal-choose-province';
+import { FormikProps } from 'formik';
 
 const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => {
 	const { navigation } = props;
 	const dispatch = useAppDispatch();
-
+	const innerRefFormik = useRef<FormikProps<any>>(null);
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
 
 	const [name, setName] = useState(userInfo?.name);

@@ -1,4 +1,4 @@
-import {FlatList, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {memo, useCallback, useState} from 'react';
 import {colors} from '../styles/colors';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
@@ -72,7 +72,7 @@ const OrderCompleted = () => {
 						<CustomText font={FONT_FAMILY.BOLD} text={item?.serviceObject?.name} />
 						<CustomText text={item?.servicerObject.name} />
 						<CustomText text={moment(item?.timeBooking).format('hh:mm - DD/MM/YYYY')} />
-						<CustomText font={FONT_FAMILY.BOLD} color={getColorStatusOrder(item?.status)} text={getStatusOrder(item?.status)} />
+						<CustomText font={FONT_FAMILY.BOLD} color={getColorStatusOrder(item.status)} text={getStatusOrder(item.status)} />
 					</View>
 				</TouchableOpacity>
 			)}
