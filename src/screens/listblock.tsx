@@ -7,7 +7,7 @@ import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
 import Spinner from '../components/spinner';
 import {TABLE} from '../constants/enum';
-import {ServicerBlockUser} from '../constants/types';
+import {ServicerBlockUser, UserProps} from '../constants/types';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
 import {useAppSelector} from '../stores/store/storeHooks';
@@ -42,8 +42,22 @@ const Listblock = (props: RootStackScreenProps<'Listblock'>) => {
 			})
 			.finally(() => setRefreshing(false));
 	};
-
+	// const handleRegister = async (value: any) => {
+	// 	const allUser = (await API.get(`${TABLE.USERS}`, true)) as UserProps[];
+	// 	for (let i = 0; i < allUser.length; i++) {
+	// 		if (allUser[i].phone === value.phone) {
+	// 			return showMessage('Số điện thoại này đang khóa');
+	// 		}
+	// 	}
+	// };
 	const handleAddBlock = () => {
+		// const users = (await API.get(TABLE.USERS, true)) as UserProps[];
+		// let check = false;
+		// for (let i = 0; i < users.length; i++) {
+		// 	if (users[i].phone !== phone) {
+		// 		check = true;
+		// 	}
+		// }
 		setError('');
 		if (!phone.trim()) {
 		  setError('Vui lòng nhập số điện thoại.');

@@ -1,21 +1,21 @@
-import React, {memo,useState} from 'react';
-import {DeviceEventEmitter, Image, StyleSheet, TouchableOpacity, View, Switch} from 'react-native';
-import {ICONS} from '../assets/image-paths';
+import React, { memo, useState } from 'react';
+import { DeviceEventEmitter, Image, StyleSheet, TouchableOpacity, View, Switch } from 'react-native';
+import { ICONS } from '../assets/image-paths';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
-import {EMIT_EVENT, FONT_FAMILY,TABLE,TYPE_USER} from '../constants/enum';
-import {RootStackScreenProps} from '../navigator/stacks';
-import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
-import {colors} from '../styles/colors';
-import {heightScale, widthScale} from '../styles/scaling-utils';
-import {ROUTE_KEY} from '../navigator/routers';
+import { EMIT_EVENT, FONT_FAMILY, TABLE, TYPE_USER } from '../constants/enum';
+import { RootStackScreenProps } from '../navigator/stacks';
+import { useAppDispatch, useAppSelector } from '../stores/store/storeHooks';
+import { colors } from '../styles/colors';
+import { heightScale, widthScale } from '../styles/scaling-utils';
+import { ROUTE_KEY } from '../navigator/routers';
 import { ScrollView } from 'react-native-gesture-handler';
 import API from '../services/api';
 import CustomSwich from '../components/custom-swich';
 
 const User = (props: RootStackScreenProps<'User'>) => {
-	const {navigation} = props;
+	const { navigation } = props;
 	const dispatch = useAppDispatch();
 
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
@@ -32,11 +32,11 @@ const User = (props: RootStackScreenProps<'User'>) => {
 	const onPressFAQs = () => navigation.navigate(ROUTE_KEY.FAQs);
 
 	const [isEnabled, setIsEnabled] = useState(false);
-	
+
 
 	const onPressLogout = () => DeviceEventEmitter.emit(EMIT_EVENT.LOGOUT);
 
-	const ProfileButton = ({buttonName, onClick}: {buttonName: string; onClick: () => void}) => {
+	const ProfileButton = ({ buttonName, onClick }: { buttonName: string; onClick: () => void }) => {
 		return (
 			<View>
 				<TouchableOpacity onPress={onClick} style={styles.button}>
@@ -47,23 +47,23 @@ const User = (props: RootStackScreenProps<'User'>) => {
 	};
 	const onPressChangeStatus = () => {
 		const status = !receiveBooking;
-		API.put(`${TABLE.USERS}/${userInfo?.id}`, {...userInfo, receiveBooking: status});
+		API.put(`${TABLE.USERS}/${userInfo?.id}`, { ...userInfo, receiveBooking: status });
 		setReceiveBooking(status);
 	};
 	return (
 		<FixedContainer>
 			<CustomHeader title="Hồ Sơ" hideBack />
 			{/* Avatar  */}
-			<Image style={styles.avatar} source={userInfo?.avatar ? {uri: userInfo?.avatar} : ICONS.user} />
+			<Image style={styles.avatar} source={userInfo?.avatar ? { uri: userInfo?.avatar } : ICONS.user} />
 
-			<CustomText text={userInfo?.name} font={FONT_FAMILY.BOLD} style={{textAlign: 'center'}} />
+			<CustomText text={userInfo?.name} font={FONT_FAMILY.BOLD} style={{ textAlign: 'center' }} />
 			<ScrollView>
 				{userInfo?.type === TYPE_USER.SERVICER && (
 					<View
-					style={{flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: widthScale(20), marginVertical: heightScale(10)}}>
-					<CustomText text={'Trạng thái hoạt động'} font={FONT_FAMILY.BOLD} size={15} />
-					<CustomSwich isOn={receiveBooking!} onPress={onPressChangeStatus} />
-				</View>
+						style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: widthScale(20), marginVertical: heightScale(10) }}>
+						<CustomText text={'TRẠNG THÁI HOẠT ĐỘNG'} font={FONT_FAMILY.BOLD} size={15} />
+						<CustomSwich isOn={receiveBooking!} onPress={onPressChangeStatus} />
+					</View>
 				)}
 				<View style={styles.viewContent}>
 					<CustomText text={'QUẢN LÝ TÀI KHOẢN'} font={FONT_FAMILY.BOLD} size={15} />
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
 	viewContent: {
 		paddingHorizontal: widthScale(20),
 		marginTop: heightScale(20),
-		
+
 
 	},
 	button: {
@@ -118,5 +118,5 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 		borderBottomColor: colors.grayLine,
 	},
-	
+
 });
