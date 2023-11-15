@@ -76,7 +76,7 @@ const User = (props: RootStackScreenProps<'User'>) => {
 				{userInfo?.type === TYPE_USER.SERVICER && (
 					<View style={styles.viewContent}>
 						<CustomText text={'Dịch Vụ'} font={FONT_FAMILY.BOLD} size={15} />
-						<ProfileButton buttonName="Phí Dịch Vụ" onClick={onPressServiceFree} />
+						<ProfileButton buttonName="Phí thanh toán" onClick={onPressServiceFree} />
 						<ProfileButton buttonName="Danh sách chặn" onClick={onPressserListBlock} />
 					</View>
 				)}

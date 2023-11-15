@@ -160,7 +160,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 	const handleReport = (reasonReport: string) => {};
 
 	const handleEvaluate = () => {
-		//navigation.navigate(ROUTE_KEY.EvaluateService, {data: data});
+		navigation.navigate(ROUTE_KEY.EvaluateService, {data: data});
 	};
 
 	if (loading) {
