@@ -21,7 +21,7 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo, generateRandomId, getColorStatusOrder, getStatusOrder, showMessage} from '../utils';
 import {getImageFromDevice, uploadImage} from '../utils/image';
 import Logger from '../utils/logger';
-import {pushNotificationToServiceCancelOrder} from '../utils/notification';
+import {pushNotificationToServiceCancelOrder, pushNotificationToUserCancelOrder, pushNotificationToUserConfirmOrder} from '../utils/notification';
 
 const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 	const {navigation, route} = props;
@@ -71,6 +71,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 									status: TYPE_ORDER_SERVICE.OrderCanceled,
 									statusCancel: reasonCancel,
 								}).then(() => {
+									pushNotificationToServiceCancelOrder(data.idService, data.idUser, data.id);
 									showMessage('Huỷ đơn hàng thành công!');
 									navigation.goBack();
 								});
@@ -93,6 +94,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 									status: TYPE_ORDER_SERVICE.OrderCanceled,
 									statusCancel: reasonCancel,
 								}).then(() => {
+									pushNotificationToUserCancelOrder(data.idService, data.idUser, data.id);
 									showMessage('Huỷ đơn hàng thành công!');
 									navigation.goBack();
 								});
@@ -114,6 +116,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 				.then(async (newData: any) => {
 					if (newData?.status !== TYPE_ORDER_SERVICE.OrderCanceled) {
 						await API.put(`${TABLE.ORDERS}/${data.id}`, {...newData, status: TYPE_ORDER_SERVICE.OrderInProcess}).then(() => {
+							pushNotificationToUserConfirmOrder(data.idService, data.idUser, data.id);
 							showMessage('Xác nhận thành công!');
 						});
 					} else {
@@ -157,7 +160,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 	const handleReport = (reasonReport: string) => {};
 
 	const handleEvaluate = () => {
-		navigation.navigate(ROUTE_KEY.EvaluateService, {data: data});
+		//navigation.navigate(ROUTE_KEY.EvaluateService, {data: data});
 	};
 
 	if (loading) {
@@ -211,7 +214,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 				</View>
 
 				<View style={{marginTop: heightScale(15)}}>
-					<CustomText font={FONT_FAMILY.BOLD} text={'ĐỊA CHỈ'} />
+					<CustomText font={FONT_FAMILY.BOLD} text={'THÔNG TIN NGƯỜI ĐẶT'} />
 					<View style={{padding: 10, borderWidth: 1, borderRadius: 5, marginTop: heightScale(5)}}>
 						<CustomText text={data?.userObject?.name} />
 						<CustomText text={data?.userObject?.phone} />
@@ -221,7 +224,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 
 				<View style={{marginTop: heightScale(15)}}>
 					<CustomText font={FONT_FAMILY.BOLD} text={'MÔ TẢ'} />
-					<View style={{padding: 10, marginTop: heightScale(5)}}>
+					<View style={{padding: 10, marginTop: heightScale(5), borderWidth: 1, borderRadius: 5}}>
 						<CustomText text={data?.description} />
 					</View>
 				</View>
@@ -236,7 +239,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 					<View style={{marginTop: heightScale(15)}}>
 						<CustomText font={FONT_FAMILY.BOLD} text={'KẾT QUẢ'} />
 						<ScrollView horizontal>
-							{data?.imageDone?.map(item => (
+							{data?.imageDone?.map((item: any) => (
 								<Image key={generateRandomId()} style={styles.imageReview} source={{uri: item}} />
 							))}
 						</ScrollView>
@@ -290,15 +293,16 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 				visible={visibleCancel}>
 				<Pressable onPress={() => setVisibleCancel(false)} style={styles.viewModal}>
 					<Pressable style={styles.content}>
-						<ScrollView>
-							<CustomText font={FONT_FAMILY.BOLD} text={'HUỶ ĐƠN HÀNG'} style={{alignSelf: 'center'}} />
-							<View style={{padding: widthScale(20)}}>
-								<CustomText font={FONT_FAMILY.BOLD} text={'NHẬP LÝ DO'} size={14} />
-								<View style={styles.viewInput}>
-									<TextInput value={reasonCancel} onChangeText={setReasonCancel} multiline style={{color: colors.black}}/>
-								</View>
+						<CustomText font={FONT_FAMILY.BOLD} text={'HUỶ ĐƠN HÀNG'} style={{alignSelf: 'center'}} />
+						<View style={{padding: widthScale(10)}}>
+							<CustomText font={FONT_FAMILY.BOLD} text={'NHẬP LÝ DO'} size={14} />
+							<View style={styles.viewInput}>
+								<ScrollView>
+									<TextInput value={reasonCancel} onChangeText={setReasonCancel} multiline style={{color: colors.black}} />
+								</ScrollView>
 							</View>
-						</ScrollView>
+						</View>
+
 						<View style={styles.viewButton1}>
 							<CustomButton onPress={() => setVisibleCancel(false)} text="HUỶ" style={{width: WIDTH / 3}} />
 							<CustomButton disabled={!reasonCancel.trim()} onPress={onPressCancel} text="XÁC NHẬN" style={{width: WIDTH / 3}} />
@@ -316,12 +320,11 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 				onRequestClose={() => setModalConfirmDone(false)}
 				visible={modalConfirmDone}>
 				<Pressable onPress={() => setModalConfirmDone(false)} style={styles.viewModal}>
-					<Pressable style={styles.content}>
-						<ScrollView>
-							<CustomText font={FONT_FAMILY.BOLD} text={'Cung cấp kết quả'} style={{alignSelf: 'center'}} />
-							<View style={{padding: widthScale(20)}}>
-								<CustomText text={'Vui lòng tải lên hình ảnh kết quả để đối chiếu khi có vấn đề phát sinh'} size={14} />
-
+					<Pressable style={styles.contentCompleted}>
+						<CustomText font={FONT_FAMILY.BOLD} text={'Cung cấp kết quả'} style={{alignSelf: 'center'}} />
+						<View style={{padding: widthScale(10)}}>
+							<CustomText text={'Vui lòng tải lên hình ảnh kết quả để đối chiếu khi có vấn đề phát sinh'} size={14} />
+							<ScrollView style={{height: heightScale(150), marginTop: heightScale(10)}}>
 								<FlatList
 									scrollEnabled={false}
 									renderItem={({item, index}) => {
@@ -377,11 +380,11 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 										}
 									}}
 									numColumns={3}
-									columnWrapperStyle={{justifyContent: 'space-between', marginBottom: heightScale(10)}}
+									columnWrapperStyle={{justifyContent: 'space-evenly', marginBottom: heightScale(10)}}
 									data={[1, ...imageDone]}
 								/>
-							</View>
-						</ScrollView>
+							</ScrollView>
+						</View>
 						<View style={styles.viewButton}>
 							<CustomButton onPress={() => setModalConfirmDone(false)} text="HUỶ" style={{width: WIDTH / 3}} />
 							<CustomButton disabled={!imageDone?.length} onPress={handleDone} text="XÁC NHẬN" style={{width: WIDTH / 3}} />
@@ -390,7 +393,6 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 				</Pressable>
 			</Modal>
 
-			{/* REPORT  */}
 			<Modal
 				statusBarTranslucent
 				transparent
@@ -476,7 +478,14 @@ const styles = StyleSheet.create({
 	},
 	content: {
 		width: widthScale(300),
-		height: heightScale(400),
+		height: heightScale(220),
+		backgroundColor: colors.white,
+		borderRadius: 10,
+		paddingTop: heightScale(10),
+	},
+	contentCompleted: {
+		width: widthScale(300),
+		height: heightScale(320),
 		backgroundColor: colors.white,
 		borderRadius: 10,
 		paddingTop: heightScale(10),
@@ -485,7 +494,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 		borderRadius: 5,
 		borderWidth: 1,
-		maxHeight: heightScale(200),
+		maxHeight: heightScale(70),
 		color: colors.black,
 	},
 	viewButton: {

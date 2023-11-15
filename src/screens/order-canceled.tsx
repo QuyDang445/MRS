@@ -1,7 +1,7 @@
-import { FlatList, Image, RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import React, { memo, useCallback, useState } from 'react';
-import { colors } from '../styles/colors';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import {FlatList, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {memo, useCallback, useState} from 'react';
+import {colors} from '../styles/colors';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import moment from 'moment';
 import CustomText from '../components/custom-text';
 import { TABLE, TYPE_ORDER_SERVICE, FONT_FAMILY } from '../constants/enum';
@@ -64,10 +64,10 @@ const OrderCanceled = () => {
 		<ScrollView refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />} style={styles.view}>
 			<FlatList
 				scrollEnabled={false}
-				renderItem={({ item }) => (
-					<TouchableOpacity onPress={() => onPressDetail(item)} style={{ flexDirection: 'row', marginBottom: heightScale(20) }}>
-						<Image style={{ width: widthScale(120), height: '100%', borderRadius: 5 }} source={{ uri: item?.serviceObject?.image }} />
-						<View style={{ marginLeft: widthScale(10) }}>
+				renderItem={({item}) => (
+					<TouchableOpacity onPress={() => onPressDetail(item)} style={{flexDirection: 'row', marginBottom: heightScale(20)}}>
+						<Image style={{width: widthScale(120), height: '100%', borderRadius: 5}} source={{uri: item?.serviceObject?.image}} />
+						<View style={{marginLeft: widthScale(10)}}>
 							<CustomText font={FONT_FAMILY.BOLD} text={item?.serviceObject?.name} />
 							<CustomText text={item?.servicerObject.name} />
 							<CustomText text={moment(item?.timeBooking).format('hh:mm - DD/MM/YYYY')} />
@@ -76,8 +76,8 @@ const OrderCanceled = () => {
 					</TouchableOpacity>
 				)}
 				ListEmptyComponent={
-					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-						<CustomText color={colors.grayText} text={'Không có đơn đặt hàng!'} />
+					<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+						<CustomText color={colors.grayText} text={'Không có đơn hàng!'} />
 					</View>
 				}
 				data={data}

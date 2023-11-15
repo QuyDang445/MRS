@@ -1,16 +1,44 @@
-import {NavigationContainer, NavigationContainerRef, NavigationState} from '@react-navigation/native';
-import React, {useEffect, useRef} from 'react';
+import {NavigationContainer, NavigationContainerRef, NavigationState, useNavigation} from '@react-navigation/native';
+import messaging from '@react-native-firebase/messaging';
+import React, {useEffect, useRef, useState} from 'react';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import Spinner from './components/spinner';
 import {RootStackScreensParams} from './navigator/params';
 import Stacks from './navigator/stacks';
 import store, {persistor} from './stores/store/store';
-import notifee, {AndroidImportance} from '@notifee/react-native';
+import notifee, {AndroidImportance, EventType} from '@notifee/react-native';
 import {CHANNEL_ID} from './constants/constants';
+import {NotificationProps} from './constants/types';
+import API from './services/api';
+import {TABLE} from './constants/enum';
+import {useAppSelector} from './stores/store/storeHooks';
+import {onDisplayNotification} from '..';
 
 const App = () => {
 	const navigationRef = useRef<NavigationContainerRef<RootStackScreensParams>>(null);
+
+	useEffect(() => {
+		messaging().onNotificationOpenedApp(remoteMessage => {
+			console.log('Notification caused app to open from background state:', remoteMessage.notification);
+		});
+
+		messaging()
+			.getInitialNotification()
+			.then(remoteMessage => {
+				if (remoteMessage) {
+					console.log('Notification caused app to open from quit state:', remoteMessage.notification);
+				}
+			});
+	}, []);
+
+	useEffect(() => {
+		const unsubscribe = messaging().onMessage(async remoteMessage => {
+			console.log('Message handled in the foreground!');
+			onDisplayNotification(remoteMessage);
+		});
+		return unsubscribe;
+	}, []);
 
 	const screenTracking = (state?: NavigationState) => {
 		if (state) {

@@ -1,4 +1,4 @@
-import {FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {memo, useCallback, useState} from 'react';
 import {colors} from '../styles/colors';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
