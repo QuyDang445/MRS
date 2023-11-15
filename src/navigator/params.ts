@@ -32,4 +32,9 @@ export type RootStackScreensParams = {
 	Listblock: undefined;
 	EvaluateService:  {data: OrderProps};
 	AddService: undefined | {data: ServiceProps};
+	AcceptServicer: {data: UserProps[]};
+	ManageServicer: undefined;
+	ManageUser: undefined;
+	ManagePayment: undefined;
+	InfoDetailUser: {data: UserProps};
 };

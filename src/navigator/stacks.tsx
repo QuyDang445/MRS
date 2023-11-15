@@ -20,6 +20,12 @@ import Listblock from '../screens/listblock';
 import DetailOrder from '../screens/detail-order';
 import EvaluateService from '../screens/EvaluateService';
 import AddService from '../screens/add-service';
+import AcceptServicer from '../screens/admin/accept-servicer';
+import ManagePayment from '../screens/admin/manage-payment';
+import ManageServicer from '../screens/admin/manage-servicer';
+import ManageUser from '../screens/admin/manage-user';
+import InfoDetailUser from '../screens/admin/info-detail-user';
+
 export type RootStackScreens = keyof RootStackScreensParams;
 export type RootStackScreenProps<T extends RootStackScreens> = StackScreenProps<RootStackScreensParams, T>;
 export type UseRootStackNavigation<T extends RootStackScreens = 'Splash'> = StackNavigationProp<RootStackScreensParams, T>;
@@ -60,6 +66,11 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.Listblock} component={Listblock} />
 			<Screen name={ROUTE_KEY.EvaluateService} component={EvaluateService} />
 			<Screen name={ROUTE_KEY.AddService} component={AddService} />
+			<Screen name={ROUTE_KEY.AcceptServicer} component={AcceptServicer}/>
+			<Screen name={ROUTE_KEY.ManagePayment} component={ManagePayment} />
+			<Screen name={ROUTE_KEY.ManageUser} component={ManageUser} />
+			<Screen name={ROUTE_KEY.ManageServicer} component={ManageServicer} />
+			<Screen name={ROUTE_KEY.InfoDetailUser} component={InfoDetailUser} />
 		</Navigator>
 	);
 };

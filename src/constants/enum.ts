@@ -47,3 +47,8 @@ export enum TYPE_ORDER_SERVICE {
 	OrderInProcess = 'OrderInProcess',
 	OrderCompleted = 'OrderCompleted',
 }
+
+export enum NOTIFICATION_TYPE {
+	// admin
+	NEW_SERVICER = 'NEW_SERVICER',
+}

@@ -18,6 +18,7 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo, showMessage} from '../utils';
 import {getImageFromDevice, uploadImage} from '../utils/image';
 import { UserProps } from '../constants/types';
+import {pushNotificationAdminNewServicer} from '../utils/notification';
 
 const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 	const {navigation} = props;
@@ -75,6 +76,7 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 			};
 			const res = await API.post(`${TABLE.USERS}`, body);
 			if (res) {
+				await pushNotificationAdminNewServicer(res.id);
 				showMessage('Đăng ký tài khoản thành công, vui lòng chờ đợi admin duyệt qua thông tin!');
 				DeviceEventEmitter.emit(EMIT_EVENT.DATA_LOGIN, {phone: value.phone, password: value.pass});
 				navigation.goBack();
@@ -116,6 +118,7 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 										value={values.phone}
 										onChangeText={handleChange('phone')}
 										keyboardType={'numeric'}
+										maxLength={10}
 										placeholder="Số điện thoại"
 										placeholderTextColor={colors.grayText}
 										style={styles.inputText}

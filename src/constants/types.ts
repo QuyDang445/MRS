@@ -1,4 +1,4 @@
-import {TYPE_ORDER_SERVICE, TYPE_USER} from './enum';
+import {TYPE_ORDER_SERVICE, TYPE_USER, NOTIFICATION_TYPE} from './enum';
 
 export interface ImageProps {
 	name: string;
@@ -92,3 +92,4 @@ export interface ServicerBlockUser {
 	phone: string;
 	id: string;
 }
+export interface Notification {}
