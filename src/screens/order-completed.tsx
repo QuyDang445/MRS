@@ -19,7 +19,10 @@ const OrderCompleted = () => {
 
 	const [refreshing, setRefreshing] = useState(false);
 	const [data, setData] = useState<OrderProps[]>([]);
-
+	const text = {
+		
+		servicesavailable: 'Không có đơn hàng!'
+	};
 	useFocusEffect(
 		useCallback(() => {
 			onRefresh();

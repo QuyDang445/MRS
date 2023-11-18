@@ -13,7 +13,7 @@ import Notification from '../screens/notification';
 import Order from '../screens/order';
 import User from '../screens/user';
 import API from '../services/api';
-import {clearUserData} from '../stores/reducers/userReducer';
+import {clearUserData,updateUserInfo} from '../stores/reducers/userReducer';
 import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';

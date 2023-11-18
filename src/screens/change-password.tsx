@@ -28,7 +28,12 @@ const ChangePassword = (props: RootStackScreenProps<'ChangePassword'>) => {
 	const [passwordVisible, setPasswordVisible] = useState(false);
 	const [newPasswordVisible, setNewPasswordVisible] = useState(false);
 	const [confirmNewPasswordVisible, setConfirmNewPasswordVisible] = useState(false);
-
+	const text = {
+		title: 'ĐỔI MẬT KHẨU',
+		enterpass: 'NHẬP MẬT KHẨU HIỆN TẠI',
+		enterpassnew: 'NHẬP MẬT KHẨU MỚI',
+		enterpassnew1: 'NHẬP LẠI MẬT KHẨU MỚI',
+	};
 
 	const handleChangePass = () => {
 		// const phoneCheck = (string)userInfo?.phone;
@@ -91,24 +96,24 @@ const ChangePassword = (props: RootStackScreenProps<'ChangePassword'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="ĐỔI MẬT KHẨU" />
+			<CustomHeader title={text.title} />
 
 			<ScrollView style={styles.view}>
-				<CustomText text={'NHẬP MẬT KHẨU HIỆN TẠI'} font={FONT_FAMILY.BOLD} size={14} />
+				<CustomText text={text.enterpass} font={FONT_FAMILY.BOLD} size={14} />
 				<View>
 				<TextInput secureTextEntry={!passwordVisible} value={currentPass} onChangeText={setCurrentPass} style={styles.input} />
 				<TouchableOpacity style={styles.eyeIcon} onPress={() => setPasswordVisible(!passwordVisible)}>
 						<Image source={ICONS.eye} style={styles.eyeIcon} />
 					</TouchableOpacity>
 				</View>
-				<CustomText text={'NHẬP MẬT KHẨU MỚI'} font={FONT_FAMILY.BOLD} size={14} />
+				<CustomText text={text.enterpassnew} font={FONT_FAMILY.BOLD} size={14} />
 				<View>
 				<TextInput secureTextEntry={!newPasswordVisible} value={newPass} onChangeText={setNewPass} style={styles.input} />
 				<TouchableOpacity style={styles.eyeIcon} onPress={() => setNewPasswordVisible(!newPasswordVisible)}>
 						<Image source={ICONS.eye} style={styles.eyeIcon} />
 					</TouchableOpacity>
 				</View>
-				<CustomText text={'NHẬP LẠI MẬT KHẨU MỚI'} font={FONT_FAMILY.BOLD} size={14} />
+				<CustomText text={text.enterpassnew1} font={FONT_FAMILY.BOLD} size={14} />
 				<View>
 					<TextInput secureTextEntry={!confirmNewPasswordVisible} value={renewPass} onChangeText={setRenewPass} style={styles.input} />
 					<TouchableOpacity style={styles.eyeIcon} onPress={() => setConfirmNewPasswordVisible(!confirmNewPasswordVisible)}>

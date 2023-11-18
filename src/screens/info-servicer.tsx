@@ -28,7 +28,13 @@ const InfoServicer = (props: RootStackScreenProps<'InfoServicer'>) => {
 	const [service, setService] = useState<ServiceProps[]>([]);
 
 	const [evaluates, setEvaluates] = useState<EvaluateProps[]>([]);
-
+	const text = {
+		title: 'THÔNG TIN CHI TIẾT',
+		all: 'TẤT CẢ DỊCH VỤ CUNG CẤP',
+		noservicer: 'Không có dịch vụ nào',
+		allevulate: 'TẤT CẢ ĐÁNH GIÁ',
+		noevulate :'Không có đánh giá nào'
+	};
 	useEffect(() => {
 		setLoading(true);
 		getData();
@@ -68,7 +74,7 @@ const InfoServicer = (props: RootStackScreenProps<'InfoServicer'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title={'THÔNG TIN CHI TIẾT'} />
+			<CustomHeader title={text.title} />
 			<ScrollView style={styles.view}>
 				{loading && <LoadingScreen />}
 				{!loading && (
@@ -77,8 +83,8 @@ const InfoServicer = (props: RootStackScreenProps<'InfoServicer'>) => {
 						<CustomText font={FONT_FAMILY.BOLD} text={data?.name} style={{textAlign: 'center'}} />
 						<CustomText text={data?.phone} style={{textAlign: 'center'}} />
 
-						<CustomText font={FONT_FAMILY.BOLD} text={'TẤT CẢ DỊCH VỤ CUNG CẤP'} style={{marginTop: heightScale(20)}} />
-						{!service.length && <CustomText color={colors.grayLine} style={{textAlign: 'center'}} text={'Không có dịch vụ nào'} />}
+						<CustomText font={FONT_FAMILY.BOLD} text={text.all} style={{marginTop: heightScale(20)}} />
+						{!service.length && <CustomText color={colors.grayLine} style={{textAlign: 'center'}} text={text.noservicer} />}
 						{service.length > 0 && (
 							<CustomScrollHorizontal>
 								<FlatList
@@ -111,12 +117,12 @@ const InfoServicer = (props: RootStackScreenProps<'InfoServicer'>) => {
 							</CustomScrollHorizontal>
 						)}
 
-						<CustomText font={FONT_FAMILY.BOLD} text={'TẤT CẢ ĐÁNH GIÁ'} style={{marginTop: heightScale(20)}} />
+						<CustomText font={FONT_FAMILY.BOLD} text={text.allevulate} style={{marginTop: heightScale(20)}} />
 						<View style={{padding: widthScale(10)}}>
 							{evaluates.map(item => {
 								return <ReviewAndRating item={item} />;
 							})}
-							{!evaluates.length && <CustomText color={colors.grayLine} style={{textAlign: 'center'}} text={'Không có đánh giá nào'} />}
+							{!evaluates.length && <CustomText color={colors.grayLine} style={{textAlign: 'center'}} text={text.noevulate} />}
 						</View>
 					</View>
 				)}

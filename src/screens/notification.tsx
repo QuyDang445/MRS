@@ -23,7 +23,10 @@ const Notification = (props: RootStackScreenProps<'Notification'>) => {
 	const [data, setData] = useState<any[]>([]);
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
 	const [refreshing, setRefreshing] = useState(false);
-
+	const text = {
+		title: 'THÔNG BÁO',
+		notifiavailable: 'Không có thông báo nào',
+	};
 	const onRefresh = async () => {
 		setRefreshing(true);
 		API.get(`${TABLE.NOTIFICATION}/${userInfo?.id}`, true)
@@ -73,7 +76,7 @@ const Notification = (props: RootStackScreenProps<'Notification'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="Thông báo" hideBack />
+			<CustomHeader title={text.title} hideBack />
 			<FlatList
 				onRefresh={onRefresh}
 				refreshing={refreshing}
@@ -83,7 +86,7 @@ const Notification = (props: RootStackScreenProps<'Notification'>) => {
 				data={data}
 				ListEmptyComponent={
 					<View style={{marginTop: heightScale(40), alignItems: 'center'}}>
-						<CustomText color={colors.grayText} text={'Không có thông báo nào'} />
+						<CustomText color={colors.grayText} text={text.notifiavailable} />
 					</View>
 				}
 			/>

@@ -1,4 +1,4 @@
-import React, {memo, useState} from 'react';
+import React, {memo, useState,useCallback} from 'react';
 import {DeviceEventEmitter, Image, StyleSheet, TouchableOpacity, View, Switch} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import CustomHeader from '../components/custom-header';
@@ -14,10 +14,15 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {clearUserData, updateUserInfo} from '../stores/reducers/userReducer';
 import API from '../services/api';
 import CustomSwich from '../components/custom-swich';
+import {useLanguage} from '../hooks/useLanguage';
+import {AlertYesNo} from '../utils';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 
 const User = (props: RootStackScreenProps<'User'>) => {
 	const { navigation } = props;
 	const dispatch = useAppDispatch();
+	const texts = useLanguage()?.User;
+	useIsFocused();
 
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
 	const [receiveBooking, setReceiveBooking] = useState(userInfo?.receiveBooking!);
@@ -33,8 +38,16 @@ const User = (props: RootStackScreenProps<'User'>) => {
 	const onPressFAQs = () => navigation.navigate(ROUTE_KEY.FAQs);
 
 	const [isEnabled, setIsEnabled] = useState(false);
-
-
+	useFocusEffect(
+		useCallback(() => {
+			if (userInfo?.type === TYPE_USER.SERVICER) {
+				getStatusPayment();
+			}
+		}, [texts]),
+	);
+	const getStatusPayment = () => {
+		
+	};
 	const onPressLogout = () => DeviceEventEmitter.emit(EMIT_EVENT.LOGOUT);
 
 	const ProfileButton = ({ buttonName, onClick }: { buttonName: string; onClick: () => void }) => {
@@ -53,7 +66,7 @@ const User = (props: RootStackScreenProps<'User'>) => {
 	};
 	return (
 		<FixedContainer>
-			<CustomHeader title="Hồ Sơ" hideBack />
+			<CustomHeader title={texts.title} hideBack />
 			{/* Avatar  */}
 			<Image style={styles.avatar} source={userInfo?.avatar ? { uri: userInfo?.avatar } : ICONS.user} />
 
@@ -62,34 +75,36 @@ const User = (props: RootStackScreenProps<'User'>) => {
 				{userInfo?.type === TYPE_USER.SERVICER && (
 					<View
 						style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: widthScale(20), marginVertical: heightScale(10) }}>
-						<CustomText text={'TRẠNG THÁI HOẠT ĐỘNG'} font={FONT_FAMILY.BOLD} size={15} />
+						<CustomText text={texts.activityStatusText} font={FONT_FAMILY.BOLD} size={15} />
 						<CustomSwich isOn={receiveBooking!} onPress={onPressChangeStatus} />
 					</View>
 				)}
 				<View style={styles.viewContent}>
-					<CustomText text={'QUẢN LÝ TÀI KHOẢN'} font={FONT_FAMILY.BOLD} size={15} />
-					<ProfileButton buttonName="Cập nhật thông tin" onClick={onPressUpdateInformation} />
-					{userInfo?.type === TYPE_USER.USER && <ProfileButton buttonName="Địa chỉ" onClick={onPressListAddress} />}
+					<CustomText text={texts.ACCOUNT_MANAGEMENT} font={FONT_FAMILY.BOLD} size={15} />
+					<ProfileButton buttonName={texts.updateInfoButtonText} onClick={onPressUpdateInformation} />
+					{userInfo?.type === TYPE_USER.USER && <ProfileButton buttonName={texts.addressButtonText} onClick={onPressListAddress} />}
 
-					<ProfileButton buttonName="Đổi mật khẩu" onClick={onPressChangePassword} />
+					<ProfileButton buttonName={texts.changePasswordButtonText} onClick={onPressChangePassword} />
 				</View>
 				{userInfo?.type === TYPE_USER.SERVICER && (
 					<View style={styles.viewContent}>
-						<CustomText text={'Dịch Vụ'} font={FONT_FAMILY.BOLD} size={15} />
-						<ProfileButton buttonName="Phí thanh toán" onClick={onPressServiceFree} />
-						<ProfileButton buttonName="Danh sách chặn" onClick={onPressserListBlock} />
+						<CustomText text={texts.SERVICE} font={FONT_FAMILY.BOLD} size={15} />
+						<ProfileButton buttonName={texts.feeServiceText} onClick={onPressServiceFree} />
+						<ProfileButton buttonName={texts.blockedUsersButtonText} onClick={onPressserListBlock} />
 					</View>
 				)}
 
 				<View style={styles.viewContent}>
-					<CustomText text={'THÔNG TIN KHÁC'} font={FONT_FAMILY.BOLD} size={14} />
-					<ProfileButton buttonName="Quy định điều khoản" onClick={onPressTermsAndConditions} />
-					<ProfileButton buttonName="Chính sách quyền riêng tư" onClick={onPressDataPrivacy} />
-					<ProfileButton buttonName="FAQs" onClick={onPressFAQs} />
-					<ProfileButton buttonName="Cài đặt" onClick={onPressSetting} />
+					<CustomText text={texts.otherInfoText} font={FONT_FAMILY.BOLD} size={14} />
+					<ProfileButton buttonName={texts.termsButtonText} onClick={onPressTermsAndConditions} />
+					<ProfileButton buttonName={texts.privacyPolicyButtonText} onClick={onPressDataPrivacy} />
+					<ProfileButton buttonName={texts.faqsButtonText} onClick={onPressFAQs} />
+					<ProfileButton buttonName={texts.settingsButtonText} onClick={onPressSetting} />
 				</View>
 				<View style={styles.viewContent}>
-					<ProfileButton buttonName="Đăng xuất" onClick={onPressLogout} />
+				<TouchableOpacity onPress={() => AlertYesNo(undefined, texts.logoutConfirmationMessage, onPressLogout)} style={styles.button}>
+					<ProfileButton buttonName={texts.logoutButtonText} onClick={onPressLogout} />
+					</TouchableOpacity>
 				</View>
 			</ScrollView>
 		</FixedContainer>

@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React, {memo, useEffect, useState} from 'react';
-import {FlatList, Image, Modal, Pressable, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import {FlatList, Image,Linking, Modal, Pressable, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import CustomButton from '../components/custom-button';
 import CustomHeader from '../components/custom-header';
@@ -43,7 +43,28 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 	const getDataEvaluate = async () => {};
 
 	const getDataUser = () => API.get(`${TABLE.USERS}/${data.idUser}`) as any;
-
+	const text = {
+		title: 'CHI TIẾT ĐƠN HÀNG',
+		status: 'Trạng thái',
+		description: 'Mô tả',
+		timebooking : "Thời gian đặt lịch",
+		appointmentschedule: "Lịch hẹn",
+		address: "Địa chỉ",
+		reason: 'Lý do',
+		result: 'Kết quả',
+		cancel: 'Hủy',
+		comform: 'Xác Nhận',
+		complete: 'Hoàn thành',
+		report: 'Báo cáo',
+		evulate: 'Đánh giá',
+		Provideslevelresults: 'Cung cấp kết quả',
+		des: 'Vui lòng tải lên hình ảnh kết quả để đối chiếu khi có vấn đề phát sinh',
+		des1: 'Dịch vụ không đúng mô tả',
+		other: 'Khác',
+		cancelorder: 'HUỶ ĐƠN HÀNG',
+		enterdes: 'NHẬP LÝ DO',
+		enterdo:'Hãy nhập lý do'
+	};
 	const getData = async () => {
 		setLoading(true);
 		const category = await getDataCategory();
@@ -169,7 +190,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="CHI TIẾT ĐƠN HÀNG" />
+			<CustomHeader title={text.title} />
 			<ScrollView style={styles.view}>
 				<View style={styles.viewTop}>
 					<Image source={{uri: data.serviceObject.image}} style={styles.image} />
@@ -178,7 +199,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 						<CustomText text={data.serviceObject?.name} font={FONT_FAMILY.BOLD} />
 					</View>
 				</View>
-
+				{userInfo?.type !== TYPE_USER.SERVICER && (
 				<View style={{marginVertical: heightScale(20), flexDirection: 'row'}}>
 					<Image source={{uri: data.servicerObject?.avatar}} style={{width: widthScale(50), height: widthScale(50), borderRadius: 100}} />
 					<View style={{flex: 1, marginLeft: widthScale(10)}}>
@@ -186,9 +207,9 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 						<CustomText text={data.servicerObject.phone} />
 					</View>
 				</View>
-
+				)}
 				<View style={styles.viewInfo}>
-					<CustomText font={FONT_FAMILY.BOLD} text={'TRẠNG THÁI'} />
+					<CustomText font={FONT_FAMILY.BOLD} text={text.status} />
 					<CustomText
 						font={data.status === TYPE_ORDER_SERVICE.OrderCanceled ? FONT_FAMILY.BOLD : undefined}
 						color={getColorStatusOrder(data.status)}
@@ -198,32 +219,39 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 
 				{data.status === TYPE_ORDER_SERVICE.OrderCanceled && (
 					<View style={[styles.viewInfo, {justifyContent: 'space-between'}]}>
-						<CustomText font={FONT_FAMILY.BOLD} text={'LÍ DO'} />
+						<CustomText font={FONT_FAMILY.BOLD} text={text.reason} />
 						<CustomText style={{maxWidth: widthScale(260)}} color="red" text={data?.statusCancel} />
 					</View>
 				)}
 
 				<View style={styles.viewInfo}>
-					<CustomText font={FONT_FAMILY.BOLD} text={'THỜI GIAN ĐẶT LỊCH'} />
+					<CustomText font={FONT_FAMILY.BOLD} text={text.timebooking} />
 					<CustomText text={moment(data?.timeBooking).format('hh:mm - DD/MM/YYYY')} />
 				</View>
 
 				<View style={styles.viewInfo}>
-					<CustomText font={FONT_FAMILY.BOLD} text={'LỊCH HẸN'} />
+					<CustomText font={FONT_FAMILY.BOLD} text={text.appointmentschedule} />
 					<CustomText text={moment(data?.time).format('hh:mm - DD/MM/YYYY')} />
 				</View>
 
 				<View style={{marginTop: heightScale(15)}}>
-					<CustomText font={FONT_FAMILY.BOLD} text={'THÔNG TIN NGƯỜI ĐẶT'} />
+					<CustomText font={FONT_FAMILY.BOLD} text={text.address} />
 					<View style={{padding: 10, borderWidth: 1, borderRadius: 5, marginTop: heightScale(5)}}>
 						<CustomText text={data?.userObject?.name} />
-						<CustomText text={data?.userObject?.phone} />
+						<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+							<CustomText text={data?.userObject?.phone} />
+							{userInfo?.type === TYPE_USER.SERVICER && (
+								<TouchableOpacity onPress={() => Linking.openURL(`tel:${data?.userObject?.phone}`)}>
+									<Image source={ICONS.call} style={{width: widthScale(25), height: widthScale(25)}} />
+								</TouchableOpacity>
+							)}
+						</View>
+
 						<CustomText text={data?.address} />
 					</View>
 				</View>
-
 				<View style={{marginTop: heightScale(15)}}>
-					<CustomText font={FONT_FAMILY.BOLD} text={'MÔ TẢ'} />
+					<CustomText font={FONT_FAMILY.BOLD} text={text.description} />
 					<View style={{padding: 10, marginTop: heightScale(5), borderWidth: 1, borderRadius: 5}}>
 						<CustomText text={data?.description} />
 					</View>
@@ -237,7 +265,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 
 				{!!data?.imageDone?.length && (
 					<View style={{marginTop: heightScale(15)}}>
-						<CustomText font={FONT_FAMILY.BOLD} text={'KẾT QUẢ'} />
+						<CustomText font={FONT_FAMILY.BOLD} text={text.result} />
 						<ScrollView horizontal>
 							{data?.imageDone?.map((item: any) => (
 								<Image key={generateRandomId()} style={styles.imageReview} source={{uri: item}} />
@@ -251,14 +279,14 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 					<>
 						{data.status === TYPE_ORDER_SERVICE.OrderPending ? (
 							<View style={{flexDirection: 'row', padding: 20, justifyContent: 'space-between'}}>
-								<CustomButton onPress={() => setVisibleCancel(true)} text="HUỶ" style={{width: WIDTH / 2.8}} />
-								<CustomButton onPress={handleConfirm} text="XÁC NHẬN" style={{width: WIDTH / 2.8}} />
+								<CustomButton onPress={() => setVisibleCancel(true)} text={text.cancel} style={{width: WIDTH / 2.8}} />
+								<CustomButton onPress={handleConfirm} text={text.comform} style={{width: WIDTH / 2.8}} />
 							</View>
 						) : (
 							<>
 								{data.status === TYPE_ORDER_SERVICE.OrderInProcess && (
 									<View style={{alignItems: 'center', width: '100%', marginTop: heightScale(20)}}>
-										<CustomButton onPress={() => setModalConfirmDone(true)} text="HOÀN THÀNH" style={{width: WIDTH / 2.8}} />
+										<CustomButton onPress={() => setModalConfirmDone(true)} text={text.complete} style={{width: WIDTH / 2.8}} />
 									</View>
 								)}
 							</>
@@ -271,13 +299,13 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 					<>
 						{data.status === TYPE_ORDER_SERVICE.OrderPending && (
 							<View style={{alignItems: 'center', width: '100%', marginTop: heightScale(20)}}>
-								<CustomButton onPress={() => setVisibleCancel(true)} text="HUỶ" style={{width: WIDTH / 3}} />
+								<CustomButton onPress={() => setVisibleCancel(true)} text={text.cancel} style={{width: WIDTH / 3}} />
 							</View>
 						)}
 						{data.status === TYPE_ORDER_SERVICE.OrderCompleted && !data?.isEvaluate && (
 							<View style={{flexDirection: 'row', padding: 20, justifyContent: 'space-between'}}>
-								<CustomButton onPress={() => setModalReport(true)} text="BÁO CÁO" style={{width: WIDTH / 2.8}} />
-								<CustomButton onPress={handleEvaluate} text="ĐÁNH GIÁ" style={{width: WIDTH / 2.8}} />
+								<CustomButton onPress={() => setModalReport(true)} text={text.report} style={{width: WIDTH / 2.8}} />
+								<CustomButton onPress={handleEvaluate} text={text.evulate} style={{width: WIDTH / 2.8}} />
 							</View>
 						)}
 					</>
@@ -293,9 +321,9 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 				visible={visibleCancel}>
 				<Pressable onPress={() => setVisibleCancel(false)} style={styles.viewModal}>
 					<Pressable style={styles.content}>
-						<CustomText font={FONT_FAMILY.BOLD} text={'HUỶ ĐƠN HÀNG'} style={{alignSelf: 'center'}} />
+						<CustomText font={FONT_FAMILY.BOLD} text={text.cancelorder} style={{alignSelf: 'center'}} />
 						<View style={{padding: widthScale(10)}}>
-							<CustomText font={FONT_FAMILY.BOLD} text={'NHẬP LÝ DO'} size={14} />
+							<CustomText font={FONT_FAMILY.BOLD} text={text.enterdes} size={14} />
 							<View style={styles.viewInput}>
 								<ScrollView>
 									<TextInput value={reasonCancel} onChangeText={setReasonCancel} multiline style={{color: colors.black}} />
@@ -304,8 +332,8 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 						</View>
 
 						<View style={styles.viewButton1}>
-							<CustomButton onPress={() => setVisibleCancel(false)} text="HUỶ" style={{width: WIDTH / 3}} />
-							<CustomButton disabled={!reasonCancel.trim()} onPress={onPressCancel} text="XÁC NHẬN" style={{width: WIDTH / 3}} />
+							<CustomButton onPress={() => setVisibleCancel(false)} text={text.cancel} style={{width: WIDTH / 3}} />
+							<CustomButton disabled={!reasonCancel.trim()} onPress={onPressCancel} text={text.complete} style={{width: WIDTH / 3}} />
 						</View>
 					</Pressable>
 				</Pressable>
@@ -321,9 +349,9 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 				visible={modalConfirmDone}>
 				<Pressable onPress={() => setModalConfirmDone(false)} style={styles.viewModal}>
 					<Pressable style={styles.contentCompleted}>
-						<CustomText font={FONT_FAMILY.BOLD} text={'Cung cấp kết quả'} style={{alignSelf: 'center'}} />
+						<CustomText font={FONT_FAMILY.BOLD} text={text.Provideslevelresults} style={{alignSelf: 'center'}} />
 						<View style={{padding: widthScale(10)}}>
-							<CustomText text={'Vui lòng tải lên hình ảnh kết quả để đối chiếu khi có vấn đề phát sinh'} size={14} />
+							<CustomText text={text.des} size={14} />
 							<ScrollView style={{height: heightScale(150), marginTop: heightScale(10)}}>
 								<FlatList
 									scrollEnabled={false}
@@ -386,8 +414,8 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 							</ScrollView>
 						</View>
 						<View style={styles.viewButton}>
-							<CustomButton onPress={() => setModalConfirmDone(false)} text="HUỶ" style={{width: WIDTH / 3}} />
-							<CustomButton disabled={!imageDone?.length} onPress={handleDone} text="XÁC NHẬN" style={{width: WIDTH / 3}} />
+							<CustomButton onPress={() => setModalConfirmDone(false)} text={text.cancel} style={{width: WIDTH / 3}} />
+							<CustomButton disabled={!imageDone?.length} onPress={handleDone} text={text.comform} style={{width: WIDTH / 3}} />
 						</View>
 					</Pressable>
 				</Pressable>
@@ -402,23 +430,23 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 				<Pressable onPress={() => setModalReport(false)} style={styles.viewModal}>
 					<Pressable style={styles.content}>
 						<ScrollView>
-							<CustomText font={FONT_FAMILY.BOLD} text={'BÁO CÁO'} style={{alignSelf: 'center'}} />
+							<CustomText font={FONT_FAMILY.BOLD} text={text.report} style={{alignSelf: 'center'}} />
 							<View style={{padding: widthScale(20)}}>
 								<CustomRadioButton
-									text="Dịch vụ không đúng mô tả"
-									isChecked={reasonReport === 'Dịch vụ không đúng mô tả'}
-									onPress={() => setReasonReport('Dịch vụ không đúng mô tả')}
+									text={text.des1}
+									isChecked={reasonReport === text.des1}
+									onPress={() => setReasonReport(text.des1)}
 								/>
 								<View style={{height: 10}} />
-								<CustomRadioButton text="Khác" isChecked={reasonReport !== 'Dịch vụ không đúng mô tả'} onPress={() => setReasonReport('')} />
+								<CustomRadioButton text={text.other} isChecked={reasonReport !== text.des1} onPress={() => setReasonReport('')} />
 								<View style={{height: 10}} />
 
-								{reasonReport !== 'Dịch vụ không đúng mô tả' && (
+								{reasonReport !== text.des1 && (
 									<TextInput
 										onChangeText={setReasonReport}
 										value={reasonReport}
 										multiline
-										placeholder="Hãy nhập lí do"
+										placeholder={text.enterdo}
 										style={{
 											width: '100%',
 											backgroundColor: `${colors.grayLine}40`,
@@ -430,11 +458,11 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 							</View>
 						</ScrollView>
 						<View style={styles.viewButton1}>
-							<CustomButton onPress={() => setModalReport(false)} text="HUỶ" style={{width: WIDTH / 3}} />
+							<CustomButton onPress={() => setModalReport(false)} text={text.cancel} style={{width: WIDTH / 3}} />
 							<CustomButton
 								disabled={!reasonReport.trim()}
 								onPress={() => handleReport(reasonReport)}
-								text="XÁC NHẬN"
+								text={text.complete}
 								style={{width: WIDTH / 3}}
 							/>
 						</View>

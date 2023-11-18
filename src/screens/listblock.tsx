@@ -26,6 +26,10 @@ const Listblock = (props: RootStackScreenProps<'Listblock'>) => {
 	const [data, setData] = useState<ServicerBlockUser[]>([]);
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
 	const [error, setError] = useState<string>('');
+	const text = {
+		title: 'DANH SÁCH CHẶN',
+		block: 'chặn'
+	};
 	useEffect(() => {
 		onRefresh();
 	}, []);
@@ -96,7 +100,7 @@ const Listblock = (props: RootStackScreenProps<'Listblock'>) => {
 	return (
 		<FixedContainer>
 			<CustomHeader
-				title="DANH SÁCH CHẶN"
+				title={text.title}
 				rightContent={
 					<TouchableOpacity onPress={() => setShowBlock(true)}>
 						<Image style={{width: widthScale(25), height: widthScale(25)}} source={ICONS.add} />
@@ -164,7 +168,7 @@ const Listblock = (props: RootStackScreenProps<'Listblock'>) => {
 							/>
 						</View>
 
-						<CustomButton onPress={handleAddBlock} style={{width: widthScale(100), alignSelf: 'center'}} text="Chặn" />
+						<CustomButton onPress={handleAddBlock} style={{width: widthScale(100), alignSelf: 'center'}} text={text.block} />
 					</View>
 				</View>
 			</Modal>

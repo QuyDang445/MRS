@@ -25,7 +25,11 @@ const ListAddress = (props: RootStackScreenProps<'ListAddress'>) => {
 	const modalChooseProvinceRef = useRef<ModalObject>(null);
 	const [data, setData] = useState<AddressProps[]>([]);
 	const [refreshing, setRefreshing] = useState(false);
-
+	const text = {
+		title: 'SỔ ĐỊA CHỈ',
+		addaddress: 'Thêm địa chỉ',
+		noaddress: 'Không có thông tin địa chỉ'
+	};
 	useEffect(() => {
 		onRefresh();
 	}, []);
@@ -66,7 +70,7 @@ const ListAddress = (props: RootStackScreenProps<'ListAddress'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="SỔ ĐỊA CHỈ" />
+			<CustomHeader title={text.title} />
 			<FlatList
 				refreshing={refreshing}
 				onRefresh={onRefresh}
@@ -102,7 +106,7 @@ const ListAddress = (props: RootStackScreenProps<'ListAddress'>) => {
 				)}
 				ListEmptyComponent={
 					<View style={{alignItems: 'center', marginTop: heightScale(20)}}>
-						<CustomText color={colors.grayText} text={'Không có thông tin địa chỉ'} />
+						<CustomText color={colors.grayText} text={text.noaddress} />
 					</View>
 				}
 				contentContainerStyle={styles.view}
@@ -110,7 +114,7 @@ const ListAddress = (props: RootStackScreenProps<'ListAddress'>) => {
 			/>
 			{!onChooseAddress && (
 				<View style={{padding: widthScale(20)}}>
-					<CustomButton onPress={onPressAddAddress} text="THÊM ĐỊA CHỈ" />
+					<CustomButton onPress={onPressAddAddress} text={text.addaddress} />
 				</View>
 			)}
 

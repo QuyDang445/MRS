@@ -33,6 +33,7 @@ export enum TABLE {
 	NOTIFICATION = 'NOTIFICATION',
 	SERVICE_BLOCK_USER = 'SERVICE_BLOCK_USER',
 	EVALUATE = 'EVALUATE',
+	FAQ = 'FAQ',
 }
 
 export enum TYPE_BLOCK_SERVICER {
@@ -51,4 +52,11 @@ export enum TYPE_ORDER_SERVICE {
 
 export enum NOTIFICATION_TYPE {
 
+}
+export enum LANGUAGE {
+	VI = 'VI',
+	EN = 'EN',
+	JA = 'JA',
+	ZH = 'ZH',
+	KO = 'KO',
 }

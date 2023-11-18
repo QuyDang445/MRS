@@ -48,6 +48,10 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export const ReviewAndRating = ({item}) => {
 	// console.log('ReviewAndRating New' + JSON.stringify(item));
+	const text = {
+		title: 'TẤT CẢ ĐÁNH GIÁ',
+		
+	};
 	return (
 		<View style={{flexDirection: 'row', marginVertical: heightScale(5)}} key={generateRandomId()}>
 			<Image style={styles.avatarComment} source={{uri: item.userObject?.avatar}} />

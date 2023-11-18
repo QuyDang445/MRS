@@ -15,8 +15,11 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {generateRandomId, getServiceAll} from '../utils';
 import {ServiceProps, Category} from '../constants/types';
 import API from '../services/api';
+import { useLanguage } from '../hooks/useLanguage';
 
 const Home = (props: RootStackScreenProps<'Home'>) => {
+	
+	
 	const {navigation} = props;
 
 	const [filterCategory, setFilterCategory] = useState<Category>();
@@ -25,7 +28,13 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 	const [outstandingService, setOutstandingService] = useState<ServiceProps[]>([]);
 	const [categories, setCategories] = useState<Category[]>([]);
 	const [serviceAll, setServiceAll] = useState<ServiceProps[]>([]);
-
+	const text = {
+		title: 'TRANG CHỦ',
+		Listofservices: 'Danh mục dịch vụ',
+		all: 'Tất cả',
+		outstandingservice: 'Dịch vụ nổi bật',
+		servicesavailable: 'Không có dịch vụ nào'
+	};
 	const onFocusSearch = () => {
 		navigation.navigate(ROUTE_KEY.Search, {data: allServiceRef.current, categories: categories});
 	};
@@ -103,7 +112,7 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="TRANG CHỦ" hideBack />
+			<CustomHeader title={text.title} hideBack />
 			<ScrollView
 				refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
 				showsVerticalScrollIndicator={false}
@@ -130,7 +139,7 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 				)}
 				{!!categories.length && (
 					<>
-						<CustomText style={styles.titleList} text={'Danh mục dịch vụ'} font={FONT_FAMILY.BOLD} />
+						<CustomText style={styles.titleList} text={text.Listofservices} font={FONT_FAMILY.BOLD} />
 						<View style={{flexDirection: 'row'}}>
 							<TouchableOpacity
 								onPress={() => {
@@ -144,7 +153,7 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 									},
 								]}>
 								<Image style={styles.imageCategory} source={ICONS.all} />
-								<CustomText style={{width: '100%', textAlign: 'center'}} size={10} text={'Tất cả'} />
+								<CustomText style={{width: '100%', textAlign: 'center'}} size={10} text={text.all} />
 							</TouchableOpacity>
 							<CustomScrollHorizontal style={{flex: 1}}>
 								<FlatList
@@ -175,7 +184,7 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 					renderItem={renderItemOutstandingService}
 					ListEmptyComponent={
 						<View style={{marginTop: heightScale(50)}}>
-							<CustomText style={{textAlign: 'center'}} color={colors.grayText} text={'Không có dịch vụ nào'} />
+							<CustomText style={{textAlign: 'center'}} color={colors.grayText} text={text.servicesavailable} />
 						</View>
 					}
 				/>

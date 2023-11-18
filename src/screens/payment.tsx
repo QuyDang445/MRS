@@ -16,11 +16,22 @@ const Payment = (props: RootStackScreenProps<'Payment'>) => {
 
 	//const onPressEditFee = () => navigation.navigate(ROUTE_KEY.EditPaymentFee);
 	//const onPressAddPayment = () => navigation.navigate(ROUTE_KEY.AddPayment);
+	const text = {
+		title: 'THANH TOÁN',
+		feeservicer: 'Phí dịch vụ',
+		payfees: '50.000 VND/tháng',
+		bank: 'Ngân hàng',
+		bankname: 'techcombank',
+		numberaccount: 'Số tài khoản',
+		nameaccount: 'Tên chủ thẻ',
+		descriptsion :'Nội dung',
 
+		
+	};
 	return (
 		<FixedContainer>
 			<CustomHeader
-				title="THANH TOÁN"
+				title={text.title}
 				// rightContent={
 				// 	<TouchableOpacity onPress={onPressAddPayment}>
 				// 		<Image style={styles.icon} source={ICONS.add} />
@@ -30,7 +41,7 @@ const Payment = (props: RootStackScreenProps<'Payment'>) => {
 
 			<ScrollView style={styles.view}>
 				<View style={styles.viewContent}>
-					<CustomText font={FONT_FAMILY.BOLD} text={'Phí dịch vụ: '} rightContent={<CustomText text={'50.000 VND/tháng'} />} />
+					<CustomText font={FONT_FAMILY.BOLD} text={text.feeservicer} rightContent={<CustomText text={text.payfees} />} />
 					{/* <TouchableOpacity onPress={onPressEditFee}>
 						<Image style={styles.icon} source={ICONS.edit} />
 					</TouchableOpacity> */}
@@ -41,7 +52,7 @@ const Payment = (props: RootStackScreenProps<'Payment'>) => {
 						key={generateRandomId()}
 						style={{marginBottom: heightScale(10), backgroundColor: `${colors.gray}80`, padding: 5, borderRadius: 5}}>
 						<View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-							<CustomText font={FONT_FAMILY.BOLD} text={'Ngân hàng: '} rightContent={<CustomText text={'Techcombank'} />} />
+							<CustomText font={FONT_FAMILY.BOLD} text={text.bank} rightContent={<CustomText text={text.bankname} />} />
 							<TouchableOpacity>
 								<Image style={styles.icon} source={ICONS.edit} />
 							</TouchableOpacity>
@@ -56,9 +67,9 @@ const Payment = (props: RootStackScreenProps<'Payment'>) => {
 								marginVertical: heightScale(5),
 							}}
 						/>
-						<CustomText font={FONT_FAMILY.BOLD} text={'Số tài khoản: '} rightContent={<CustomText text={'19035244530019'} />} />
-						<CustomText font={FONT_FAMILY.BOLD} text={'Tên chủ thẻ: '} rightContent={<CustomText text={'Nguyen A'} />} />
-						<CustomText font={FONT_FAMILY.BOLD} text={'Nội dung: '} rightContent={<CustomText text={'SoDienThoai_TenNguoiDongPhi'} />} />
+						<CustomText font={FONT_FAMILY.BOLD} text={text.numberaccount} rightContent={<CustomText text={'19035244530019'} />} />
+						<CustomText font={FONT_FAMILY.BOLD} text={text.nameaccount} rightContent={<CustomText text={'Nguyen A'} />} />
+						<CustomText font={FONT_FAMILY.BOLD} text={text.descriptsion} rightContent={<CustomText text={'SoDienThoai_TenNguoiDongPhi'} />} />
 
 						<Image
 							resizeMode="contain"

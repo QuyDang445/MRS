@@ -16,6 +16,12 @@ const Otp = (props: RootStackScreenProps<'Otp'>) => {
 	const userPhone = route.params.userPhone;
 
 	const [code, setCode] = useState('');
+	const text = {
+		title: 'Xác thực OTP',
+		accuracy: 'Xác thực'
+	
+		
+	};
 
 	const handleOtp = () => {
 		Spinner.show();
@@ -30,10 +36,10 @@ const Otp = (props: RootStackScreenProps<'Otp'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="Xác thực OTP" />
+			<CustomHeader title={text.title} />
 			<View style={styles.view}>
 				<InputOtp onChangeCode={setCode} />
-				<CustomButton onPress={handleOtp} text="Xác thực" style={{marginTop: 'auto'}} />
+				<CustomButton onPress={handleOtp} text={text.accuracy} style={{marginTop: 'auto'}} />
 			</View>
 		</FixedContainer>
 	);

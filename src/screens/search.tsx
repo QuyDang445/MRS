@@ -36,7 +36,13 @@ const Search = (props: RootStackScreenProps<'Search'>) => {
 	const [filterData, setFilterData] = useState<Sort>();
 
 	const allServiceRef = useRef<ServiceProps[]>(route.params.data);
-
+	const text = {
+		title: 'TÌM KIẾM',
+		entersearch: 'Nhập thông tin tìm kiếm',
+		sort: 'Sắp xếp',
+		filters : 'lọc',
+		servicesavailable: 'Không có dịch vụ nào'
+	};
 	useEffect(() => {
 		const all = {id: 'ALL', name: 'Tất cả'};
 		const newCategories = [all, ...categories] as any;
@@ -104,7 +110,7 @@ const Search = (props: RootStackScreenProps<'Search'>) => {
 	};
 	return (
 		<FixedContainer>
-			<CustomHeader title="TÌM KIẾM" />
+			<CustomHeader title={text.title}/>
 			<ScrollView
 				refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />}
 				showsVerticalScrollIndicator={false}
@@ -113,7 +119,7 @@ const Search = (props: RootStackScreenProps<'Search'>) => {
 					<Image source={ICONS.search} style={styles.iconSearch} />
 					<TextInput
 						placeholderTextColor={colors.grayText}
-						placeholder="Nhập thông tin cần tìm kiếm"
+						placeholder={text.entersearch}
 						autoFocus
 						onChangeText={onSearch}
 						style={styles.input}
@@ -125,7 +131,7 @@ const Search = (props: RootStackScreenProps<'Search'>) => {
 					onPressSort={onPressSort}
 					onPressShow={() => setIsShow(!isShow)}
 					isOn={isShow}
-					title="SẮP XẾP"
+					title={text.sort}
 					textButton={sortData?.title!}
 					filter={sort}
 				/>
@@ -134,7 +140,7 @@ const Search = (props: RootStackScreenProps<'Search'>) => {
 					onPressSort={onPressFilter}
 					onPressShow={() => setIsShowFilter(!isShowFilter)}
 					isOn={isShowFilter}
-					title="LỌC"
+					title={text.filters}
 					textButton={filterData?.name!}
 					filter={filter}
 				/>
@@ -154,7 +160,7 @@ const Search = (props: RootStackScreenProps<'Search'>) => {
 						renderItem={renderItemOutstandingService}
 						ListEmptyComponent={
 							<View style={{marginTop: heightScale(50)}}>
-								<CustomText style={{textAlign: 'center'}} color={colors.grayText} text={'Không có dịch vụ nào'} />
+								<CustomText style={{textAlign: 'center'}} color={colors.grayText} text={text.servicesavailable} />
 							</View>
 						}
 						showsVerticalScrollIndicator={false}

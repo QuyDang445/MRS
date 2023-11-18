@@ -82,6 +82,8 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.InfoServicer} component={InfoServicer} />
 			<Screen name={ROUTE_KEY.AcceptServicer} component={AcceptServicer} />
 			<Screen name={ROUTE_KEY.InfoAcceptServicer} component={infoAcceptServicer} />
+			<Screen name={ROUTE_KEY.Policy} component={Privacypolicy} />
+			<Screen name={ROUTE_KEY.FAQ} component={FAQs} />
 		</Navigator>
 	);
 };

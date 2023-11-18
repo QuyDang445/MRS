@@ -1,4 +1,4 @@
-import {NOTIFICATION_TYPE, TYPE_ORDER_SERVICE, TYPE_USER} from './enum';
+import {NOTIFICATION_TYPE, TYPE_ORDER_SERVICE, TYPE_USER,LANGUAGE} from './enum';
 
 export interface ImageProps {
 	name: string;
@@ -26,6 +26,7 @@ export interface UserProps {
 	isAccept?: boolean;
 	dateRegister?: number;
 	reasonBlock: string;
+	language?: LANGUAGE;
 }
 
 export interface NotificationProps {
@@ -97,4 +98,9 @@ export interface ServicerBlockUser {
 	idServicer: string;
 	phone: string;
 	id: string;
+}
+export interface FAQType {
+	id?: string;
+	question: string;
+	answer: string;
 }

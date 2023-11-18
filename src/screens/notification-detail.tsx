@@ -12,9 +12,13 @@ import moment from 'moment';
 const NotificationDetail = ({navigation, route}: RootStackScreenProps<'NotificationDetail'>) => {
 	const {notificationData} = route.params;
 	console.log(JSON.stringify(notificationData));
+	const text = {
+		title: 'Chi tiết thông báo',
+		
+	};
 	return (
 		<FixedContainer>
-			<CustomHeader title="Chi tiết thông báo" hideBack={false} />
+			<CustomHeader title={text.title} hideBack={false} />
 			<View style={{paddingHorizontal: widthScale(20), flexDirection: 'column', gap: heightScale(10)}}>
 				<View style={{flexDirection: 'row', gap: widthScale(10), width: '100%'}}>
 					<Image style={styles.notificationIcon} source={ICONS.notification_read} />

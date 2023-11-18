@@ -27,7 +27,13 @@ const EvaluateService = (props: RootStackScreenProps<'EvaluateService'>) => {
 	const [star, setStar] = useState(5);
 	const [images, setImages] = useState<ImageProps[]>([]);
 	const [content, setContent] = useState('');
-
+	const text = {
+		title: 'ĐÁNH GIÁ DỊCH VỤ',
+		description: 'Nội dung đánh giá',
+		enterdescription: 'Hãy nhập đánh giá',
+		image: 'Hình ảnh',
+		evulate: 'Đánh giá'
+	};
 	const handleEvaluate = async () => {
 		Spinner.show();
 		const listImage = [];
@@ -56,7 +62,7 @@ const EvaluateService = (props: RootStackScreenProps<'EvaluateService'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="ĐÁNH GIÁ DỊCH VỤ" />
+			<CustomHeader title={text.title} />
 			<ScrollView style={{paddingHorizontal: widthScale(20)}}>
 				<View style={{flexDirection: 'row', alignItems: 'center'}}>
 					<Image style={{width: widthScale(120), height: widthScale(120), borderRadius: 10}} source={{uri: data?.serviceObject?.image}} />
@@ -109,12 +115,12 @@ const EvaluateService = (props: RootStackScreenProps<'EvaluateService'>) => {
 					</TouchableOpacity>
 				</View>
 
-				<CustomText text={'Nội dung đánh giá'} style={{textAlign: 'center'}} />
+				<CustomText text={text.description} style={{textAlign: 'center'}} />
 				<View style={{borderRadius: 5, borderWidth: 1, borderColor: 'black', marginBottom: heightScale(20)}}>
-					<TextInput value={content} onChangeText={setContent} multiline placeholder="Hãy nhập đánh giá" style={{}} />
+					<TextInput value={content} onChangeText={setContent} multiline placeholder={text.enterdescription} style={{}} />
 				</View>
 
-				<CustomText text={'Hình ảnh'} style={{textAlign: 'center'}} />
+				<CustomText text={text.image} style={{textAlign: 'center'}} />
 
 				<View style={{flexDirection: 'row', alignItems: 'center'}}>
 					<TouchableOpacity
@@ -178,7 +184,7 @@ const EvaluateService = (props: RootStackScreenProps<'EvaluateService'>) => {
 				</View>
 			</ScrollView>
 			<View style={{padding: widthScale(20)}}>
-				<CustomButton disabled={!content || !images.length} text="ĐÁNH GIÁ" onPress={handleEvaluate} />
+				<CustomButton disabled={!content || !images.length} text={text.evulate} onPress={handleEvaluate} />
 			</View>
 		</FixedContainer>
 	);

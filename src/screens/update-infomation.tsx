@@ -17,6 +17,7 @@ import { showMessage } from '../utils';
 import { getImageFromDevice, uploadImage } from '../utils/image';
 import ModalChooseProvince, { ModalObject } from '../components/sign-up/modal-choose-province';
 import { FormikProps } from 'formik';
+import { useLanguage } from '../hooks/useLanguage';
 
 const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => {
 	const { navigation } = props;
@@ -30,7 +31,14 @@ const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => 
 	const [loading, setLoading] = useState(false);
 	const onChangeAddress = (text: string) => innerRefFormik.current?.setFieldValue('address', text);
 	const modalChooseProvinceRef = useRef<ModalObject>(null);
-
+	const text = {
+		title: 'CẬP NHẬP THÔNG TIN',
+		fullname: 'HỌ VÀ TÊN',
+		phonenumber: 'SỐ ĐIỆN THOẠI',
+		addresss : 'Địa chỉ',
+		save : 'LƯU',
+		showmessagename: 'Thiếu tên',
+	};
 	//chọn ảnh và cập nhập ảnh
 	const onPressUpdateAvatar = async () => {
 		Spinner.show();
@@ -50,7 +58,7 @@ const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => 
 
 	const onPressSave = async () => {
 		if (!name?.trim()) {
-			return showMessage('Thiếu tên');
+			return showMessage(text.showmessagename);
 		}
 
 		if (!phone?.trim()) {
@@ -69,7 +77,7 @@ const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => 
 	};
 
 	return (<FixedContainer>
-		<CustomHeader title="CẬP NHẬT THÔNG TIN" />
+		<CustomHeader title={text.title} />
 
 		<ScrollView style={styles.view}>
 			<TouchableOpacity
@@ -96,27 +104,27 @@ const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => 
 				)}
 			</TouchableOpacity>
 
-			<CustomText text={'HỌ VÀ TÊN'} font={FONT_FAMILY.BOLD} size={14} />
+			<CustomText text={text.fullname} font={FONT_FAMILY.BOLD} size={14} />
 			<TextInput onChangeText={setName} value={name} style={styles.input} />
 
 			{userInfo?.type === TYPE_USER.USER && (
 				<View>
-					<CustomText text={'SỐ ĐIỆN THOẠI'} font={FONT_FAMILY.BOLD} size={14} />
+					<CustomText text={text.phonenumber} font={FONT_FAMILY.BOLD} size={14} />
 					<TextInput keyboardType="numeric" onChangeText={setPhone} value={phone} style={styles.input} />
 				</View>
 			)}
 			{userInfo?.type === TYPE_USER.SERVICER && (
 				<View>
-					<CustomText text={'SỐ ĐIỆN THOẠI'} font={FONT_FAMILY.BOLD} size={14} />
+					<CustomText text={text.phonenumber} font={FONT_FAMILY.BOLD} size={14} />
 					<TextInput keyboardType="numeric" onChangeText={setPhone} editable={false} value={phone} style={styles.input} />
-					<CustomText text={'ĐỊA CHỈ'} font={FONT_FAMILY.BOLD} size={14} />
+					<CustomText text={text.addresss} font={FONT_FAMILY.BOLD} size={14} />
 					<TouchableOpacity onPress={() => modalChooseProvinceRef.current?.show({})} style={styles.buttonProvince}>
-						<CustomText color={address ? colors.black : colors.grayText} text={setAddress || 'Địa chỉ'} />
+						<CustomText color={address ? colors.black : colors.grayText} text={setAddress || text.addresss} />
 					</TouchableOpacity>
 				</View>
 			)}
 			<ModalChooseProvince ref={modalChooseProvinceRef} onPressSave={onChangeAddress} />
-			<CustomButton onPress={onPressSave} text="LƯU" />
+			<CustomButton onPress={onPressSave} text={text.save} />
 		</ScrollView>
 
 	</FixedContainer>

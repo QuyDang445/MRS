@@ -13,6 +13,13 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 const Tab = createMaterialTopTabNavigator();
 
 const HomeServicer = (props: RootStackScreenProps<'Home'>) => {
+	const text = {
+		title: 'ĐƠN HÀNG',
+		pending: 'Chờ xác nhận',
+		inprocess: 'Tiến hành',
+		completed: 'Hoàn thành',
+		canceled: 'Đã hủy'
+	};
 	const {navigation} = props;
 	const renderTapBarItem = useCallback(
 		(props: MaterialTopTabBarProps) => (
@@ -43,12 +50,12 @@ const HomeServicer = (props: RootStackScreenProps<'Home'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="ĐƠN HÀNG" hideBack />
+			<CustomHeader title={text.title} hideBack />
 			<Tab.Navigator screenOptions={{lazy: true, swipeEnabled: false}} tabBar={renderTapBarItem}>
-				<Tab.Screen key={TYPE_ORDER_SERVICE.OrderPending} name={'Chờ xác nhận'} component={OrderPending} />
-				<Tab.Screen key={TYPE_ORDER_SERVICE.OrderInProcess} name={'Tiến hành'} component={OrderInProcess} />
-				<Tab.Screen key={TYPE_ORDER_SERVICE.OrderCompleted} name={'Hoàn thành'} component={OrderCompleted} />
-				<Tab.Screen key={TYPE_ORDER_SERVICE.OrderCanceled} name={'Đã huỷ'} component={OrderCanceled} />
+				<Tab.Screen key={TYPE_ORDER_SERVICE.OrderPending} name={text.pending} component={OrderPending} />
+				<Tab.Screen key={TYPE_ORDER_SERVICE.OrderInProcess} name={text.inprocess} component={OrderInProcess} />
+				<Tab.Screen key={TYPE_ORDER_SERVICE.OrderCompleted} name={text.completed} component={OrderCompleted} />
+				<Tab.Screen key={TYPE_ORDER_SERVICE.OrderCanceled} name={text.canceled} component={OrderCanceled} />
 			</Tab.Navigator>
 		</FixedContainer>
 	);

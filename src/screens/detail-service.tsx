@@ -28,7 +28,17 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 	const [evaluates, setEvaluates] = useState<EvaluateProps[]>([]);
 
 	const [servicer, setServicer] = useState<UserProps[]>([]);
-
+	const text = {
+		title: 'CHI TIẾT DỊCH VỤ',
+		descriptionservicesL: 'Mô tả dịch vụ',
+		description: 'Nội dung đánh giá',
+		suggestions: 'Gợi ý cho bạn',
+		infomationprovider: 'Thông tin thợ',
+		booking : "Đặt lịch",
+		evulate: 'Đánh giá',
+		allevulate : 'Xem tất cả đánh giá',
+		noevulate: 'Không có đánh giá nào',
+	};
 	const starTotal = useMemo(() => {
 		let total = 0;
 		for (let i = 0; i < evaluates.length; i++) {
@@ -95,7 +105,7 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 	const onPressViewAllReview = () => navigation.navigate(ROUTE_KEY.AllReview, {idService: data.id});
 	return (
 		<FixedContainer>
-			<CustomHeader title="CHI TIẾT DỊCH VỤ" />
+			<CustomHeader title={text.title} />
 			<ScrollView style={styles.view}>
 				<View style={styles.viewTop}>
 					<Image source={{uri: data?.image}} style={styles.image} />
@@ -105,7 +115,7 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 					</View>
 				</View>
 				<View style={{marginVertical: heightScale(20)}}>
-					<CustomText text={'Mô tả dịch vụ'} font={FONT_FAMILY.BOLD} />
+					<CustomText text={text.description} font={FONT_FAMILY.BOLD} />
 					<CustomText text={data?.description} />
 				</View>
 
@@ -123,12 +133,12 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 				</TouchableOpacity>
 
 				<View style={{marginVertical: widthScale(10)}}>
-					<CustomText text={'Đánh giá'} font={FONT_FAMILY.BOLD} />
+					<CustomText text={text.evulate} font={FONT_FAMILY.BOLD} />
 					<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
 						<Star star={starTotal} isShowNumber />
 						{!!evaluates.length && (
 							<TouchableOpacity onPress={onPressViewAllReview}>
-								<CustomText style={{textDecorationLine: 'underline'}} size={13} text={'Xem tất cả đánh giá'} font={FONT_FAMILY.BOLD} />
+								<CustomText style={{textDecorationLine: 'underline'}} size={13} text={text.allevulate} font={FONT_FAMILY.BOLD} />
 							</TouchableOpacity>
 						)}
 					</View>
@@ -140,11 +150,11 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 					{evaluates.slice(0, 5).map(item => {
 						return <ReviewAndRating item={item} />;
 					})}
-					{!evaluates.length && <CustomText color={colors.grayLine} style={{textAlign: 'center'}} text={'Không có đánh giá nào'} />}
+					{!evaluates.length && <CustomText color={colors.grayLine} style={{textAlign: 'center'}} text={text.noevulate} />}
 				</View>
 				{servicer.length > 0 && (
 					<View style={{marginVertical: heightScale(20)}}>
-						<CustomText text={'Gợi ý cho bạn'} font={FONT_FAMILY.BOLD} />
+						<CustomText text={text.suggestions} font={FONT_FAMILY.BOLD} />
 
 						<FlatList
 							showsHorizontalScrollIndicator={false}
@@ -174,9 +184,9 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 			</ScrollView>
 			{userInfo?.type === TYPE_USER.USER && (
 				<View style={{flexDirection: 'row', justifyContent: 'center', paddingVertical: heightScale(10)}}>
-					<CustomButton style={{width: WIDTH / 2.5}} text="THÔNG TIN THỢ" onPress={onPressViewInfoServicer} />
+					<CustomButton style={{width: WIDTH / 2.5}} text={text.infomationprovider} onPress={onPressViewInfoServicer} />
 					<View style={{width: widthScale(15)}} />
-					<CustomButton style={{width: WIDTH / 2.5}} text="ĐẶT LỊCH" onPress={onPressBooking} />
+					<CustomButton style={{width: WIDTH / 2.5}} text={text.booking} onPress={onPressBooking} />
 				</View>
 			)}
 		</FixedContainer>

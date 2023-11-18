@@ -21,7 +21,12 @@ const ChangePasswordForgot = (props: RootStackScreenProps<'ChangePasswordForgot'
 	const [renewPass, setRenewPass] = useState('');
 	const [newPasswordVisible, setNewPasswordVisible] = useState(false);
 	const [confirmNewPasswordVisible, setConfirmNewPasswordVisible] = useState(false);
-
+	const text = {
+		title: 'ĐỔI MẬT KHẨU',
+		enterpass: 'NHẬP MẬT KHẨU HIỆN TẠI',
+		enterpassnew: 'NHẬP MẬT KHẨU MỚI',
+		resetpassword: 'ĐẶT LẠI MẬT KHẨU MỚI',
+	};
 	const handleChangePass = async () => {
 		if (newPass !== renewPass) {
 			return showMessage('Xác nhận mật khẩu sai!');
@@ -41,16 +46,16 @@ const ChangePasswordForgot = (props: RootStackScreenProps<'ChangePasswordForgot'
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="ĐỔI MẬT KHẨU" />
+			<CustomHeader title={text.title} />
 			<ScrollView style={styles.view}>
-				<CustomText text={'NHẬP MẬT KHẨU MỚI'} font={FONT_FAMILY.BOLD} size={14} />
+				<CustomText text={text.enterpass} font={FONT_FAMILY.BOLD} size={14} />
 				<View>
 					<TextInput secureTextEntry={!newPasswordVisible} value={newPass} onChangeText={setNewPass} style={styles.input} />
 					<TouchableOpacity style={styles.eyeIcon} onPress={() => setNewPasswordVisible(!newPasswordVisible)}>
 						<Image source={ICONS.eye} style={styles.eyeIcon} />
 					</TouchableOpacity>
 				</View>
-				<CustomText text={'NHẬP LẠI MẬT KHẨU MỚI'} font={FONT_FAMILY.BOLD} size={14} />
+				<CustomText text={text.enterpassnew} font={FONT_FAMILY.BOLD} size={14} />
 				<View>
 					<TextInput secureTextEntry={!confirmNewPasswordVisible} value={renewPass} onChangeText={setRenewPass} style={styles.input} />
 					<TouchableOpacity style={styles.eyeIcon} onPress={() => setConfirmNewPasswordVisible(!confirmNewPasswordVisible)}>
@@ -59,7 +64,7 @@ const ChangePasswordForgot = (props: RootStackScreenProps<'ChangePasswordForgot'
 				</View>
 			</ScrollView>
 			<View style={{margin: widthScale(20)}}>
-				<CustomButton disabled={!newPass.trim() || !renewPass.trim()} onPress={handleChangePass} text="ĐẶT LẠI MẬT KHẨU" />
+				<CustomButton disabled={!newPass.trim() || !renewPass.trim()} onPress={handleChangePass} text={text.resetpassword} />
 			</View>
 		</FixedContainer>
 	);

@@ -27,7 +27,10 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 	const onPressDetail = (item: ServiceProps) => navigation.navigate(ROUTE_KEY.ServiceDetail,{serviceData: item});
 
 	const onPressAddService = () => navigation.navigate(ROUTE_KEY.AddService);
-
+	const text = {
+		title: 'DỊCH VỤ CỦA TÔI',
+		servicesavailable: 'Bạn không có dịch vụ nào'
+	};
 	const onRefresh = async () => {
 		setRefreshing(true);
 		const newData = await getServiceFromID(userInfo?.id!);
@@ -57,7 +60,7 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 	return (
 		<FixedContainer>
 			<CustomHeader
-				title="DỊCH VỤ CỦA TÔI"
+				title={text.title}
 				hideBack
 				rightContent={
 					<TouchableOpacity onPress={onPressAddService}>
@@ -100,7 +103,7 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 					}}
 					ListEmptyComponent={
 						<View style={{marginTop: heightScale(50)}}>
-							<CustomText style={{textAlign: 'center'}} color={colors.grayText} text={'Bạn không có dịch vụ nào'} />
+							<CustomText style={{textAlign: 'center'}} color={colors.grayText} text={text.servicesavailable} />
 						</View>
 					}
 					data={data}

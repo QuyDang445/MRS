@@ -35,4 +35,6 @@ export type RootStackScreensParams = {
 	AllReview: {idService: string};
 	AcceptServicer: {data: UserProps[]};
 	InfoAcceptServicer: {data: UserProps};
+	Policy: undefined;
+	FAQ: undefined;
 };
