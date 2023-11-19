@@ -30,21 +30,23 @@ const AddCategory = (props: RootStackScreenProps<'AddCategory'>) => {
 	const [name, setName] = useState('');
 
 	useEffect(() => {
-		console.log('data: ' + JSON.stringify(data));
 		if (data) {
+			console.log('data image: ' + JSON.stringify(data.uri));
 			setName(data?.name);
-			setImage(data?.uri);
+			setImage(data);
 		}
 	}, []);
 
 	const handleAdd = async () => {
-		if (data) {
-			Spinner.show();
-			const body = {
-				name: name,
-				uri: data?.uri,
-			};
+		Spinner.show();
+		const categoryImage = await uploadImage(image?.uri || '');
+		Spinner.show();
+		const body = {
+			name: name,
+			uri: categoryImage,
+		};
 
+		if (data) {
 			API.put(`${TABLE.CATEGORY}/${data.id}`, body)
 				.then(() => {
 					showMessage('Sửa loại dịch vụ thành công!');
@@ -53,23 +55,12 @@ const AddCategory = (props: RootStackScreenProps<'AddCategory'>) => {
 				})
 				.finally(() => Spinner.hide());
 		} else {
-			Spinner.show();
-
-			if (image) {
-				const categoryImage = await uploadImage(image.uri);
-				Spinner.hide();
-				const body = {
-					name: name,
-					uri: categoryImage,
-				};
-
-				API.post(`${TABLE.CATEGORY}`, body)
-					.then(() => {
-						showMessage('Thêm loại dịch vụ thành công');
-						navigation.goBack();
-					})
-					.finally(() => Spinner.hide());
-			}
+			API.post(`${TABLE.CATEGORY}`, body)
+				.then(() => {
+					showMessage('Thêm loại dịch vụ thành công');
+					navigation.goBack();
+				})
+				.finally(() => Spinner.hide());
 			Spinner.hide();
 		}
 	};
@@ -83,16 +74,13 @@ const AddCategory = (props: RootStackScreenProps<'AddCategory'>) => {
 				<TextInput value={name} onChangeText={setName} style={styles.input} />
 				<TouchableOpacity
 					onPress={async () => {
-						const image = await getImageFromDevice();
-						setImage(image);
-						console.log('set image: ' + image.uri);
+						const newImage = await getImageFromDevice();
+						setImage(newImage);
+						console.log('set image: ' + newImage.uri);
 					}}
 					style={styles.uploadImage}>
-					{image ? (
-						<Image source={{uri: image.uri}} style={{flex: 1, width: '3333333333100%', height: '100%', resizeMode: 'center'}} />
-					) : (
-						<Image source={ICONS.upload} style={styles.upload} />
-					)}
+					{image && <Image source={{uri: image.uri}} style={{flex: 1, width: '100%', height: '100%', resizeMode: 'contain'}} />}
+					{!image && <Image source={ICONS.upload} style={styles.upload} />}
 				</TouchableOpacity>
 			</ScrollView>
 			<View style={{padding: widthScale(20)}}>
@@ -133,6 +121,8 @@ const styles = StyleSheet.create({
 	upload: {
 		width: widthScale(25),
 		height: widthScale(25),
+		flex: 1,
+		resizeMode: 'contain',
 	},
 	viewInput: {
 		width: '100%',

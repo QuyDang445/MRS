@@ -26,6 +26,7 @@ import Logger from '../utils/logger';
 import CustomText from '../components/custom-text';
 import {sendNotificationToDevices} from '../utils/notification';
 import orderService from '../screens/order-service';
+import {AdminServiceAndServiceType} from '../screens';
 
 const Tab = createBottomTabNavigator<RootStackScreensParams>();
 
@@ -117,7 +118,6 @@ const BottomTab = (props: RootStackScreenProps<'BottomTab'>) => {
 		DeviceEventEmitter.addListener(EMIT_EVENT.LOGOUT, logout);
 	}, [userInfo]);
 
-
 	const logout = async () => {
 		navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.LogIn}]}));
 
@@ -143,6 +143,8 @@ const BottomTab = (props: RootStackScreenProps<'BottomTab'>) => {
 		switch (userInfo?.type) {
 			case TYPE_USER.USER:
 				return Order;
+			case TYPE_USER.ADMIN:
+				return AdminServiceAndServiceType;
 			default:
 				return orderService;
 		}

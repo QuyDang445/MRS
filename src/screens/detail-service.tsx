@@ -170,7 +170,7 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 			</ScrollView>
 			{userInfo?.type === TYPE_USER.USER && (
 				<View style={{flexDirection: 'row', justifyContent: 'center', paddingVertical: heightScale(10)}}>
-					<CustomButton style={{width: WIDTH / 2.5}} text="THÔNG TIN THỢ" onPress={onPressViewInfoServicer} />
+					{/* <CustomButton style={{width: WIDTH / 2.5}} text="THÔNG TIN THỢ" onPress={onPressViewInfoServicer} /> */}
 					<View style={{width: widthScale(15)}} />
 					<CustomButton style={{width: WIDTH / 2.5}} text="ĐẶT LỊCH" onPress={onPressBooking} />
 				</View>

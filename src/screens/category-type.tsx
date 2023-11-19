@@ -41,7 +41,7 @@ const CategoryType = () => {
 	};
 
 	const searchCategory = async (keyword: string) => {
-		console.log('serach: keyword' + keyword + ' length: ' + keyword.length);
+		console.log('search: keyword' + keyword + ' length: ' + keyword.length);
 		if (keyword && keyword.length > 0) {
 			setKeyword(keyword);
 
