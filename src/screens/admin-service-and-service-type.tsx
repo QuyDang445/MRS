@@ -7,7 +7,7 @@ import FixedContainer from '../components/fixed-container';
 import Spinner from '../components/spinner';
 import Star from '../components/star';
 import {EMIT_EVENT, FONT_FAMILY, TABLE} from '../constants/enum';
-import {ServiceProps} from '../constants/types';
+import {Category, ServiceProps} from '../constants/types';
 import {ROUTE_KEY} from '../navigator/routers';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
@@ -17,12 +17,13 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo, getServiceFromID, showMessage} from '../utils';
 import {MaterialTopTabBarProps, createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import CategoryType from './category-type';
+import {AdminService} from '.';
 
 const Tab = createMaterialTopTabNavigator();
 
-const AdminServiceAndServiceType = (props: RootStackScreenProps<'Order'>) => {
+const AdminServiceAndServiceType = (props: RootStackScreenProps<'AdminServiceAndServiceType'>) => {
 	const navigation = props.navigation;
-	const onPressAdd = (item: Category) => navigation.navigate(ROUTE_KEY.AddCategory, {});
+	const onPressAdd = (item: ServiceProps) => navigation.navigate(ROUTE_KEY.AddCategory, {});
 
 	const renderTapBarItem = useCallback(
 		(props: MaterialTopTabBarProps) => (
@@ -55,7 +56,7 @@ const AdminServiceAndServiceType = (props: RootStackScreenProps<'Order'>) => {
 			/>
 			<Tab.Navigator screenOptions={{lazy: true, swipeEnabled: false}} tabBar={renderTapBarItem}>
 				<Tab.Screen key={'ServiceCategory'} name={'Loại dịch vụ'} component={CategoryType} />
-				<Tab.Screen key={'Service'} name={'Dịch vụ'} component={CategoryType} />
+				<Tab.Screen key={'AdminService'} name={'Dịch vụ'} component={AdminService} />
 			</Tab.Navigator>
 		</FixedContainer>
 	);

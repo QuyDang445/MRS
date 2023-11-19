@@ -39,4 +39,5 @@ export const ROUTE_KEY = createEnum({
 	InfoServicer: 'InfoServicer',
 	AdminServiceAndServiceType: 'AdminServiceAndServiceType',
 	AddCategory: 'AddCategory',
+	AdminAddService: 'AdminAddService',
 });

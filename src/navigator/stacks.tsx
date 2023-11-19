@@ -16,6 +16,7 @@ import {
 	AllReview,
 	InfoServicer,
 	AdminServiceAndServiceType,
+	AdminAddService,
 } from '../screens';
 import BottomTab from './bottom-tab';
 import ChangePasswordForgot from '../screens/change-password-forgot';
@@ -82,6 +83,7 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.InfoServicer} component={InfoServicer} />
 			<Screen name={ROUTE_KEY.AdminServiceAndServiceType} component={AdminServiceAndServiceType} />
 			<Screen name={ROUTE_KEY.AddCategory} component={AddCategory} />
+			<Screen name={ROUTE_KEY.AdminAddService} component={AdminAddService} />
 		</Navigator>
 	);
 };

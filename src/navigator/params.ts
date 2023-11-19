@@ -35,4 +35,5 @@ export type RootStackScreensParams = {
 	AllReview: {idService: string};
 	AdminServiceAndServiceType: undefined;
 	AddCategory: {data: Category};
+	AdminAddService: {data: ServiceProps};
 };

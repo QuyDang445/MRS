@@ -14,6 +14,8 @@ import ServiceDetail from './detail-service';
 import AllReview from './all-review';
 import InfoServicer from './info-servicer';
 import AdminServiceAndServiceType from './admin-service-and-service-type';
+import AdminService from './admin-service';
+import AdminAddService from './admin-add-service';
 export {
 	Home,
 	LogIn,
@@ -31,4 +33,6 @@ export {
 	Otp,
 	InfoServicer,
 	AdminServiceAndServiceType,
+	AdminService,
+	AdminAddService,
 };
