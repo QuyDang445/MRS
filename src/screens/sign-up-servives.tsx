@@ -17,8 +17,9 @@ import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo, showMessage} from '../utils';
 import {getImageFromDevice, uploadImage} from '../utils/image';
+import { UserProps } from '../constants/types';
 
-const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
+const SignUpServices = async (props: RootStackScreenProps<'SignUpServices'>) => {
 	const {navigation} = props;
 
 	const [passwordVisible, setPasswordVisible] = useState(false);
@@ -28,19 +29,9 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 	const phoneRegex = /^0[0-9]{9}$/;
 	const cccdRegex = /^0[0-9]{11}$/;
 
-	//const phoneInputRef = useRef<TextInput>(null);
-	//const phone = phoneInputRef.current?.get;
-	// const users = (await API.get(TABLE.USERS, true)) as UserProps[];
-	// 	let check = false; // 	for (let i = 0; i < users.length; i++) {
-		// 		if (users[i].phone === phone) {
-			// 			check = true;
-			// 		}
-			// 	}
-
-
 	const SignUpSchema = Yup.object().shape({
 		name: Yup.string().required('Thiếu tên'),
-		phone: Yup.string().matches(phoneRegex, 'Số điện thoại không hợp lệ!').required('Thiếu số điện thoại'),
+		phone: Yup.string().matches(phoneRegex, 'Số điện thoại không hợp lệ!').required('Thiếu số điện thoai'),
 		cccd: Yup.string().matches(cccdRegex, 'Số căn cước công dân không hợp lệ!').required('Thiếu căn cước công dân'),
 		image: Yup.string().required('Thiếu hình ảnh căn cước công dân'),
 		address: Yup.string().required('Thiếu địa chỉ'),
@@ -58,7 +49,15 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 		}
 	};
 
-	const handleRegister = (value: any) => {
+	const handleRegister = async (value: any) => {
+		const allUser = (await API.get(`${TABLE.USERS}`, true)) as UserProps[];
+		for (let i = 0; i < allUser.length; i++) {
+			if (allUser[i].phone === value.phone) {
+				//console.log('Số điện thoại này đã được đăng ký');
+				return showMessage('Số điện thoại này đã được đăng ký');
+			}
+		}
+
 		AlertYesNo('', 'Bạn đã kiểm tra kĩ thông tin?', async () => {
 			Spinner.show();
 			const imageCccd = await uploadImage(value.image);
@@ -89,7 +88,7 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 	return (
 		<FixedContainer>
 			<CustomHeader title="ĐĂNG KÝ TÀI KHOẢN" />
-			<ScrollView>
+			
 				<Formik
 					innerRef={innerRefFormik}
 					validationSchema={SignUpSchema}
@@ -100,6 +99,7 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 						return (
 							<>
 								<Image source={IMAGES.LOGO} style={styles.logo} />
+								<ScrollView>
 								<View style={styles.input}>
 									<TextInput
 										value={values.name}
@@ -114,6 +114,7 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 								<View style={styles.input}>
 									<TextInput
 										value={values.phone}
+										maxLength={10}
 										onChangeText={handleChange('phone')}
 										keyboardType={'numeric'}
 										placeholder="Số điện thoại"
@@ -192,17 +193,17 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 									text={'Tôi đồng ý với Điều Khoản Sử Dụng'}
 								/>
 								{errors.isCheck && (
-									<CustomText text={errors.isCheck} color={colors.red} size={12} style={{marginHorizontal: widthScale(20)}} />
+									<CustomText text={errors.isCheck} color={colors.red} size={12} style={{marginHorizontal: widthScale(20), alignSelf: 'center'}} />
 								)}
 
 								<View style={{alignSelf: 'center', marginBottom: heightScale(20)}}>
 									<CustomButton onPress={handleSubmit} text="ĐĂNG KÝ" style={styles.button} />
 								</View>
+								</ScrollView>
 							</>
 						);
 					}}
 				</Formik>
-			</ScrollView>
 			<ModalChooseProvince ref={modalChooseProvinceRef} onPressSave={onChangeAddress} />
 		</FixedContainer>
 	);
@@ -256,12 +257,12 @@ const styles = StyleSheet.create({
 	},
 	viewCheck: {
 		marginHorizontal: widthScale(20),
-		marginTop: heightScale(10),
+		marginTop: heightScale(20),
 		justifyContent: 'center',
 	},
 	button: {
 		width: widthScale(150),
-		marginTop: heightScale(100),
+		marginTop: heightScale(50),
 	},
 	eyeIcon: {
 		position: 'absolute',

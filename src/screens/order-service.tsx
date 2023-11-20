@@ -1,5 +1,5 @@
 import React, {memo, useEffect, useState} from 'react';
-import {DeviceEventEmitter, FlatList, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {DeviceEventEmitter, FlatList, Image, RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
@@ -8,6 +8,7 @@ import Spinner from '../components/spinner';
 import Star from '../components/star';
 import {EMIT_EVENT, FONT_FAMILY, TABLE} from '../constants/enum';
 import {ServiceProps} from '../constants/types';
+import {useLanguage} from '../hooks/useLanguage';
 import {ROUTE_KEY} from '../navigator/routers';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
@@ -17,6 +18,7 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo, getServiceFromID, showMessage} from '../utils';
 
 const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
+	const text = useLanguage().OrderServicer;
 	const {navigation} = props;
 
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
@@ -24,7 +26,7 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 	const [data, setData] = useState<ServiceProps[]>([]);
 	const [refreshing, setRefreshing] = useState(false);
 
-	const onPressDetail = (item: ServiceProps) => navigation.navigate(ROUTE_KEY.ServiceDetail,{serviceData: item});
+	const onPressDetail = (item: ServiceProps) => navigation.navigate(ROUTE_KEY.ServiceDetail, {serviceData: item});
 
 	const onPressAddService = () => navigation.navigate(ROUTE_KEY.AddService);
 
@@ -43,11 +45,11 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 	const onPressEdit = (item: ServiceProps) => navigation.navigate(ROUTE_KEY.AddService, {data: item});
 
 	const onPressDelete = (item: ServiceProps) => {
-		AlertYesNo(undefined, 'Bạn chắc chắn muốn xoá?', () => {
+		AlertYesNo(undefined, text.confirmDelete, () => {
 			Spinner.show();
 			API.put(`${TABLE.SERVICE}/${item.id}`, {})
 				.then(() => {
-					showMessage('Xoá dịch vụ thành công!');
+					showMessage(text.deleteSuccess);
 					onRefresh();
 				})
 				.finally(() => Spinner.hide());
@@ -57,7 +59,7 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 	return (
 		<FixedContainer>
 			<CustomHeader
-				title="DỊCH VỤ CỦA TÔI"
+				title={text.title}
 				hideBack
 				rightContent={
 					<TouchableOpacity onPress={onPressAddService}>
@@ -65,47 +67,47 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 					</TouchableOpacity>
 				}
 			/>
-
-			<FlatList
-				refreshing={refreshing}
-				onRefresh={onRefresh}
-				contentContainerStyle={{padding: widthScale(20)}}
-				renderItem={({item}) => {
-					return (
-						<TouchableOpacity
-							onPress={() => onPressDetail(item)}
-							style={{
-								padding: widthScale(10),
-								flexDirection: 'row',
-								marginBottom: widthScale(10),
-								borderRadius: 10,
-								borderWidth: 1,
-								borderColor: colors.gray,
-							}}>
-							<Image style={styles.image} source={{uri: item.image}} />
-							<View style={{flex: 1, marginLeft: widthScale(10)}}>
-								<CustomText font={FONT_FAMILY.BOLD} text={item.name} />
-								<CustomText text={item?.categoryObject?.name} />
-								<Star star={item?.star || 0} />
-								<View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center', flexDirection: 'row', gap: 10}}>
-									<TouchableOpacity onPress={() => onPressEdit(item)}>
-										<Image source={ICONS.edit} style={styles.icon} />
-									</TouchableOpacity>
-									<TouchableOpacity onPress={() => onPressDelete(item)}>
-										<Image source={ICONS.delete} style={styles.icon} />
-									</TouchableOpacity>
+			<ScrollView refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />} style={styles.view}>
+				<FlatList
+					scrollEnabled={false}
+					contentContainerStyle={{padding: widthScale(20)}}
+					renderItem={({item}) => {
+						return (
+							<TouchableOpacity
+								onPress={() => onPressDetail(item)}
+								style={{
+									padding: widthScale(10),
+									flexDirection: 'row',
+									marginBottom: widthScale(10),
+									borderRadius: 10,
+									borderWidth: 1,
+									borderColor: colors.gray,
+								}}>
+								<Image style={styles.image} source={{uri: item.image}} />
+								<View style={{flex: 1, marginLeft: widthScale(10)}}>
+									<CustomText font={FONT_FAMILY.BOLD} text={item.name} />
+									<CustomText text={item?.categoryObject?.name} />
+									<Star star={item?.star || 0} />
+									<View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center', flexDirection: 'row', gap: 10}}>
+										<TouchableOpacity onPress={() => onPressEdit(item)}>
+											<Image source={ICONS.edit} style={styles.icon} />
+										</TouchableOpacity>
+										<TouchableOpacity onPress={() => onPressDelete(item)}>
+											<Image source={ICONS.delete} style={styles.icon} />
+										</TouchableOpacity>
+									</View>
 								</View>
-							</View>
-						</TouchableOpacity>
-					);
-				}}
-				ListEmptyComponent={
-					<View style={{marginTop: heightScale(50)}}>
-						<CustomText style={{textAlign: 'center'}} color={colors.grayText} text={'Bạn không có dịch vụ nào'} />
-					</View>
-				}
-				data={data}
-			/>
+							</TouchableOpacity>
+						);
+					}}
+					ListEmptyComponent={
+						<View style={{marginTop: heightScale(50)}}>
+							<CustomText style={{textAlign: 'center'}} color={colors.grayText} text={text.servicesavailable} />
+						</View>
+					}
+					data={data}
+				/>
+			</ScrollView>
 		</FixedContainer>
 	);
 };
@@ -124,5 +126,10 @@ const styles = StyleSheet.create({
 	icon: {
 		width: widthScale(25),
 		height: widthScale(25),
+	},
+	view: {
+		flex: 1,
+		backgroundColor: colors.white,
+		paddingHorizontal: widthScale(20),
 	},
 });

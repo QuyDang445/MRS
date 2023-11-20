@@ -22,7 +22,13 @@ export const ICONS = {
 	notification_unread: require('./icons/notification-icon-unread.png'),
 	eye: require('./icons/eye.png'),
 	location: require('./icons/location.png'),
+	call: require('./icons/call.png'),
 	bookaddress: require('./icons/bookaddress.png'),
+	VI: require('./icons/VI.png'),
+	ZH: require('./icons/ZH.png'),
+	EN: require('./icons/EN.png'),
+	JA: require('./icons/JA.png'),
+	KO: require('./icons/KO.png'),
 };
 
 export const IMAGES = {

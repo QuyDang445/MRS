@@ -1,4 +1,4 @@
-import {FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, Image, RefreshControl, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {memo, useCallback, useState} from 'react';
 import {colors} from '../styles/colors';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
@@ -11,10 +11,13 @@ import API from '../services/api';
 import {useAppSelector} from '../stores/store/storeHooks';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {getColorStatusOrder, getStatusOrder} from '../utils';
+import {ScrollView} from 'react-native-gesture-handler';
+import {useLanguage} from '../hooks/useLanguage';
 
 const OrderPending = () => {
+	const text = useLanguage().OrderAll;
 	const navigation = useNavigation<any>();
-
+	const status = useLanguage().StatusOrder;
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
 
 	const [refreshing, setRefreshing] = useState(false);
@@ -48,12 +51,13 @@ const OrderPending = () => {
 
 			for (let j = 0; j < arrServicer.length; j++) {
 				if (arrServicer[j].id === newData[i].serviceObject.servicer) {
-					servicerObject = arrServicer[i];
+					servicerObject = arrServicer[j];
 					break;
 				}
 			}
 			newData[i].servicerObject = servicerObject;
 		}
+
 		setData(newData);
 		setRefreshing(false);
 	};
@@ -61,28 +65,28 @@ const OrderPending = () => {
 	const onPressDetail = (item: OrderProps) => navigation.navigate(ROUTE_KEY.DetailOrder, {data: item});
 
 	return (
-		<FlatList
-			onRefresh={onRefresh}
-			refreshing={refreshing}
-			contentContainerStyle={styles.view}
-			renderItem={({item}) => (
-				<TouchableOpacity onPress={() => onPressDetail(item)} style={{flexDirection: 'row', marginBottom: heightScale(20)}}>
-					<Image style={{width: widthScale(120), height: '100%', borderRadius: 5}} source={{uri: item?.serviceObject?.image}} />
-					<View style={{marginLeft: widthScale(10)}}>
-						<CustomText font={FONT_FAMILY.BOLD} text={item?.serviceObject?.name} />
-						<CustomText text={item?.servicerObject.name} />
-						<CustomText text={moment(item?.timeBooking).format('hh:mm - DD/MM/YYYY')} />
-						<CustomText font={FONT_FAMILY.BOLD} color={getColorStatusOrder(item.status)} text={getStatusOrder(item.status)} />
+		<ScrollView refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />} style={styles.view}>
+			<FlatList
+				scrollEnabled={false}
+				renderItem={({item}) => (
+					<TouchableOpacity onPress={() => onPressDetail(item)} style={{flexDirection: 'row', marginBottom: heightScale(20)}}>
+						<Image style={{width: widthScale(120), height: '100%', borderRadius: 5}} source={{uri: item?.serviceObject?.image}} />
+						<View style={{marginLeft: widthScale(10)}}>
+							<CustomText font={FONT_FAMILY.BOLD} text={item?.serviceObject?.name} />
+							<CustomText text={item?.servicerObject.name} />
+							<CustomText text={moment(item?.timeBooking).format('hh:mm - DD/MM/YYYY')} />
+							<CustomText font={FONT_FAMILY.BOLD} color={getColorStatusOrder(item.status)} text={getStatusOrder(item.status,status)} />
+						</View>
+					</TouchableOpacity>
+				)}
+				ListEmptyComponent={
+					<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+						<CustomText color={colors.grayText} text={text.no_order} />
 					</View>
-				</TouchableOpacity>
-			)}
-			ListEmptyComponent={
-				<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-					<CustomText color={colors.grayText} text={'Không có đơn đặt hàng!'} />
-				</View>
-			}
-			data={data}
-		/>
+				}
+				data={data}
+			/>
+		</ScrollView>
 	);
 };
 

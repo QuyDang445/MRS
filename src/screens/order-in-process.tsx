@@ -11,15 +11,15 @@ import API from '../services/api';
 import {useAppSelector} from '../stores/store/storeHooks';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {getColorStatusOrder, getStatusOrder} from '../utils';
+import { useLanguage } from '../hooks/useLanguage';
 
 const OrderInProcess = () => {
 	const navigation = useNavigation<any>();
-
+	const text = useLanguage().OrderAll;
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
-
+	const status = useLanguage().StatusOrder;
 	const [refreshing, setRefreshing] = useState(false);
 	const [data, setData] = useState<OrderProps[]>([]);
-
 	useFocusEffect(
 		useCallback(() => {
 			onRefresh();
@@ -64,7 +64,7 @@ const OrderInProcess = () => {
 		<FlatList
 			onRefresh={onRefresh}
 			refreshing={refreshing}
-			contentContainerStyle={styles.view}
+			style={styles.view}
 			renderItem={({item}) => (
 				<TouchableOpacity onPress={() => onPressDetail(item)} style={{flexDirection: 'row', marginBottom: heightScale(20)}}>
 					<Image style={{width: widthScale(120), height: '100%', borderRadius: 5}} source={{uri: item?.serviceObject?.image}} />
@@ -72,7 +72,7 @@ const OrderInProcess = () => {
 						<CustomText font={FONT_FAMILY.BOLD} text={item?.serviceObject?.name} />
 						<CustomText text={item?.servicerObject.name} />
 						<CustomText text={moment(item?.timeBooking).format('hh:mm - DD/MM/YYYY')} />
-						<CustomText font={FONT_FAMILY.BOLD} color={getColorStatusOrder(item.status)} text={getStatusOrder(item.status)} />
+						<CustomText font={FONT_FAMILY.BOLD} color={getColorStatusOrder(item.status)} text={getStatusOrder(item.status,status)} />
 					</View>
 				</TouchableOpacity>
 			)}

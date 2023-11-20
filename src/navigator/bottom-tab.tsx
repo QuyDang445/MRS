@@ -1,31 +1,30 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import database from '@react-native-firebase/database';
 import {BottomTabBarProps, createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CommonActions} from '@react-navigation/native';
 import React, {memo, useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {AppState, DeviceEventEmitter, Image, Keyboard, StyleSheet, ToastAndroid, TouchableOpacity, View} from 'react-native';
+import {Alert, AppState, DeviceEventEmitter, Image, Keyboard, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import FixedContainer from '../components/fixed-container';
 import {WIDTH} from '../constants/constants';
-import {EMIT_EVENT, TABLE, TYPE_USER} from '../constants/enum';
+import {ASYNC_STORAGE_KEY, EMIT_EVENT, TABLE, TYPE_USER} from '../constants/enum';
 import {UserProps} from '../constants/types';
 import Home from '../screens/home';
 import HomeServicer from '../screens/home-servicer';
 import Notification from '../screens/notification';
 import Order from '../screens/order';
+import orderService from '../screens/order-service';
 import User from '../screens/user';
 import API from '../services/api';
-import {clearUserData} from '../stores/reducers/userReducer';
+import {clearUserData, updateUserInfo} from '../stores/reducers/userReducer';
 import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
+import {getServiceDetailFromID} from '../utils';
+import {sleep} from '../utils/time';
 import {RootStackScreensParams} from './params';
 import {ROUTE_KEY} from './routers';
 import {RootStackScreenProps} from './stacks';
-import notifee, {AndroidImportance, EventType} from '@notifee/react-native';
-import messaging from '@react-native-firebase/messaging';
-import Logger from '../utils/logger';
-import CustomText from '../components/custom-text';
-import {sendNotificationToDevices} from '../utils/notification';
-import orderService from '../screens/order-service';
 
 const Tab = createBottomTabNavigator<RootStackScreensParams>();
 
@@ -57,9 +56,7 @@ const CusTomTabBar = memo((props: BottomTabBarProps) => {
 		}
 	}, []);
 
-	if (isShowKeyBoard) {
-		return <></>;
-	}
+	if (isShowKeyBoard) return <></>;
 
 	return (
 		<View style={styles.tabBar}>
@@ -96,27 +93,64 @@ const CusTomTabBar = memo((props: BottomTabBarProps) => {
 const BottomTab = (props: RootStackScreenProps<'BottomTab'>) => {
 	const {navigation} = props;
 	const dispatch = useAppDispatch();
-
+	const text = {
+		logoutAlert: 'Tài khoản của bạn đã bị chặn!',
+		logoutAlertReason: (reasonBlock: string) => `Lí do ${reasonBlock}`,
+	};
 	const appState = useRef(AppState.currentState);
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
 
 	const renderTabBar = useCallback((props: BottomTabBarProps) => <CusTomTabBar {...props} />, []);
 
 	useEffect(() => {
+		listenDynamicLink();
+	}, []);
+	const listenDynamicLink = async () => {
+		await sleep(300);
+		const idService = await AsyncStorage.getItem(ASYNC_STORAGE_KEY.DYNAMIC_LINK_ID_SERVICE);
+		if (idService) {
+			const data = await getServiceDetailFromID(idService);
+			navigation.navigate(ROUTE_KEY.ServiceDetail, {serviceData: data});
+			AsyncStorage.removeItem(ASYNC_STORAGE_KEY.DYNAMIC_LINK_ID_SERVICE);
+		}
+	};
+
+	useEffect(() => {
+		let listenBlockAccount = database()
+			.ref(`/USERS/${userInfo?.id}`)
+			.on('value', snapshot => handleBlockUser(snapshot.val()));
+
 		const sub = AppState.addEventListener('change', async nextAppState => {
 			if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+				listenBlockAccount = database()
+					.ref(`/USERS/${userInfo?.id}`)
+					.on('value', snapshot => handleBlockUser(snapshot.val()));
+				console.log('\x1b[32;1m--> Socket - connected');
 			} else {
+				database().ref(`/USERS/${userInfo?.id}`).off('value', listenBlockAccount);
+				console.log('\x1b[31;1m--> Socket - disconnect');
 			}
 			appState.current = nextAppState;
 		});
 
-		return () => sub.remove();
+		return () => {
+			sub.remove();
+			database().ref(`/USERS/${userInfo?.id}`).off('value', listenBlockAccount);
+		};
 	}, []);
+
+	const handleBlockUser = (user: UserProps) => {
+		if (user?.isBlocked) {
+			Alert.alert(text.logoutAlert, text.logoutAlertReason(user?.reasonBlock), [{text: 'OK', onPress: logout}]);
+		} else {
+			// update info
+			dispatch(updateUserInfo(user));
+		}
+	};
 
 	useEffect(() => {
 		DeviceEventEmitter.addListener(EMIT_EVENT.LOGOUT, logout);
 	}, [userInfo]);
-
 
 	const logout = async () => {
 		navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.LogIn}]}));

@@ -1,31 +1,32 @@
-import React, {memo} from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
-import {RootStackScreenProps} from '../navigator/stacks';
-import FixedContainer from '../components/fixed-container';
-import CustomHeader from '../components/custom-header';
+import moment from 'moment';
+import React from 'react';
+import {Image, StyleSheet, View} from 'react-native';
 import {ICONS} from '../assets/image-paths';
-import {heightScale, widthScale} from '../styles/scaling-utils';
+import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
+import FixedContainer from '../components/fixed-container';
 import {FONT_FAMILY} from '../constants/enum';
-import {colors} from '../styles/colors';
-import {convertDateTime} from '../utils/time';
+import {useLanguage} from '../hooks/useLanguage';
+import {RootStackScreenProps} from '../navigator/stacks';
+import {heightScale, widthScale} from '../styles/scaling-utils';
 
 const NotificationDetail = ({navigation, route}: RootStackScreenProps<'NotificationDetail'>) => {
+	const text = useLanguage().NotificationDetail;
 	const {notificationData} = route.params;
-	console.log(JSON.stringify(notificationData));
+
 	return (
 		<FixedContainer>
-			<CustomHeader title="Chi tiết thông báo" hideBack={false} />
+			<CustomHeader title={text.title} hideBack={false} />
 			<View style={{paddingHorizontal: widthScale(20), flexDirection: 'column', gap: heightScale(10)}}>
-				<View style={{width: '100%', flexDirection: 'row', gap: widthScale(10)}}>
+				<View style={{flexDirection: 'row', gap: widthScale(10), width: '100%'}}>
 					<Image style={styles.notificationIcon} source={ICONS.notification_read} />
-					<View style={{flexDirection: 'column', gap: heightScale(10)}}>
+					<View style={{flexDirection: 'column', gap: heightScale(10), width: '80%'}}>
 						<CustomText font={FONT_FAMILY.BOLD} text={notificationData.title} />
-						<CustomText size={12} color={colors.grayText} text={notificationData.sendTime} />
+						<CustomText text={moment(notificationData.time).format('hh:mm:ss - DD/MM/YYYY')} />
 					</View>
 				</View>
 				<View style={{width: '100%'}}>
-					<CustomText text={notificationData.message} />
+					<CustomText text={notificationData.body} />
 				</View>
 			</View>
 		</FixedContainer>

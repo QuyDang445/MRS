@@ -1,8 +1,10 @@
 import axios from 'axios';
 import {YOUR_SERVER_KEY} from '../constants/constants';
-import {NOTIFICATION_TYPE, TABLE} from '../constants/enum';
+import {Notification} from '@notifee/react-native';
+import {NotificationProps, ServiceProps, UserProps} from '../constants/types';
 import API from '../services/api';
-import { Notification } from '@notifee/react-native';
+import {NOTIFICATION_TYPE, TABLE} from '../constants/enum';
+import moment from 'moment';
 
 export const sendNotificationToDevices = async (token: string, title: string, body: string, data: Notification) => {
 	try {
@@ -14,6 +16,7 @@ export const sendNotificationToDevices = async (token: string, title: string, bo
 					title: title,
 					body: body,
 				},
+				data,
 			},
 			{
 				headers: {
@@ -51,10 +54,133 @@ export const pushNotificationAdminNewPayment = async (idServicer: string, idPaym
 
 
 
-// Bắn thông báo cho service khi người dùng đặt hàng thành công.
-export const pushNotificationToServiceNewOrder = (idService: string, idUser: string, idOrder: string) => {};
+const saveNotification = async (userId: string, data: NotificationProps) => {
+	// save notification
+	await API.post(`${TABLE.NOTIFICATION}/${userId}`, data).then(async res => {
+		console.log('res noti: ' + JSON.stringify(res));
+		const id = res.name;
+		data.id = id;
+		await API.put(`${TABLE.NOTIFICATION}/${userId}/${id}`, data);
+	});
+};
 
-// Bắn thông báo cho user khi service xác nhận đơn đặt hàng.
+// Push notification cho servicer khi người dùng đặt hàng thành công.
+export const pushNotificationToServiceNewOrder = async (serviceId: string, userId: string, orderId: string) => {
+	console.log('PN cho đơn hàng thành công');
 
-// Bắn thông báo cho service khi user huỷ đơn đặt hàng.
-export const pushNotificationToServiceCancelOrder = (idService: string, idUser: string, idOrder: string) => {};
+	const service = (await API.get(`${TABLE.SERVICE}/${serviceId}`, false)) as ServiceProps;
+
+	const servicer = (await API.get(`${TABLE.USERS}/${service.servicer}`, false)) as UserProps;
+
+	const user = (await API.get(`${TABLE.USERS}/${userId}`, false)) as UserProps;
+
+	const servicerToken = servicer.tokenDevice;
+	console.log('service: ' + JSON.stringify(service) + 'servicerToken: ' + servicerToken);
+
+	const title = `Có đơn đặt hàng mới từ người dùng ${user?.name}`;
+	const time = new Date().getTime();
+	const body = `Đơn hàng ${service.name} đã được đặt. Xác nhận ngay`;
+
+	const data: NotificationProps = {
+		id: '',
+		title,
+		body,
+		time,
+		isRead: false,
+		data: {
+			userId: serviceId,
+			status: '',
+		},
+	};
+	sendNotificationToDevices(servicerToken, title, body, data);
+
+	saveNotification(servicer.id, data);
+};
+
+// Push notification cho servicer khi user huỷ đơn đặt hàng.
+export const pushNotificationToServiceCancelOrder = async (serviceId: string, userId: string, orderId: string) => {
+	console.log('PN cho đơn hàng bị hủy bởi user');
+
+	const service = (await API.get(`${TABLE.SERVICE}/${serviceId}`, false)) as ServiceProps;
+
+	const servicer = (await API.get(`${TABLE.USERS}/${service.servicer}`, false)) as UserProps;
+
+	const servicerToken = servicer.tokenDevice;
+	console.log('user: ' + JSON.stringify(servicer) + 'userToken: ' + servicerToken);
+
+	const title = `Đơn hàng ID ${orderId} đã bị hủy`;
+	const time = new Date().getTime();
+	const body = `Đơn hàng đã bị hủy bởi người đặt. Vui lòng kiểm tra.`;
+
+	const data: NotificationProps = {
+		id: '',
+		title,
+		body,
+		time,
+		isRead: false,
+		data: {
+			userId,
+			status: '',
+		},
+	};
+	sendNotificationToDevices(servicerToken, title, body, data);
+
+	saveNotification(servicer.id, data);
+};
+
+// Push notification cho user khi service provider huỷ đơn đặt hàng.
+export const pushNotificationToUserCancelOrder = async (serviceId: string, userId: string, orderId: string) => {
+	console.log('PN cho đơn hàng bị hủy bởi nhà cung cấp');
+
+	const user = (await API.get(`${TABLE.USERS}/${userId}`, false)) as UserProps;
+
+	const userToken = user.tokenDevice;
+	console.log('user: ' + JSON.stringify(user) + 'userToken: ' + userToken);
+
+	const title = `Đơn hàng ID ${orderId} đã bị hủy`;
+	const time = new Date().getTime();
+	const body = `Đơn hàng đã bị hủy bởi người cung cấp dịch vụ. Vui lòng kiểm tra.`;
+
+	const data: NotificationProps = {
+		id: '',
+		title,
+		body,
+		time,
+		isRead: false,
+		data: {
+			userId,
+			status: '',
+		},
+	};
+	sendNotificationToDevices(userToken, title, body, data);
+
+	saveNotification(user.id, data);
+};
+// Push notification cho user khi service provider huỷ đơn đặt hàng.
+export const pushNotificationToUserConfirmOrder = async (serviceId: string, userId: string, orderId: string) => {
+	console.log('PN cho đơn hàng xác nhận bởi nhà cung cấp');
+
+	const user = (await API.get(`${TABLE.USERS}/${userId}`, false)) as UserProps;
+
+	const userToken = user.tokenDevice;
+	console.log('user: ' + JSON.stringify(user) + 'userToken: ' + userToken);
+
+	const title = `Đơn hàng ID ${orderId} đã được xác nhận`;
+	const time = new Date().getTime();
+	const body = `Đơn hàng đã được xác nhận bởi người cung cấp dịch vụ. Thời gian thực tế để hoàn thành sửa chữa dịch vụ sẽ tùy thuộc vào tình trạng hư hại của thiết bị`;
+
+	const data: NotificationProps = {
+		id: '',
+		title,
+		body,
+		time,
+		isRead: false,
+		data: {
+			userId,
+			status: '',
+		},
+	};
+	sendNotificationToDevices(userToken, title, body, data);
+
+	saveNotification(userId, data);
+};

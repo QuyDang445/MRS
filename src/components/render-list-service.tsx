@@ -2,7 +2,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import moment from 'moment';
 import React, {memo, useCallback, useEffect, useState} from 'react';
-import {FlatList, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {FlatList, Image, RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {FONT_FAMILY, TABLE, TYPE_ORDER_SERVICE} from '../constants/enum';
 import {OrderProps, ServiceProps, UserProps} from '../constants/types';
 import {RootStackScreensParams} from '../navigator/params';
@@ -50,37 +50,38 @@ const RenderListService = (props: Props) => {
 
 	const onPressDetail = (item: OrderProps) => navigation.navigate(ROUTE_KEY.DetailOrder, {data: item});
 
-	// xác nhận đơn
-	const onPressConfirm = () => {};
+	// // xác nhận đơn
+	// const onPressConfirm = () => {};
 
-	// huỷ đơn
-	const onPressCancel = () => {};
+	// // huỷ đơn
+	// const onPressCancel = () => {};
 
-	// xong đơn
-	const onPressCompleted = () => {};
+	// // xong đơn
+	// const onPressCompleted = () => {};
 
 	return (
-		<FlatList
-			onRefresh={onRefresh}
-			refreshing={refreshing}
-			contentContainerStyle={styles.view}
-			data={data}
-			renderItem={({item}) => (
-				<TouchableOpacity onPress={() => onPressDetail(item)} style={{marginBottom: heightScale(20), flexDirection: 'row'}}>
-					<Image style={styles.viewImage} source={{uri: item?.serviceObject?.image}} />
-					<View style={{marginLeft: widthScale(10), flex: 1}}>
-						<CustomText font={FONT_FAMILY.BOLD} text={item?.serviceObject?.name} />
-						<CustomText text={item?.userObject?.name} />
-						<CustomText text={moment(item?.time).format('hh:mm DD/MM/YYYY')} />
+		<ScrollView style={{flex: 1, backgroundColor: colors.white}} refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />}>
+			<FlatList
+				scrollEnabled={false}
+				contentContainerStyle={styles.view}
+				data={data}
+				renderItem={({item}) => (
+					<TouchableOpacity onPress={() => onPressDetail(item)} style={{marginBottom: heightScale(20), flexDirection: 'row'}}>
+						<Image style={styles.viewImage} source={{uri: item?.serviceObject?.image}} />
+						<View style={{marginLeft: widthScale(10), flex: 1}}>
+							<CustomText font={FONT_FAMILY.BOLD} text={item?.serviceObject?.name} />
+							<CustomText text={item?.userObject?.name} />
+							<CustomText text={moment(item?.time).format('hh:mm DD/MM/YYYY')} />
+						</View>
+					</TouchableOpacity>
+				)}
+				ListEmptyComponent={
+					<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+						<CustomText color={colors.grayText} text={'Không có đơn đặt hàng!'} />
 					</View>
-				</TouchableOpacity>
-			)}
-			ListEmptyComponent={
-				<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-					<CustomText color={colors.grayText} text={'Không có đơn đặt hàng!'} />
-				</View>
-			}
-		/>
+				}
+			/>
+		</ScrollView>
 	);
 };
 

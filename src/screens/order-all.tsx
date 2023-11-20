@@ -1,11 +1,11 @@
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 import React, {memo, useCallback, useState} from 'react';
-import {Image, RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+import {FlatList, Image, StyleSheet, TouchableOpacity, View, RefreshControl, ScrollView} from 'react-native';
 import CustomText from '../components/custom-text';
 import {FONT_FAMILY, TABLE} from '../constants/enum';
 import {OrderProps, UserProps} from '../constants/types';
+import {useLanguage} from '../hooks/useLanguage';
 import {ROUTE_KEY} from '../navigator/routers';
 import API from '../services/api';
 import {useAppSelector} from '../stores/store/storeHooks';
@@ -14,6 +14,8 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {getColorStatusOrder, getStatusOrder} from '../utils';
 
 const OrderAll = () => {
+	const text = useLanguage().OrderAll;
+	const status = useLanguage().StatusOrder;
 	const navigation = useNavigation<any>();
 
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
@@ -50,6 +52,7 @@ const OrderAll = () => {
 			for (let j = 0; j < arrServicer.length; j++) {
 				if (arrServicer[j].id === newData[i].serviceObject.servicer) {
 					servicerObject = arrServicer[j];
+					servicerObject = arrServicer[j];
 					break;
 				}
 			}
@@ -72,13 +75,13 @@ const OrderAll = () => {
 							<CustomText font={FONT_FAMILY.BOLD} text={item?.serviceObject?.name} />
 							<CustomText text={item?.servicerObject.name} />
 							<CustomText text={moment(item?.timeBooking).format('hh:mm - DD/MM/YYYY')} />
-							<CustomText font={FONT_FAMILY.BOLD} color={getColorStatusOrder(item.status)} text={getStatusOrder(item.status)} />
+							<CustomText font={FONT_FAMILY.BOLD} color={getColorStatusOrder(item.status)} text={getStatusOrder(item.status, status)} />
 						</View>
 					</TouchableOpacity>
 				)}
 				ListEmptyComponent={
 					<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-						<CustomText color={colors.grayText} text={'Không có đơn đặt hàng!'} />
+						<CustomText color={colors.grayText} text={text.no_order} />
 					</View>
 				}
 				data={data}
