@@ -75,7 +75,7 @@ const OrderPending = () => {
 							<CustomText font={FONT_FAMILY.BOLD} text={item?.serviceObject?.name} />
 							<CustomText text={item?.servicerObject.name} />
 							<CustomText text={moment(item?.timeBooking).format('hh:mm - DD/MM/YYYY')} />
-							<CustomText font={FONT_FAMILY.BOLD} color={getColorStatusOrder(item.status)} text={getStatusOrder(item.status, status)} />
+							<CustomText font={FONT_FAMILY.BOLD} color={getColorStatusOrder(item.status)} text={getStatusOrder(item.status,status)} />
 						</View>
 					</TouchableOpacity>
 				)}

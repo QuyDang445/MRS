@@ -5,7 +5,7 @@ import CustomHeader from '../components/custom-header';
 import FixedContainer from '../components/fixed-container';
 import {useLanguage} from '../hooks/useLanguage';
 
-const TermsAndConditions = () => {
+const Termsandconditions = () => {
 	const text = useLanguage().TermsAndConditions;
 	return (
 		<FixedContainer>
@@ -23,7 +23,7 @@ const TermsAndConditions = () => {
 	);
 };
 
-export default TermsAndConditions;
+export default Termsandconditions;
 const styles = StyleSheet.create({
 	loading: {
 		width: '100%',

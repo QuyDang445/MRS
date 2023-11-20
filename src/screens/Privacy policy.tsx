@@ -5,7 +5,7 @@ import CustomHeader from '../components/custom-header';
 import FixedContainer from '../components/fixed-container';
 import {useLanguage} from '../hooks/useLanguage';
 
-const PrivacyPolicy = () => {
+const Privacypolicy = () => {
 	const text = useLanguage().PrivacyPolicy;
 	return (
 		<FixedContainer>
@@ -32,4 +32,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default PrivacyPolicy;
+export default Privacypolicy;

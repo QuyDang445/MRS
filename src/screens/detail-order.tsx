@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React, {memo, useEffect, useState} from 'react';
-import {FlatList, Image,Linking, Modal, Pressable, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import {FlatList, Image, Linking, Modal, Pressable, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import CustomButton from '../components/custom-button';
 import CustomHeader from '../components/custom-header';
@@ -11,7 +11,8 @@ import LoadingScreen from '../components/loading-screen';
 import Spinner from '../components/spinner';
 import {WIDTH} from '../constants/constants';
 import {FONT_FAMILY, TABLE, TYPE_ORDER_SERVICE, TYPE_USER} from '../constants/enum';
-import {ImageProps, OrderProps} from '../constants/types';
+import {ImageProps} from '../constants/types';
+import {useLanguage} from '../hooks/useLanguage';
 import {ROUTE_KEY} from '../navigator/routers';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
@@ -20,11 +21,13 @@ import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo, generateRandomId, getColorStatusOrder, getStatusOrder, showMessage} from '../utils';
 import {getImageFromDevice, uploadImage} from '../utils/image';
-import Logger from '../utils/logger';
-import {pushNotificationToServiceCancelOrder, pushNotificationToUserCancelOrder, pushNotificationToUserConfirmOrder} from '../utils/notification';
+import {pushNotificationToServiceCancelOrder, pushNotificationToUserConfirmOrder} from '../utils/notification';
 
 const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
+	const text = useLanguage().DetailOrder;
 	const {navigation, route} = props;
+
+	const status = useLanguage().StatusOrder;
 
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
 
@@ -43,28 +46,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 	const getDataEvaluate = async () => {};
 
 	const getDataUser = () => API.get(`${TABLE.USERS}/${data.idUser}`) as any;
-	const text = {
-		title: 'CHI TIẾT ĐƠN HÀNG',
-		status: 'Trạng thái',
-		description: 'Mô tả',
-		timebooking : "Thời gian đặt lịch",
-		appointmentschedule: "Lịch hẹn",
-		address: "Địa chỉ",
-		reason: 'Lý do',
-		result: 'Kết quả',
-		cancel: 'Hủy',
-		comform: 'Xác Nhận',
-		complete: 'Hoàn thành',
-		report: 'Báo cáo',
-		evulate: 'Đánh giá',
-		Provideslevelresults: 'Cung cấp kết quả',
-		des: 'Vui lòng tải lên hình ảnh kết quả để đối chiếu khi có vấn đề phát sinh',
-		des1: 'Dịch vụ không đúng mô tả',
-		other: 'Khác',
-		cancelorder: 'HUỶ ĐƠN HÀNG',
-		enterdes: 'NHẬP LÝ DO',
-		enterdo:'Hãy nhập lý do'
-	};
+
 	const getData = async () => {
 		setLoading(true);
 		const category = await getDataCategory();
@@ -79,114 +61,85 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 		getData();
 	}, []);
 
+	// Hiển thị thông báo
+	const showAlert = (message: string) => {
+		showMessage(message);
+	};
+
+	// Hàm hiển thị hộp thoại xác nhận huỷ đơn hàng
 	const onPressCancel = async () => {
-		switch (userInfo?.type) {
-			case TYPE_USER.USER:
-				AlertYesNo(undefined, 'Bạn chắc chắn muốn huỷ?', async () => {
-					Spinner.show();
-					API.get(`${TABLE.ORDERS}/${data.id}`)
-						.then(async (newData: any) => {
-							if (newData?.status === TYPE_ORDER_SERVICE.OrderPending) {
-								await API.put(`${TABLE.ORDERS}/${data.id}`, {
-									...newData,
-									status: TYPE_ORDER_SERVICE.OrderCanceled,
-									statusCancel: reasonCancel,
-								}).then(() => {
-									pushNotificationToServiceCancelOrder(data.idService, data.idUser, data.id);
-									showMessage('Huỷ đơn hàng thành công!');
-									navigation.goBack();
-								});
-							} else {
-								showMessage('Không thể huỷ!');
-							}
-						})
-						.finally(() => Spinner.hide());
+		AlertYesNo(undefined, text.cancel, async () => {
+			Spinner.show();
+			const newData = await API.get(`${TABLE.ORDERS}/${data.id}`);
+			if (newData?.status === TYPE_ORDER_SERVICE.OrderPending) {
+				await API.put(`${TABLE.ORDERS}/${data.id}`, {
+					...newData,
+					status: TYPE_ORDER_SERVICE.OrderCanceled,
+					statusCancel: reasonCancel,
+				}).then(() => {
+					pushNotificationToServiceCancelOrder(data.idService, data.idUser, data.id);
+					showAlert(text.cancelSuccess);
+					navigation.goBack();
 				});
-				break;
-
-			case TYPE_USER.SERVICER:
-				AlertYesNo(undefined, 'Bạn chắc chắn muốn huỷ?', async () => {
-					Spinner.show();
-					API.get(`${TABLE.ORDERS}/${data.id}`)
-						.then(async (newData: any) => {
-							if (newData?.status === TYPE_ORDER_SERVICE.OrderPending) {
-								await API.put(`${TABLE.ORDERS}/${data.id}`, {
-									...newData,
-									status: TYPE_ORDER_SERVICE.OrderCanceled,
-									statusCancel: reasonCancel,
-								}).then(() => {
-									pushNotificationToUserCancelOrder(data.idService, data.idUser, data.id);
-									showMessage('Huỷ đơn hàng thành công!');
-									navigation.goBack();
-								});
-							} else {
-								showMessage('Không thể huỷ!');
-							}
-						})
-						.finally(() => Spinner.hide());
-				});
-
-				break;
-		}
+			} else {
+				showAlert(text.cannotCancel);
+			}
+			Spinner.hide();
+		});
 	};
 
+	// Hàm xử lý xác nhận đơn hàng
 	const handleConfirm = async () => {
-		AlertYesNo(undefined, 'Xác nhận?', async () => {
+		AlertYesNo(undefined, text.comform, async () => {
 			Spinner.show();
-			API.get(`${TABLE.ORDERS}/${data.id}`)
-				.then(async (newData: any) => {
-					if (newData?.status !== TYPE_ORDER_SERVICE.OrderCanceled) {
-						await API.put(`${TABLE.ORDERS}/${data.id}`, {...newData, status: TYPE_ORDER_SERVICE.OrderInProcess}).then(() => {
-							pushNotificationToUserConfirmOrder(data.idService, data.idUser, data.id);
-							showMessage('Xác nhận thành công!');
-						});
-					} else {
-						showMessage('Đơn hàng đã bị huỷ!');
-					}
-				})
-				.finally(() => Spinner.hide())
-				.finally(() => navigation.goBack());
+			const newData = await API.get(`${TABLE.ORDERS}/${data.id}`);
+			if (newData?.status !== TYPE_ORDER_SERVICE.OrderCanceled) {
+				await API.put(`${TABLE.ORDERS}/${data.id}`, {...newData, status: TYPE_ORDER_SERVICE.OrderInProcess}).then(() => {
+					pushNotificationToUserConfirmOrder(data.idService, data.idUser, data.id);
+					showAlert(text.confirmSuccess);
+					navigation.goBack();
+				});
+			} else {
+				showAlert(text.orderCancelled);
+			}
+			Spinner.hide();
 		});
 	};
 
+	// Hàm xử lý hoàn thành đơn hàng
 	const handleDone = () => {
-		AlertYesNo(undefined, 'Xác nhận?', async () => {
+		AlertYesNo(undefined, text.comform, async () => {
 			Spinner.show();
-			API.get(`${TABLE.ORDERS}/${data.id}`)
-				.then(async (newData: any) => {
-					if (newData?.status !== TYPE_ORDER_SERVICE.OrderCanceled) {
-						const imageDoneUp = [];
+			const newData = await API.get(`${TABLE.ORDERS}/${data.id}`);
+			if (newData?.status !== TYPE_ORDER_SERVICE.OrderCanceled) {
+				const imageDoneUp = [];
 
-						for (let i = 0; i < imageDone.length; i++) {
-							const url = await uploadImage(imageDone[i].uri);
-							imageDoneUp.push(url);
-						}
+				for (let i = 0; i < imageDone.length; i++) {
+					const url = await uploadImage(imageDone[i].uri);
+					imageDoneUp.push(url);
+				}
 
-						await API.put(`${TABLE.ORDERS}/${data.id}`, {
-							...newData,
-							status: TYPE_ORDER_SERVICE.OrderCompleted,
-							imageDone: imageDoneUp,
-						}).then(() => {
-							showMessage('Hoàn thành!');
-						});
-					} else {
-						showMessage('Đơn hàng đã bị huỷ!');
-					}
-				})
-				.finally(() => Spinner.hide())
-				.finally(() => navigation.goBack());
+				await API.put(`${TABLE.ORDERS}/${data.id}`, {
+					...newData,
+					status: TYPE_ORDER_SERVICE.OrderCompleted,
+					imageDone: imageDoneUp,
+				}).then(() => {
+					showAlert(text.completionSuccess);
+				});
+			} else {
+				showAlert(text.orderCancelled);
+			}
+			Spinner.hide();
+			navigation.goBack();
 		});
 	};
-
 	const handleReport = (reasonReport: string) => {};
 
 	const handleEvaluate = () => {
 		navigation.navigate(ROUTE_KEY.EvaluateService, {data: data});
 	};
 
-	if (loading) {
-		return <LoadingScreen />;
-	}
+	if (loading) return <LoadingScreen />;
 
 	return (
 		<FixedContainer>
@@ -200,20 +153,20 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 					</View>
 				</View>
 				{userInfo?.type !== TYPE_USER.SERVICER && (
-				<View style={{marginVertical: heightScale(20), flexDirection: 'row'}}>
-					<Image source={{uri: data.servicerObject?.avatar}} style={{width: widthScale(50), height: widthScale(50), borderRadius: 100}} />
-					<View style={{flex: 1, marginLeft: widthScale(10)}}>
-						<CustomText text={data.servicerObject?.name} font={FONT_FAMILY.BOLD} />
-						<CustomText text={data.servicerObject.phone} />
+					<View style={{marginVertical: heightScale(20), flexDirection: 'row'}}>
+						<Image source={{uri: data.servicerObject?.avatar}} style={{width: widthScale(50), height: widthScale(50), borderRadius: 100}} />
+						<View style={{flex: 1, marginLeft: widthScale(10)}}>
+							<CustomText text={data.servicerObject?.name} font={FONT_FAMILY.BOLD} />
+							<CustomText text={data.servicerObject.phone} />
+						</View>
 					</View>
-				</View>
 				)}
 				<View style={styles.viewInfo}>
 					<CustomText font={FONT_FAMILY.BOLD} text={text.status} />
 					<CustomText
 						font={data.status === TYPE_ORDER_SERVICE.OrderCanceled ? FONT_FAMILY.BOLD : undefined}
 						color={getColorStatusOrder(data.status)}
-						text={getStatusOrder(data.status)}
+						text={getStatusOrder(data.status, status)}
 					/>
 				</View>
 
@@ -432,11 +385,7 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 						<ScrollView>
 							<CustomText font={FONT_FAMILY.BOLD} text={text.report} style={{alignSelf: 'center'}} />
 							<View style={{padding: widthScale(20)}}>
-								<CustomRadioButton
-									text={text.des1}
-									isChecked={reasonReport === text.des1}
-									onPress={() => setReasonReport(text.des1)}
-								/>
+								<CustomRadioButton text={text.des1} isChecked={reasonReport === text.des1} onPress={() => setReasonReport(text.des1)} />
 								<View style={{height: 10}} />
 								<CustomRadioButton text={text.other} isChecked={reasonReport !== text.des1} onPress={() => setReasonReport('')} />
 								<View style={{height: 10}} />

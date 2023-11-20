@@ -14,7 +14,6 @@ export const ROUTE_KEY = createEnum({
 	NotificationDetail: 'NotificationDetail',
 	UpdateInformation: 'UpdateInformation',
 	ChangePassword: 'ChangePassword',
-	TermsAndConditions: 'TermsAndConditions',
 	ListAddress: 'ListAddress',
 	DataPrivacy: 'DataPrivacy',
 	FAQs: 'FAQs',
@@ -39,6 +38,5 @@ export const ROUTE_KEY = createEnum({
 	InfoServicer: 'InfoServicer',
 	AcceptServicer: 'AcceptServicer',
 	InfoAcceptServicer: 'InfoAcceptServicer',
-	Policy: 'Policy',
-	FAQ: 'FAQ',
+	
 });

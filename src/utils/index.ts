@@ -152,18 +152,21 @@ export const getMyLocation = () =>
 	);
 
 
-export const getStatusOrder = (status: TYPE_ORDER_SERVICE) => {
-	switch (status) {
-		case TYPE_ORDER_SERVICE.OrderPending:
-			return 'ĐANG CHỜ';
-		case TYPE_ORDER_SERVICE.OrderInProcess:
-			return 'ĐÃ XÁC NHẬN';
-		case TYPE_ORDER_SERVICE.OrderCompleted:
-			return 'HOÀN THÀNH';
-		case TYPE_ORDER_SERVICE.OrderCanceled:
-			return 'ĐÃ HUỶ';
-	}
-};
+	export const getStatusOrder = (
+		status: TYPE_ORDER_SERVICE,
+		language: {OrderPending: string; OrderCanceled: string; OrderInProcess: string; OrderCompleted: string},
+	) => {
+		switch (status) {
+			case TYPE_ORDER_SERVICE.OrderPending:
+				return language.OrderPending;
+			case TYPE_ORDER_SERVICE.OrderInProcess:
+				return language.OrderInProcess;
+			case TYPE_ORDER_SERVICE.OrderCompleted:
+				return language.OrderCompleted;
+			case TYPE_ORDER_SERVICE.OrderCanceled:
+				return language.OrderCanceled;
+		}
+	};
 
 export const getColorStatusOrder = (status: TYPE_ORDER_SERVICE) => {
 	switch (status) {
