@@ -11,6 +11,8 @@ import {RootStackScreenProps} from '../../navigator/stacks';
 import {colors} from '../../styles/colors';
 import {heightScale, widthScale} from '../../styles/scaling-utils';
 import {generateRandomId, getServicerALl} from '../../utils';
+import { UserProps } from '../../constants/types';
+import { ROUTE_KEY } from '../../navigator/routers';
 
 const AcceptServicer = (props: RootStackScreenProps<'AcceptServicer'>) => {
 	const text = useLanguage().AcceptServicer;
@@ -18,7 +20,7 @@ const AcceptServicer = (props: RootStackScreenProps<'AcceptServicer'>) => {
 	const [servicer, setServicer] = useState(route.params.data);
 	const [refreshing, setRefreshing] = useState(false);
 
-	const onPressDetailService = () => console.log('onPressDetailService ');
+	const onPressDetailService = (item: UserProps) => navigation.navigate(ROUTE_KEY.InfoAcceptServicer, {data: item});
 
 	const onRefresh = async () => {
 		setRefreshing(true);

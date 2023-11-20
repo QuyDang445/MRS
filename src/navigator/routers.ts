@@ -38,5 +38,4 @@ export const ROUTE_KEY = createEnum({
 	InfoServicer: 'InfoServicer',
 	AcceptServicer: 'AcceptServicer',
 	InfoAcceptServicer: 'InfoAcceptServicer',
-	
 });
