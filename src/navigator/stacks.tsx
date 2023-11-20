@@ -70,6 +70,7 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.EvaluateService} component={EvaluateService} />
 			<Screen name={ROUTE_KEY.AddService} component={AddService} />
 			<Screen name={ROUTE_KEY.Payment} component={Payment} />
+			<Screen name={ROUTE_KEY.FeeService} component={FeeService} />
 		</Navigator>
 	);
 };

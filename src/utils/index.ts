@@ -61,64 +61,6 @@ export const getServiceFromID = async (id: string) => {
 		arr[i].categoryObject = category;
 	}
 
-	// get info servicer
-	const allServicer = await API.get(`${TABLE.USERS}`, true);
-	const getServicerFromID = (idServicer: string) => {
-		for (let i = 0; i < allServicer.length; i++) {
-			if (idServicer === allServicer[i].id) return allServicer[i];
-		}
-	};
-	for (let i = 0; i < arr.length; i++) {
-		const service = getServicerFromID(arr[i].servicer);
-		arr[i].servicerObject = service;
-	}
-
-	// get info star evaluate
-	for (let i = 0; i < arr.length; i++) {
-		const evaluate = (await API.get(`${TABLE.EVALUATE}/${arr[i].id}`, true, true)) as EvaluateProps[];
-		arr[i].evaluate = evaluate;
-
-		// get info star
-		const evaluate = (await API.get(`${TABLE.EVALUATE}/${arr[i].id}`, true)) as EvaluateProps[];
-		// console.log('evaluate in index: ' + JSON.stringify(evaluate));
-		let totalStar = 0;
-		if (evaluate !== undefined && evaluate.length > 0) {
-			for (let j = 0; j < evaluate.length; j++) {
-				const userData = (await API.get(`${TABLE.USERS}/${evaluate[j].user_id}`)) as unknown as UserProps;
-				console.log(`get userData ${evaluate[j].user_id} of eva ${evaluate[j].id}`);
-				evaluate[j].userObject = userData;
-				totalStar += evaluate[j].star;
-			}
-			arr[i].star = totalStar / (evaluate.length || 1);
-			// console.log('evaluate in index2: ' + JSON.stringify([...evaluate]));
-			arr[i].evaluate = [...evaluate];
-		}
-	}
-
-	return arr;
-};
-
-export const getServiceFromID = async (id: string) => {
-	const result = (await API.get(`${TABLE.SERVICE}`, true)) as ServiceProps[];
-
-	const arr = [];
-
-	for (let i = 0; i < result.length; i++) {
-		result[i].servicer === id && arr.push(result[i]);
-	}
-
-	// get info category
-	const allCategory = await API.get(`${TABLE.CATEGORY}`, true);
-	const getCategoryFromID = (idCategory: string) => {
-		for (let i = 0; i < allCategory.length; i++) {
-			if (idCategory === allCategory[i].id) return allCategory[i];
-		}
-	};
-	for (let i = 0; i < arr.length; i++) {
-		const category = (await API.get(`${TABLE.CATEGORY}/${arr[i].category}`, undefined)) as any;
-		arr[i].categoryObject = category;
-	}
-
 	// get info service
 	for (let i = 0; i < arr.length; i++) {
 		const service = (await API.get(`${TABLE.USERS}/${arr[i].servicer}`, undefined)) as any;
