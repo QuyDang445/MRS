@@ -2,8 +2,9 @@ import axios from 'axios';
 import {YOUR_SERVER_KEY} from '../constants/constants';
 import {NOTIFICATION_TYPE, TABLE} from '../constants/enum';
 import API from '../services/api';
+import { Notification } from '@notifee/react-native';
 
-export const sendNotificationToDevices = async (token: string, title: string, body: any) => {
+export const sendNotificationToDevices = async (token: string, title: string, body: string, data: Notification) => {
 	try {
 		const response = await axios.post(
 			'https://fcm.googleapis.com/fcm/send',
