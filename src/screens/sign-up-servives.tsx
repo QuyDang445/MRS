@@ -18,6 +18,7 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo, showMessage} from '../utils';
 import {getImageFromDevice, uploadImage} from '../utils/image';
 import { UserProps } from '../constants/types';
+import {pushNotificationAdminNewServicer} from '../utils/notification';
 
 const SignUpServices = async (props: RootStackScreenProps<'SignUpServices'>) => {
 	const {navigation} = props;
@@ -31,7 +32,7 @@ const SignUpServices = async (props: RootStackScreenProps<'SignUpServices'>) => 
 
 	const SignUpSchema = Yup.object().shape({
 		name: Yup.string().required('Thiếu tên'),
-		phone: Yup.string().matches(phoneRegex, 'Số điện thoại không hợp lệ!').required('Thiếu số điện thoại'),
+		phone: Yup.string().matches(phoneRegex, 'Số điện thoại không hợp lệ!').required('Thiếu số điện thoai'),
 		cccd: Yup.string().matches(cccdRegex, 'Số căn cước công dân không hợp lệ!').required('Thiếu căn cước công dân'),
 		image: Yup.string().required('Thiếu hình ảnh căn cước công dân'),
 		address: Yup.string().required('Thiếu địa chỉ'),
@@ -75,6 +76,7 @@ const SignUpServices = async (props: RootStackScreenProps<'SignUpServices'>) => 
 			};
 			const res = await API.post(`${TABLE.USERS}`, body);
 			if (res) {
+				await pushNotificationAdminNewServicer(res.id);
 				showMessage('Đăng ký tài khoản thành công, vui lòng chờ đợi admin duyệt qua thông tin!');
 				DeviceEventEmitter.emit(EMIT_EVENT.DATA_LOGIN, {phone: value.phone, password: value.pass});
 				navigation.goBack();
@@ -117,6 +119,7 @@ const SignUpServices = async (props: RootStackScreenProps<'SignUpServices'>) => 
 										maxLength={10}
 										onChangeText={handleChange('phone')}
 										keyboardType={'numeric'}
+										maxLength={10}
 										placeholder="Số điện thoại"
 										placeholderTextColor={colors.grayText}
 										style={styles.inputText}

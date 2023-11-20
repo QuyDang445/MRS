@@ -8,6 +8,7 @@ import Spinner from '../components/spinner';
 import Star from '../components/star';
 import {EMIT_EVENT, FONT_FAMILY, TABLE} from '../constants/enum';
 import {ServiceProps} from '../constants/types';
+import {useLanguage} from '../hooks/useLanguage';
 import {ROUTE_KEY} from '../navigator/routers';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
@@ -17,6 +18,7 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo, getServiceFromID, showMessage} from '../utils';
 
 const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
+	const text = useLanguage().OrderServicer;
 	const {navigation} = props;
 
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
@@ -24,7 +26,7 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 	const [data, setData] = useState<ServiceProps[]>([]);
 	const [refreshing, setRefreshing] = useState(false);
 
-	const onPressDetail = (item: ServiceProps) => navigation.navigate(ROUTE_KEY.ServiceDetail,{serviceData: item});
+	const onPressDetail = (item: ServiceProps) => navigation.navigate(ROUTE_KEY.ServiceDetail, {serviceData: item});
 
 	const onPressAddService = () => navigation.navigate(ROUTE_KEY.AddService);
 
@@ -43,11 +45,11 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 	const onPressEdit = (item: ServiceProps) => navigation.navigate(ROUTE_KEY.AddService, {data: item});
 
 	const onPressDelete = (item: ServiceProps) => {
-		AlertYesNo(undefined, 'Bạn chắc chắn muốn xoá?', () => {
+		AlertYesNo(undefined, text.confirmDelete, () => {
 			Spinner.show();
 			API.put(`${TABLE.SERVICE}/${item.id}`, {})
 				.then(() => {
-					showMessage('Xoá dịch vụ thành công!');
+					showMessage(text.deleteSuccess);
 					onRefresh();
 				})
 				.finally(() => Spinner.hide());
@@ -57,7 +59,7 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 	return (
 		<FixedContainer>
 			<CustomHeader
-				title="DỊCH VỤ CỦA TÔI"
+				title={text.title}
 				hideBack
 				rightContent={
 					<TouchableOpacity onPress={onPressAddService}>
@@ -100,7 +102,7 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 					}}
 					ListEmptyComponent={
 						<View style={{marginTop: heightScale(50)}}>
-							<CustomText style={{textAlign: 'center'}} color={colors.grayText} text={'Bạn không có dịch vụ nào'} />
+							<CustomText style={{textAlign: 'center'}} color={colors.grayText} text={text.servicesavailable} />
 						</View>
 					}
 					data={data}

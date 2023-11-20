@@ -1,39 +1,39 @@
 import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {memo} from 'react';
-import {RootStackScreenProps} from '../navigator/stacks';
-import FixedContainer from '../components/fixed-container';
-import CustomHeader from '../components/custom-header';
-import {heightScale, widthScale} from '../styles/scaling-utils';
-import CustomText from '../components/custom-text';
-import {ICONS} from '../assets/image-paths';
-import {FONT_FAMILY} from '../constants/enum';
-import {generateRandomId} from '../utils';
-import {colors} from '../styles/colors';
-import {ROUTE_KEY} from '../navigator/routers';
+import {RootStackScreenProps} from '../../navigator/stacks';
+import FixedContainer from '../../components/fixed-container';
+import CustomHeader from '../../components/custom-header';
+import {heightScale, widthScale} from '../../styles/scaling-utils';
+import CustomText from '../../components/custom-text';
+import {ICONS} from '../../assets/image-paths';
+import {FONT_FAMILY} from '../../constants/enum';
+import {generateRandomId} from '../../utils';
+import {colors} from '../../styles/colors';
+import {ROUTE_KEY} from '../../navigator/routers';
 
 const Payment = (props: RootStackScreenProps<'Payment'>) => {
 	const {navigation} = props;
 
-	//const onPressEditFee = () => navigation.navigate(ROUTE_KEY.EditPaymentFee);
-	//const onPressAddPayment = () => navigation.navigate(ROUTE_KEY.AddPayment);
+	const onPressEditFee = () => navigation.navigate(ROUTE_KEY.EditPaymentFee);
+	const onPressAddPayment = () => navigation.navigate(ROUTE_KEY.AddPayment);
 
 	return (
 		<FixedContainer>
 			<CustomHeader
 				title="THANH TOÁN"
-				// rightContent={
-				// 	<TouchableOpacity onPress={onPressAddPayment}>
-				// 		<Image style={styles.icon} source={ICONS.add} />
-				// 	</TouchableOpacity>
-				// }
+				rightContent={
+					<TouchableOpacity onPress={onPressAddPayment}>
+						<Image style={styles.icon} source={ICONS.add} />
+					</TouchableOpacity>
+				}
 			/>
 
 			<ScrollView style={styles.view}>
 				<View style={styles.viewContent}>
 					<CustomText font={FONT_FAMILY.BOLD} text={'Phí dịch vụ: '} rightContent={<CustomText text={'50.000 VND/tháng'} />} />
-					{/* <TouchableOpacity onPress={onPressEditFee}>
+					<TouchableOpacity onPress={onPressEditFee}>
 						<Image style={styles.icon} source={ICONS.edit} />
-					</TouchableOpacity> */}
+					</TouchableOpacity>
 				</View>
 
 				{[1, 1, 1].map(() => (

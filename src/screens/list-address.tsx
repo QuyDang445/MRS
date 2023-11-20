@@ -9,6 +9,7 @@ import ModalChooseProvince, {ModalObject} from '../components/sign-up/modal-choo
 import Spinner from '../components/spinner';
 import {TABLE} from '../constants/enum';
 import {AddressProps} from '../constants/types';
+import {useLanguage} from '../hooks/useLanguage';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
 import {useAppSelector} from '../stores/store/storeHooks';
@@ -17,6 +18,7 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo} from '../utils';
 
 const ListAddress = (props: RootStackScreenProps<'ListAddress'>) => {
+	const text = useLanguage().ListAddress;
 	const {navigation, route} = props;
 	const onChooseAddress = route.params?.onChoose;
 
@@ -48,7 +50,7 @@ const ListAddress = (props: RootStackScreenProps<'ListAddress'>) => {
 	};
 
 	const handleDeleteAddress = (id: string) => {
-		AlertYesNo(undefined, 'Bạn có muốn xoá không ?', () => {
+		AlertYesNo(undefined, text.deleteConfirm, () => {
 			Spinner.show();
 			API.put(`${TABLE.ADDRESS}/${userInfo?.id}/${id}`, {})
 				.then(() => onRefresh())
@@ -66,7 +68,7 @@ const ListAddress = (props: RootStackScreenProps<'ListAddress'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="SỔ ĐỊA CHỈ" />
+			<CustomHeader title={text.title} />
 			<FlatList
 				refreshing={refreshing}
 				onRefresh={onRefresh}
@@ -79,9 +81,9 @@ const ListAddress = (props: RootStackScreenProps<'ListAddress'>) => {
 						disabled={!onChooseAddress}
 						style={styles.item}>
 						<View style={{width: widthScale(280), paddingVertical: heightScale(10), paddingLeft: widthScale(10)}}>
-							<CustomText text={`Họ tên: ${item.name}`} />
-							<CustomText text={`Số điện thoại: ${item.phone}`} />
-							<CustomText text={`Địa chỉ: ${item.address}`} />
+							<CustomText text={`${text.name}${item.name}`} />
+							<CustomText text={`${text.phone}${item.phone}`} />
+							<CustomText text={`${text.address}${item.address}`} />
 						</View>
 
 						{!onChooseAddress && (
@@ -102,7 +104,7 @@ const ListAddress = (props: RootStackScreenProps<'ListAddress'>) => {
 				)}
 				ListEmptyComponent={
 					<View style={{alignItems: 'center', marginTop: heightScale(20)}}>
-						<CustomText color={colors.grayText} text={'Không có thông tin địa chỉ'} />
+						<CustomText color={colors.grayText} text={text.noaddress} />
 					</View>
 				}
 				contentContainerStyle={styles.view}
@@ -110,7 +112,7 @@ const ListAddress = (props: RootStackScreenProps<'ListAddress'>) => {
 			/>
 			{!onChooseAddress && (
 				<View style={{padding: widthScale(20)}}>
-					<CustomButton onPress={onPressAddAddress} text="THÊM ĐỊA CHỈ" />
+					<CustomButton onPress={onPressAddAddress} text={text.addaddress} />
 				</View>
 			)}
 

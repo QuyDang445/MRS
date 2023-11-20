@@ -1,3 +1,4 @@
+import { FormikProps } from 'formik';
 import React, { useRef, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { ICONS } from '../assets/image-paths';
@@ -5,8 +6,10 @@ import CustomButton from '../components/custom-button';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
+import ModalChooseProvince, { ModalObject } from '../components/sign-up/modal-choose-province';
 import Spinner from '../components/spinner';
 import { FONT_FAMILY, TABLE, TYPE_USER } from '../constants/enum';
+import { useLanguage } from '../hooks/useLanguage';
 import { RootStackScreenProps } from '../navigator/stacks';
 import API from '../services/api';
 import { cacheUserInfo } from '../stores/reducers/userReducer';
@@ -15,22 +18,26 @@ import { colors } from '../styles/colors';
 import { heightScale, widthScale } from '../styles/scaling-utils';
 import { showMessage } from '../utils';
 import { getImageFromDevice, uploadImage } from '../utils/image';
-import ModalChooseProvince, { ModalObject } from '../components/sign-up/modal-choose-province';
 
 const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => {
+	const text = useLanguage().UpdateInformation;
 	const { navigation } = props;
 	const dispatch = useAppDispatch();
-
+	const innerRefFormik = useRef<FormikProps<any>>(null);
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
 
 	const [name, setName] = useState(userInfo?.name);
 	const [phone, setPhone] = useState(userInfo?.phone);
 	const [address, setAddress] = useState(userInfo?.address);
 	const [loading, setLoading] = useState(false);
-	const onChangeAddress = (text: string) => innerRefFormik.current?.setFieldValue('address', text);
+
+	// const onChangeAddress = (text: string) => innerRefFormik.current?.setFieldValue('address', text);
+	const onChangeAddress = (text: string) => {
+		console.log("Adress: " + text)
+		setAddress(text)
+	};
 	const modalChooseProvinceRef = useRef<ModalObject>(null);
 
-	//chọn ảnh và cập nhập ảnh
 	const onPressUpdateAvatar = async () => {
 		Spinner.show();
 
@@ -49,78 +56,77 @@ const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => 
 
 	const onPressSave = async () => {
 		if (!name?.trim()) {
-			return showMessage('Thiếu tên');
+			return showMessage(text.showmessagename);
 		}
 
 		if (!phone?.trim()) {
-			return showMessage('Thiếu số điện thoại');
+			return showMessage(text.missingPhoneNumber);
 		}
 		Spinner.show();
-		const res = await API.put(`${TABLE.USERS}/${userInfo?.id}`, { ...userInfo, name: name, phone: phone });
+		const res = await API.put(`${TABLE.USERS}/${userInfo?.id}`, { ...userInfo, name: name, phone: phone, address: address });
 		Spinner.hide();
 		if (res) {
 			dispatch(cacheUserInfo(res));
-			showMessage('Đã lưu thành công');
+			showMessage(text.saveSuccess);
 			navigation.goBack();
 		} else {
-			showMessage('Lưu thông tin thất bại');
+			showMessage(text.saveFailure);
 		}
 	};
 
-	return (<FixedContainer>
-		<CustomHeader title="CẬP NHẬT THÔNG TIN" />
+	return (
+		<FixedContainer>
+			<CustomHeader title={text.title} />
 
-		<ScrollView style={styles.view}>
-			<TouchableOpacity
-				disabled={loading}
-				onPress={onPressUpdateAvatar}
-				style={{
-					alignSelf: 'center',
-					borderRadius: 100,
-					width: widthScale(100),
-					height: widthScale(100),
-					justifyContent: 'center',
-					alignItems: 'center',
-					backgroundColor: `${colors.grayLine}30`,
-				}}>
-				{loading ? (
-					<ActivityIndicator />
-				) : (
-					<>
-						<Image style={styles.avatar} source={userInfo?.avatar ? { uri: userInfo?.avatar } : ICONS.user} />
-						<View style={styles.viewEdit}>
-							<Image style={{ width: widthScale(25), height: widthScale(25) }} source={ICONS.edit} />
-						</View>
-					</>
+			<ScrollView style={styles.view}>
+				<TouchableOpacity
+					disabled={loading}
+					onPress={onPressUpdateAvatar}
+					style={{
+						alignSelf: 'center',
+						borderRadius: 100,
+						width: widthScale(100),
+						height: widthScale(100),
+						justifyContent: 'center',
+						alignItems: 'center',
+						backgroundColor: `${colors.grayLine}30`,
+					}}>
+					{loading ? (
+						<ActivityIndicator />
+					) : (
+						<>
+							<Image style={styles.avatar} source={userInfo?.avatar ? { uri: userInfo?.avatar } : ICONS.user} />
+							<View style={styles.viewEdit}>
+								<Image style={{ width: widthScale(25), height: widthScale(25) }} source={ICONS.edit} />
+							</View>
+						</>
+					)}
+				</TouchableOpacity>
+
+				<CustomText text={text.fullname} font={FONT_FAMILY.BOLD} size={14} />
+				<TextInput onChangeText={setName} value={name} style={styles.input} />
+
+				{userInfo?.type === TYPE_USER.USER && (
+					<View>
+						<CustomText text={text.phonenumber} font={FONT_FAMILY.BOLD} size={14} />
+						<TextInput keyboardType="numeric" onChangeText={setPhone} value={phone} style={styles.input} />
+					</View>
 				)}
-			</TouchableOpacity>
-
-			<CustomText text={'HỌ VÀ TÊN'} font={FONT_FAMILY.BOLD} size={14} />
-			<TextInput onChangeText={setName} value={name} style={styles.input} />
-
-			{userInfo?.type === TYPE_USER.USER && (
-				<View>
-					<CustomText text={'SỐ ĐIỆN THOẠI'} font={FONT_FAMILY.BOLD} size={14} />
-					<TextInput keyboardType="numeric" onChangeText={setPhone} value={phone} style={styles.input} />
-				</View>
-			)}
-			{userInfo?.type === TYPE_USER.SERVICER && (
-				<View>
-					<CustomText text={'SỐ ĐIỆN THOẠI'} font={FONT_FAMILY.BOLD} size={14} />
-					<TextInput keyboardType="numeric" onChangeText={setPhone} editable={false} value={phone} style={styles.input} />
-					<CustomText text={'ĐỊA CHỈ'} font={FONT_FAMILY.BOLD} size={14} />
-					<TouchableOpacity onPress={() => modalChooseProvinceRef.current?.show({})} style={styles.buttonProvince}>
-						<CustomText color={address ? colors.black : colors.grayText} text={setAddress || 'Địa chỉ'} />
-					</TouchableOpacity>
-				</View>
-			)}
-			<ModalChooseProvince ref={modalChooseProvinceRef} onPressSave={onChangeAddress} />
-			<CustomButton onPress={onPressSave} text="LƯU" />
-		</ScrollView>
-
-	</FixedContainer>
+				{userInfo?.type === TYPE_USER.SERVICER && (
+					<View>
+						<CustomText text={text.phonenumber} font={FONT_FAMILY.BOLD} size={14} />
+						<TextInput keyboardType="numeric" onChangeText={setPhone} editable={false} value={phone} style={styles.input} />
+						<CustomText text={text.addresss} font={FONT_FAMILY.BOLD} size={14} />
+						<TouchableOpacity onPress={() => modalChooseProvinceRef.current?.show({})} style={styles.buttonProvince}>
+							<CustomText color={address ? colors.black : colors.grayText} text={setAddress || text.addresss} />
+						</TouchableOpacity>
+					</View>
+				)}
+				<ModalChooseProvince ref={modalChooseProvinceRef} onPressSave={onChangeAddress} />
+				<CustomButton onPress={onPressSave} text={text.save} />
+			</ScrollView>
+		</FixedContainer>
 	);
-
 };
 
 export default UpdateInformation;

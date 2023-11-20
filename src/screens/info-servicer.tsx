@@ -3,20 +3,22 @@ import {FlatList, Image, ScrollView, StyleSheet, TouchableOpacity, View} from 'r
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
+import CustomScrollHorizontal from '../components/home/custom-scroll-horizontal';
 import LoadingScreen from '../components/loading-screen';
 import Star from '../components/star';
 import {FONT_FAMILY, TABLE} from '../constants/enum';
 import {EvaluateProps, ServiceProps, UserProps} from '../constants/types';
+import {useLanguage} from '../hooks/useLanguage';
+import {ROUTE_KEY} from '../navigator/routers';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {generateRandomId, getServiceFromID} from '../utils';
 import {ReviewAndRating} from './all-review';
-import CustomScrollHorizontal from '../components/home/custom-scroll-horizontal';
-import {ROUTE_KEY} from '../navigator/routers';
 
 const InfoServicer = (props: RootStackScreenProps<'InfoServicer'>) => {
+	const text = useLanguage().InfoServicer;
 	const {navigation, route} = props;
 
 	const idServicer = route.params.idServicer;
@@ -68,7 +70,7 @@ const InfoServicer = (props: RootStackScreenProps<'InfoServicer'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title={'THÔNG TIN CHI TIẾT'} />
+			<CustomHeader title={text.title} />
 			<ScrollView style={styles.view}>
 				{loading && <LoadingScreen />}
 				{!loading && (
@@ -77,8 +79,8 @@ const InfoServicer = (props: RootStackScreenProps<'InfoServicer'>) => {
 						<CustomText font={FONT_FAMILY.BOLD} text={data?.name} style={{textAlign: 'center'}} />
 						<CustomText text={data?.phone} style={{textAlign: 'center'}} />
 
-						<CustomText font={FONT_FAMILY.BOLD} text={'TẤT CẢ DỊCH VỤ CUNG CẤP'} style={{marginTop: heightScale(20)}} />
-						{!service.length && <CustomText color={colors.grayLine} style={{textAlign: 'center'}} text={'Không có dịch vụ nào'} />}
+						<CustomText font={FONT_FAMILY.BOLD} text={text.all} style={{marginTop: heightScale(20)}} />
+						{!service.length && <CustomText color={colors.grayLine} style={{textAlign: 'center'}} text={text.noservicer} />}
 						{service.length > 0 && (
 							<CustomScrollHorizontal>
 								<FlatList
@@ -111,12 +113,12 @@ const InfoServicer = (props: RootStackScreenProps<'InfoServicer'>) => {
 							</CustomScrollHorizontal>
 						)}
 
-						<CustomText font={FONT_FAMILY.BOLD} text={'TẤT CẢ ĐÁNH GIÁ'} style={{marginTop: heightScale(20)}} />
+						<CustomText font={FONT_FAMILY.BOLD} text={text.allevulate} style={{marginTop: heightScale(20)}} />
 						<View style={{padding: widthScale(10)}}>
 							{evaluates.map(item => {
-								return <ReviewAndRating item={item} />;
+								return <ReviewAndRating key={generateRandomId()} item={item} />;
 							})}
-							{!evaluates.length && <CustomText color={colors.grayLine} style={{textAlign: 'center'}} text={'Không có đánh giá nào'} />}
+							{!evaluates.length && <CustomText color={colors.grayLine} style={{textAlign: 'center'}} text={text.noevulate} />}
 						</View>
 					</View>
 				)}

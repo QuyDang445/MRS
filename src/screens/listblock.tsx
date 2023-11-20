@@ -8,6 +8,7 @@ import FixedContainer from '../components/fixed-container';
 import Spinner from '../components/spinner';
 import {TABLE} from '../constants/enum';
 import {ServicerBlockUser} from '../constants/types';
+import {useLanguage} from '../hooks/useLanguage';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
 import {useAppSelector} from '../stores/store/storeHooks';
@@ -16,15 +17,17 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo, generateRandomId, showMessage} from '../utils';
 
 const Listblock = (props: RootStackScreenProps<'Listblock'>) => {
+	const text = useLanguage().Listblock;
 	const {navigation} = props;
 
 	const [showBlock, setShowBlock] = useState(false);
-
+	const phoneRegex = /(0)+([0-9]{9})\b/;
 	const [phone, setPhone] = useState('');
 	const [refreshing, setRefreshing] = useState(false);
 
 	const [data, setData] = useState<ServicerBlockUser[]>([]);
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
+	const [error, setError] = useState<string>('');
 
 	useEffect(() => {
 		onRefresh();
@@ -44,25 +47,35 @@ const Listblock = (props: RootStackScreenProps<'Listblock'>) => {
 	};
 
 	const handleAddBlock = () => {
-		if (phone) {
+		setError('');
+		if (!phone.trim()) {
+			setError(text.enterPhoneNumber);
+			return showMessage(text.enterPhoneNumber);
+		} else if (phoneRegex.test(phone) == false) {
+			setError(text.invalidPhoneNumber);
+			return showMessage(text.invalidPhoneNumber);
+		} else {
 			setShowBlock(false);
 			Spinner.show();
 			API.post(`${TABLE.SERVICE_BLOCK_USER}`, {idServicer: userInfo?.id, phone: phone})
 				.then(() => {
-					showMessage('Block số điện thoại thành công!');
+					showMessage(text.blockSuccess);
 					onRefresh();
 					setPhone('');
+				})
+				.catch(error => {
+					console.error('Error posting data:', error);
 				})
 				.finally(() => Spinner.hide());
 		}
 	};
 
 	const deleteBlock = (id: string) => {
-		AlertYesNo(undefined, 'Bạn chắc chắn muốn xoá?', () => {
+		AlertYesNo(undefined, text.confirmDelete, () => {
 			Spinner.show();
 			API.put(`${TABLE.SERVICE_BLOCK_USER}/${id}`, {})
 				.then(() => {
-					showMessage('Xoá thành công!');
+					showMessage(text.deleteSuccess);
 					onRefresh();
 				})
 				.finally(() => Spinner.hide());
@@ -72,7 +85,7 @@ const Listblock = (props: RootStackScreenProps<'Listblock'>) => {
 	return (
 		<FixedContainer>
 			<CustomHeader
-				title="DANH SÁCH CHẶN"
+				title={text.title}
 				rightContent={
 					<TouchableOpacity onPress={() => setShowBlock(true)}>
 						<Image style={{width: widthScale(25), height: widthScale(25)}} source={ICONS.add} />
@@ -140,7 +153,7 @@ const Listblock = (props: RootStackScreenProps<'Listblock'>) => {
 							/>
 						</View>
 
-						<CustomButton onPress={handleAddBlock} style={{width: widthScale(100), alignSelf: 'center'}} text="Chặn" />
+						<CustomButton onPress={handleAddBlock} style={{width: widthScale(100), alignSelf: 'center'}} text={text.block} />
 					</View>
 				</View>
 			</Modal>
@@ -151,4 +164,3 @@ const Listblock = (props: RootStackScreenProps<'Listblock'>) => {
 export default Listblock;
 
 const styles = StyleSheet.create({});
-

@@ -11,6 +11,7 @@ import Spinner from '../components/spinner';
 import TimePicker, {ModalRefObject} from '../components/time-picker';
 import {FONT_FAMILY, TABLE, TYPE_ORDER_SERVICE} from '../constants/enum';
 import {ImageProps} from '../constants/types';
+import {useLanguage} from '../hooks/useLanguage';
 import {ROUTE_KEY} from '../navigator/routers';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
@@ -22,6 +23,8 @@ import {getImageFromDevice, uploadImage} from '../utils/image';
 import {pushNotificationToServiceNewOrder} from '../utils/notification';
 
 const Booking = (props: RootStackScreenProps<'Booking'>) => {
+	const text = useLanguage().Booking;
+
 	const {navigation, route} = props;
 	const service = route.params?.service;
 
@@ -49,18 +52,21 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 			if (address) {
 				setAddress(address);
 			} else {
-				showMessage('Không có thông tin địa chỉ!');
+				showMessage(text.alertMessage);
 			}
 		} else {
-			showMessage('Không có thông tin địa chỉ!');
+			showMessage(text.alertMessage);
 		}
 		Spinner.hide();
 	};
 
-	const onPressChooseAddress = () => navigation.navigate(ROUTE_KEY.ListAddress, {onChoose: (newAddress: string) => setAddress(newAddress)});
+	const onPressChooseAddress = () =>
+		navigation.navigate(ROUTE_KEY.ListAddress, {
+			onChoose: (newAddress: string) => setAddress(newAddress),
+		});
 
 	const onPressOrder = () => {
-		AlertYesNo(undefined, 'Bạn đã kiểm tra kĩ thông tin?', async () => {
+		AlertYesNo(undefined, text.alertMessage, async () => {
 			Spinner.show();
 			const arrImage = [];
 
@@ -84,7 +90,7 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 
 			API.post(`${TABLE.ORDERS}`, body)
 				.then((res: any) => {
-					showMessage('Tạo đơn đặt hàng thành công!' + JSON.stringify(res));
+					showMessage(text.booking_success(JSON.stringify(res)));
 					pushNotificationToServiceNewOrder(service.id, userInfo?.id!, res?.name!);
 					navigation.goBack();
 				})
@@ -94,31 +100,31 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="ĐẶT LỊCH" />
+			<CustomHeader title={text.title} />
 			<CustomText style={{textAlign: 'center'}} font={FONT_FAMILY.BOLD} />
 
 			<ScrollView style={styles.view}>
 				{/* NAME  */}
 				<View style={styles.viewInput}>
-					<CustomText text={'TÊN KHÁCH HÀNG'} font={FONT_FAMILY.BOLD} />
+					<CustomText text={text.namecustomer} font={FONT_FAMILY.BOLD} />
 					<TextInput onChangeText={setName} value={name} style={styles.input} />
 				</View>
 
 				{/* PHONE  */}
 				<View style={styles.viewInput}>
-					<CustomText text={'SỐ ĐIỆN THOẠI'} font={FONT_FAMILY.BOLD} />
+					<CustomText text={text.phonecustomer} font={FONT_FAMILY.BOLD} />
 					<TextInput onChangeText={setPhone} value={phone} keyboardType={'numeric'} style={styles.input} />
 				</View>
 
 				{/* ADDRESS  */}
 				<View style={styles.viewInput}>
-					<CustomText text={'ĐỊA CHỈ'} font={FONT_FAMILY.BOLD} />
+					<CustomText text={text.addresscustomer} font={FONT_FAMILY.BOLD} />
 					<View style={styles.addressButtonsContainer}>
 						<View style={styles.addressButton}>
 							<TouchableOpacity onPress={onPressGetMyAddress} style={styles.buttonUseCurrentLocation}>
 								<View style={{flexDirection: 'row', alignItems: 'center'}}>
 									<Image source={ICONS.location} style={styles.icon} />
-									<CustomText style={styles.textUseCurrentLocation} text={'Sử dụng vị trí hiện tại'} />
+									<CustomText style={styles.textUseCurrentLocation} text={text.localaddress} />
 								</View>
 							</TouchableOpacity>
 						</View>
@@ -126,7 +132,7 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 							<TouchableOpacity style={styles.buttonChooseAddress} onPress={onPressChooseAddress}>
 								<View style={{flexDirection: 'row', alignItems: 'center'}}>
 									<Image source={ICONS.bookaddress} style={styles.icon} />
-									<CustomText style={styles.textChooseAddress} size={12} text={'Chọn địa chỉ'} />
+									<CustomText style={styles.textChooseAddress} size={12} text={text.chooseaddress} />
 								</View>
 							</TouchableOpacity>
 						</View>
@@ -136,7 +142,7 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 
 				{/* DATE  */}
 				<View style={styles.viewInput}>
-					<CustomText text={'NGÀY ĐẶT LỊCH'} font={FONT_FAMILY.BOLD} />
+					<CustomText text={text.datebooking} font={FONT_FAMILY.BOLD} />
 					<TouchableOpacity
 						onPress={() => {
 							timeRef.current?.show();
@@ -147,7 +153,7 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 
 				{/* TIME  */}
 				<View style={styles.viewInput}>
-					<CustomText text={'GIỜ ĐẶT LỊCH'} font={FONT_FAMILY.BOLD} />
+					<CustomText text={text.timebooking} font={FONT_FAMILY.BOLD} />
 					<TouchableOpacity
 						onPress={() => {
 							timeRef.current?.show(true);
@@ -158,13 +164,13 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 
 				{/* DESCRIPTION  */}
 				<View style={styles.viewInput}>
-					<CustomText text={'MÔ TẢ VẤN ĐỀ'} font={FONT_FAMILY.BOLD} />
+					<CustomText text={text.desprolem} font={FONT_FAMILY.BOLD} />
 					<TextInput value={description} onChangeText={setDescription} multiline style={styles.inputDescription} />
 				</View>
 
 				{/* IMAGES  */}
 				<View style={styles.viewInput}>
-					<CustomText text={'CÁC HÌNH ẢNH'} font={FONT_FAMILY.BOLD} />
+					<CustomText text={text.image} font={FONT_FAMILY.BOLD} />
 					<View style={{flexDirection: 'row', alignItems: 'center'}}>
 						<TouchableOpacity
 							onPress={async () => {
@@ -218,13 +224,17 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 				</View>
 			</ScrollView>
 			<View style={{padding: widthScale(20)}}>
-				<CustomButton onPress={onPressOrder} disabled={!name || !phone || !address || !date || !description || !images.length} text="ĐẶT LỊCH" />
+				<CustomButton
+					onPress={onPressOrder}
+					disabled={!name || !phone || !address || !date || !description || !images.length}
+					text={text.booking}
+				/>
 			</View>
 			<TimePicker
 				date={new Date()}
 				maximumDate={new Date(new Date().setDate(new Date().getDate() + 7))}
 				minimumDate={new Date()}
-				title="CHỌN NGÀY ĐẶT LỊCH"
+				title={text.choosebooking}
 				ref={timeRef}
 				onConfirm={newDate => setDate(newDate.valueOf())}
 			/>

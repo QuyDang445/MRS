@@ -8,14 +8,18 @@ import {TABLE, TYPE_ORDER_SERVICE, TYPE_USER} from '../constants/enum';
 import {colors} from '../styles/colors';
 
 export const parseObjectToArray = (object: any) => {
-	const array = [];
-	for (const key in object) {
-		if (Object.prototype.hasOwnProperty.call(object, key)) {
-			const element: object = object[key as keyof object];
-			array.push({...element, id: key});
+	try {
+		const array = [];
+		for (const key in object) {
+			if (Object.prototype.hasOwnProperty.call(object, key)) {
+				const element: object = object?.[key as keyof object];
+				array.push({...element, id: key});
+			}
 		}
+		return array as any[];
+	} catch (error) {
+		return [];
 	}
-	return array as any[];
 };
 
 export const isNumber = (value: string) => /^\d+$/.test(value);
@@ -46,21 +50,29 @@ export const getServiceFromID = async (id: string) => {
 	}
 
 	// get info category
+	const allCategory = await API.get(`${TABLE.CATEGORY}`, true);
+	const getCategoryFromID = (idCategory: string) => {
+		for (let i = 0; i < allCategory.length; i++) {
+			if (idCategory === allCategory[i].id) return allCategory[i];
+		}
+	};
 	for (let i = 0; i < arr.length; i++) {
 		const category = (await API.get(`${TABLE.CATEGORY}/${arr[i].category}`, undefined)) as any;
 		arr[i].categoryObject = category;
 	}
 
-	// get info servicer
+	// get info service
 	for (let i = 0; i < arr.length; i++) {
-		const servicer = (await API.get(`${TABLE.USERS}/${arr[i].servicer}`, undefined)) as any;
-		arr[i].servicerObject = servicer;
+		const service = (await API.get(`${TABLE.USERS}/${arr[i].servicer}`, undefined)) as any;
+		arr[i].servicerObject = service;
 	}
 
 	// get info star evaluate
 	for (let i = 0; i < arr.length; i++) {
 		const evaluate = (await API.get(`${TABLE.EVALUATE}/${arr[i].id}`, true)) as EvaluateProps[];
-		// console.log('evaluate in index: ' + JSON.stringify(evaluate));
+		arr[i].evaluate = evaluate;
+
+		// get info star
 		let totalStar = 0;
 		if (evaluate !== undefined && evaluate.length > 0) {
 			for (let j = 0; j < evaluate.length; j++) {
@@ -83,19 +95,19 @@ export const getServiceAll = async () => {
 
 	// get info category
 	for (let i = 0; i < arr.length; i++) {
-		const category = (await API.get(`${TABLE.CATEGORY}/${arr[i].category}`, undefined)) as any;
+		const category = (await API.get(`${TABLE.CATEGORY}/${arr[i].category}`, undefined, true)) as any;
 		arr[i].categoryObject = category;
 	}
 
-	// get info service
+	// get info servicer
 	for (let i = 0; i < arr.length; i++) {
-		const service = (await API.get(`${TABLE.USERS}/${arr[i].servicer}`, undefined)) as any;
+		const service = (await API.get(`${TABLE.USERS}/${arr[i].servicer}`, undefined, true)) as any;
 		arr[i].servicerObject = service;
 	}
 
 	// get info star evalute
 	for (let i = 0; i < arr.length; i++) {
-		const evaluate = (await API.get(`${TABLE.EVALUATE}/${arr[i].id}`, true)) as EvaluateProps[];
+		const evaluate = (await API.get(`${TABLE.EVALUATE}/${arr[i].id}`, true, true)) as EvaluateProps[];
 		arr[i].evaluate = evaluate;
 
 		// get info star
@@ -103,7 +115,7 @@ export const getServiceAll = async () => {
 		for (let j = 0; j < evaluate.length; j++) {
 			totalStar += evaluate[j].star;
 		}
-		arr[i].star = totalStar / (evaluate.length || 1);
+		arr[i].star = Math.round(totalStar / (evaluate.length || 1));
 	}
 
 	return arr;
@@ -151,18 +163,22 @@ export const getMyLocation = () =>
 		),
 	);
 
-export const getStatusOrder = (status: TYPE_ORDER_SERVICE) => {
-	switch (status) {
-		case TYPE_ORDER_SERVICE.OrderPending:
-			return 'ĐANG CHỜ';
-		case TYPE_ORDER_SERVICE.OrderInProcess:
-			return 'ĐÃ XÁC NHẬN';
-		case TYPE_ORDER_SERVICE.OrderCompleted:
-			return 'HOÀN THÀNH';
-		case TYPE_ORDER_SERVICE.OrderCanceled:
-			return 'ĐÃ HUỶ';
-	}
-};
+
+	export const getStatusOrder = (
+		status: TYPE_ORDER_SERVICE,
+		language: {OrderPending: string; OrderCanceled: string; OrderInProcess: string; OrderCompleted: string},
+	) => {
+		switch (status) {
+			case TYPE_ORDER_SERVICE.OrderPending:
+				return language.OrderPending;
+			case TYPE_ORDER_SERVICE.OrderInProcess:
+				return language.OrderInProcess;
+			case TYPE_ORDER_SERVICE.OrderCompleted:
+				return language.OrderCompleted;
+			case TYPE_ORDER_SERVICE.OrderCanceled:
+				return language.OrderCanceled;
+		}
+	};
 
 export const getColorStatusOrder = (status: TYPE_ORDER_SERVICE) => {
 	switch (status) {
@@ -200,27 +216,47 @@ export const getUserAll = async () => {
 	}
 	return newData;
 };
+export const getServiceDetailFromID = async (id: string) => {
+	const service = (await API.get(`${TABLE.SERVICE}/${id}`)) as ServiceProps;
+	const allCategory = (await API.get(`${TABLE.CATEGORY}`, true)) as any[];
+	const allServicer = (await API.get(`${TABLE.USERS}`, true)) as any[];
 
+	service.id = id;
+
+	service.categoryObject = allCategory.find(o => o.id === service.category);
+
+	service.servicerObject = allServicer.find(o => o.id === service.servicer);
+
+	const evaluate = (await API.get(`${TABLE.EVALUATE}/${id}`, true)) as EvaluateProps[];
+	service.evaluate = evaluate;
+
+	let totalStar = 0;
+	for (let j = 0; j < evaluate.length; j++) {
+		totalStar += evaluate[j].star;
+	}
+	service.star = totalStar / (evaluate.length || 1);
+	return service;
+};
 export const getOrderAllFromIDServicer = async (idServicer: string) => {
-	const newData = [];
+	const newData: any = [];
 	const allOrder = (await API.get(`${TABLE.ORDERS}`, true)) as OrderProps[];
+	const allUser = (await API.get(`${TABLE.USERS}`, true)) as UserProps[];
+	const allService = (await API.get(`${TABLE.SERVICE}`, true)) as ServiceProps[];
 
-	// get info servicer
+	// get info service
 	for (let i = 0; i < allOrder.length; i++) {
-		allOrder[i].serviceObject = (await API.get(`${TABLE.SERVICE}/${allOrder[i].idService}`)) as unknown as ServiceProps;
+		allOrder[i].serviceObject = allService.find(obj => obj.id === allOrder[i].idService) as any;
 	}
 
 	// filter idServicer
 	for (let i = 0; i < allOrder.length; i++) {
-		if (allOrder[i].serviceObject.servicer === idServicer) {
-			newData.push(allOrder[i]);
-		}
+		if (allOrder[i].serviceObject.servicer === idServicer) newData.push(allOrder[i]);
 	}
 
 	// get info user
 	for (let i = 0; i < newData.length; i++) {
-		newData[i].userObject = (await API.get(`${TABLE.USERS}/${newData[i].idUser}`)) as unknown as UserProps;
+		newData[i].userObject = allUser.find(obj => obj.id === newData?.[i].idUser) as any;
 	}
 
-	return newData;
+	return newData as OrderProps[];
 };
