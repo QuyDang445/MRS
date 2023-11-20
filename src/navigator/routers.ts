@@ -42,10 +42,8 @@ export const ROUTE_KEY = createEnum({
 	Payment: 'Payment',
 	AllReview: 'AllReview',
 	InfoServicer: 'InfoServicer',
-	
 	InfoAcceptServicer: 'InfoAcceptServicer',
 	EditPaymentFee: 'EditPaymentFee',
 	AddPayment: 'AddPayment',
 	FeeService: 'FeeService',
-	
 });

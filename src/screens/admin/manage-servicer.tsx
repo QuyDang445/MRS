@@ -1,7 +1,7 @@
 import {RootStackScreenProps} from '../../navigator/stacks';
 
-const ManageUser = (props: RootStackScreenProps<'ManageUser'>) => {
+const ManageServicer = (props: RootStackScreenProps<'ManageServicer'>) => {
 	
 };
 
-export default ManageUser;
+export default ManageServicer;

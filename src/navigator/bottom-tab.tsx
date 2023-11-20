@@ -29,6 +29,7 @@ import {sleep} from '../utils/time';
 import {RootStackScreensParams} from './params';
 import {ROUTE_KEY} from './routers';
 import {RootStackScreenProps} from './stacks';
+import userAdmin from '../screens/admin/user-admin';
 
 const Tab = createBottomTabNavigator<RootStackScreensParams>();
 
@@ -223,8 +224,8 @@ const BottomTab = (props: RootStackScreenProps<'BottomTab'>) => {
 
 	const USER = useMemo(() => {
 		switch (userInfo?.type) {
-			// case TYPE_USER.ADMIN:
-			// 	return userAdmin;
+			case TYPE_USER.ADMIN:
+				return userAdmin;
 			default:
 				return User;
 		}
