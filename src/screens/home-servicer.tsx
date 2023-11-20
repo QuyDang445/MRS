@@ -6,6 +6,7 @@ import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
 import RenderListService from '../components/render-list-service';
 import {FONT_FAMILY, TYPE_ORDER_SERVICE} from '../constants/enum';
+import {useLanguage} from '../hooks/useLanguage';
 import {RootStackScreenProps} from '../navigator/stacks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
@@ -13,13 +14,8 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 const Tab = createMaterialTopTabNavigator();
 
 const HomeServicer = (props: RootStackScreenProps<'Home'>) => {
-	const text = {
-		title: 'ĐƠN HÀNG',
-		pending: 'Chờ xác nhận',
-		inprocess: 'Tiến hành',
-		completed: 'Hoàn thành',
-		canceled: 'Đã hủy'
-	};
+	const text = useLanguage().HomeServicer;
+
 	const {navigation} = props;
 	const renderTapBarItem = useCallback(
 		(props: MaterialTopTabBarProps) => (

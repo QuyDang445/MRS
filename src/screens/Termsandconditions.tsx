@@ -3,14 +3,15 @@ import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import WebView from 'react-native-webview';
 import CustomHeader from '../components/custom-header';
 import FixedContainer from '../components/fixed-container';
-import {HTML_TERM_EN} from '../constants/data';
+import {useLanguage} from '../hooks/useLanguage';
 
 const TermsAndConditions = () => {
+	const text = useLanguage().TermsAndConditions;
 	return (
 		<FixedContainer>
-			<CustomHeader title={'CHÍNH SÁCH QUYỀN RIÊNG TƯ'} />
+			<CustomHeader title={text.title} />
 			<WebView
-				source={{html: HTML_TERM_EN}}
+				source={{html: text.HTML}}
 				startInLoadingState={true}
 				renderLoading={() => (
 					<View style={styles.loading}>

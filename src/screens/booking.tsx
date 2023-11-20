@@ -11,6 +11,7 @@ import Spinner from '../components/spinner';
 import TimePicker, {ModalRefObject} from '../components/time-picker';
 import {FONT_FAMILY, TABLE, TYPE_ORDER_SERVICE} from '../constants/enum';
 import {ImageProps} from '../constants/types';
+import {useLanguage} from '../hooks/useLanguage';
 import {ROUTE_KEY} from '../navigator/routers';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
@@ -22,6 +23,8 @@ import {getImageFromDevice, uploadImage} from '../utils/image';
 import {pushNotificationToServiceNewOrder} from '../utils/notification';
 
 const Booking = (props: RootStackScreenProps<'Booking'>) => {
+	const text = useLanguage().Booking;
+
 	const {navigation, route} = props;
 	const service = route.params?.service;
 
@@ -35,20 +38,7 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 	const [date, setDate] = useState(new Date().valueOf());
 	const [description, setDescription] = useState('');
 	const [images, setImages] = useState<ImageProps[]>([]);
-	const text = {
-		title: 'ĐẶT LỊCH',
-		namecustomer: 'TÊN KHÁCH HÀNG',
-		phonecustomer: 'SỐ ĐIỆN THOẠI',
-		addresscustomer: 'ĐỊA CHỈ',
-		localaddress : 'Sử dụng vị trí hiện tại',
-		chooseaddress: 'Chọn địa chỉ',
-		datebooking: 'NGÀY ĐẶT LỊCH',
-		timebooking: 'GIỜ ĐẶT LỊCH',
-		desprolem: 'MÔ TẢ VẤN ĐỀ',
-		image : 'CÁC HÌNH ẢNH',
-		choosebooking : 'CHỌN NGÀY ĐẶT LỊCH',
-		booking : 'ĐẶT LỊCH'
-	};
+
 	const onPressGetMyAddress = async () => {
 		Spinner.show();
 		const location = await getLocationMyDevice();
@@ -62,18 +52,21 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 			if (address) {
 				setAddress(address);
 			} else {
-				showMessage('Không có thông tin địa chỉ!');
+				showMessage(text.alertMessage);
 			}
 		} else {
-			showMessage('Không có thông tin địa chỉ!');
+			showMessage(text.alertMessage);
 		}
 		Spinner.hide();
 	};
 
-	const onPressChooseAddress = () => navigation.navigate(ROUTE_KEY.ListAddress, {onChoose: (newAddress: string) => setAddress(newAddress)});
+	const onPressChooseAddress = () =>
+		navigation.navigate(ROUTE_KEY.ListAddress, {
+			onChoose: (newAddress: string) => setAddress(newAddress),
+		});
 
 	const onPressOrder = () => {
-		AlertYesNo(undefined, 'Bạn đã kiểm tra kĩ thông tin?', async () => {
+		AlertYesNo(undefined, text.alertMessage, async () => {
 			Spinner.show();
 			const arrImage = [];
 
@@ -97,7 +90,7 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 
 			API.post(`${TABLE.ORDERS}`, body)
 				.then((res: any) => {
-					showMessage('Tạo đơn đặt hàng thành công!' + JSON.stringify(res));
+					showMessage(text.booking_success(JSON.stringify(res)));
 					pushNotificationToServiceNewOrder(service.id, userInfo?.id!, res?.name!);
 					navigation.goBack();
 				})
@@ -231,7 +224,11 @@ const Booking = (props: RootStackScreenProps<'Booking'>) => {
 				</View>
 			</ScrollView>
 			<View style={{padding: widthScale(20)}}>
-				<CustomButton onPress={onPressOrder} disabled={!name || !phone || !address || !date || !description || !images.length} text={text.booking} />
+				<CustomButton
+					onPress={onPressOrder}
+					disabled={!name || !phone || !address || !date || !description || !images.length}
+					text={text.booking}
+				/>
 			</View>
 			<TimePicker
 				date={new Date()}

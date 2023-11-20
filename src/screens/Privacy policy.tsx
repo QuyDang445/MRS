@@ -3,17 +3,15 @@ import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import WebView from 'react-native-webview';
 import CustomHeader from '../components/custom-header';
 import FixedContainer from '../components/fixed-container';
-import {HTML_POLICY_EN} from '../constants/data';
+import {useLanguage} from '../hooks/useLanguage';
 
 const PrivacyPolicy = () => {
-	const text = {
-		title: 'QUY ĐỊNH ĐIỀU KHOẢN',
-	};
-  return (
+	const text = useLanguage().PrivacyPolicy;
+	return (
 		<FixedContainer>
 			<CustomHeader title={text.title} />
 			<WebView
-				source={{html: HTML_POLICY_EN}}
+				source={{html: text.HTML}}
 				startInLoadingState={true}
 				renderLoading={() => (
 					<View style={styles.loading}>

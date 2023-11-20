@@ -1,6 +1,6 @@
 import React, {memo, useState} from 'react';
-import {DeviceEventEmitter, ScrollView, StyleSheet, TextInput, View, TouchableOpacity, Image} from 'react-native';
-import {ICONS, IMAGES} from '../assets/image-paths';
+import {DeviceEventEmitter, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import {ICONS} from '../assets/image-paths';
 import CustomButton from '../components/custom-button';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
@@ -9,9 +9,19 @@ import Spinner from '../components/spinner';
 import {EMIT_EVENT, FONT_FAMILY, TABLE} from '../constants/enum';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
+import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {showMessage} from '../utils';
-import { colors } from '../styles/colors';
+
+const text = {
+	title: 'ĐỔI MẬT KHẨU',
+	enterpass: 'NHẬP MẬT KHẨU HIỆN TẠI',
+	enterpassnew: 'NHẬP MẬT KHẨU MỚI',
+	resetpassword: 'ĐẶT LẠI MẬT KHẨU MỚI',
+	passwordMismatch: 'Xác nhận mật khẩu sai!',
+	changePasswordSuccess: 'Đổi mật khẩu thành công!',
+	changePasswordFailure: 'Đổi mật khẩu thất bại',
+};
 
 const ChangePasswordForgot = (props: RootStackScreenProps<'ChangePasswordForgot'>) => {
 	const {navigation, route} = props;
@@ -21,27 +31,27 @@ const ChangePasswordForgot = (props: RootStackScreenProps<'ChangePasswordForgot'
 	const [renewPass, setRenewPass] = useState('');
 	const [newPasswordVisible, setNewPasswordVisible] = useState(false);
 	const [confirmNewPasswordVisible, setConfirmNewPasswordVisible] = useState(false);
-	const text = {
-		title: 'ĐỔI MẬT KHẨU',
-		enterpass: 'NHẬP MẬT KHẨU HIỆN TẠI',
-		enterpassnew: 'NHẬP MẬT KHẨU MỚI',
-		resetpassword: 'ĐẶT LẠI MẬT KHẨU MỚI',
-	};
+
 	const handleChangePass = async () => {
 		if (newPass !== renewPass) {
-			return showMessage('Xác nhận mật khẩu sai!');
+			return showMessage(text.passwordMismatch);
 		}
 
 		Spinner.show();
-		const res = await API.put(`${TABLE.USERS}/${userPhone.id}`, {...userPhone, password: newPass});
-		if (res) {
-			showMessage('Đổi mật khẩu thành công!');
-			DeviceEventEmitter.emit(EMIT_EVENT.DATA_LOGIN, {phone: userPhone.phone, password: newPass});
-			navigation.goBack();
-		} else {
-			showMessage('Đổi mật khẩu thất bại');
+		try {
+			const res = await API.put(`${TABLE.USERS}/${userPhone.id}`, {...userPhone, password: newPass});
+			if (res) {
+				showMessage(text.changePasswordSuccess);
+				DeviceEventEmitter.emit(EMIT_EVENT.DATA_LOGIN, {phone: userPhone.phone, password: newPass});
+				navigation.goBack();
+			} else {
+				showMessage(text.changePasswordFailure);
+			}
+		} catch (error) {
+			showMessage(text.changePasswordFailure);
+		} finally {
+			Spinner.hide();
 		}
-		Spinner.hide();
 	};
 
 	return (

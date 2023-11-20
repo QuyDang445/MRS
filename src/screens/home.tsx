@@ -1,6 +1,6 @@
-import React, {memo, useState, useRef, useEffect} from 'react';
 import notifee from '@notifee/react-native';
-import {FlatList, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View, RefreshControl} from 'react-native';
+import React, {memo, useEffect, useRef, useState} from 'react';
+import {FlatList, Image, RefreshControl, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
@@ -8,18 +8,17 @@ import FixedContainer from '../components/fixed-container';
 import CustomScrollHorizontal from '../components/home/custom-scroll-horizontal';
 import Star from '../components/star';
 import {FONT_FAMILY, TABLE} from '../constants/enum';
+import {Category, ServiceProps} from '../constants/types';
+import {useLanguage} from '../hooks/useLanguage';
 import {ROUTE_KEY} from '../navigator/routers';
 import {RootStackScreenProps} from '../navigator/stacks';
+import API from '../services/api';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {generateRandomId, getServiceAll} from '../utils';
-import {ServiceProps, Category} from '../constants/types';
-import API from '../services/api';
-import { useLanguage } from '../hooks/useLanguage';
 
 const Home = (props: RootStackScreenProps<'Home'>) => {
-	
-	
+	const text = useLanguage().Home;
 	const {navigation} = props;
 
 	const [filterCategory, setFilterCategory] = useState<Category>();
@@ -28,13 +27,7 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 	const [outstandingService, setOutstandingService] = useState<ServiceProps[]>([]);
 	const [categories, setCategories] = useState<Category[]>([]);
 	const [serviceAll, setServiceAll] = useState<ServiceProps[]>([]);
-	const text = {
-		title: 'TRANG CHỦ',
-		Listofservices: 'Danh mục dịch vụ',
-		all: 'Tất cả',
-		outstandingservice: 'Dịch vụ nổi bật',
-		servicesavailable: 'Không có dịch vụ nào'
-	};
+
 	const onFocusSearch = () => {
 		navigation.navigate(ROUTE_KEY.Search, {data: allServiceRef.current, categories: categories});
 	};
@@ -66,13 +59,15 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 		}
 	};
 	const requestGiveNotification = () => notifee.requestPermission();
+
 	useEffect(() => {
 		onRefresh();
 		setTimeout(() => {
 			requestGiveNotification();
 		}, 1000);
 	}, []);
-	const renderItemCategories = ({item}: {item: Category}) => {
+
+	const renderItemCategories = ({item}: any) => {
 		return (
 			<TouchableOpacity
 				onPress={() => {
@@ -85,10 +80,7 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 						backgroundColor: filterCategory?.id === item.id ? colors.grayLine : `${colors.grayLine}50`,
 					},
 				]}>
-				<Image
-					style={styles.imageCategory}
-					source={{uri: item?.uri}}
-				/>
+				<Image style={styles.imageCategory} source={{uri: item?.uri}} />
 				<CustomText style={{width: '100%', textAlign: 'center'}} size={10} text={item?.name} />
 			</TouchableOpacity>
 		);
@@ -124,7 +116,7 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 
 				{!!outstandingService.length && (
 					<>
-						<CustomText style={styles.titleList} text={'Dịch vụ nổi bật'} font={FONT_FAMILY.BOLD} />
+						<CustomText style={styles.titleList} text={text.outstandingservice} font={FONT_FAMILY.BOLD} />
 						<CustomScrollHorizontal>
 							<FlatList
 								scrollEnabled={false}
@@ -171,7 +163,7 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 
 				<CustomText
 					style={styles.titleList}
-					text={filterCategory ? `Dịch Vụ ${filterCategory?.name}` : 'Tất cả dịch vụ'}
+					text={filterCategory ? text.filterCategory(filterCategory?.name) : text.all_service}
 					font={FONT_FAMILY.BOLD}
 				/>
 				<FlatList
@@ -243,9 +235,10 @@ const styles = StyleSheet.create({
 	},
 	itemService: {
 		width: widthScale(150),
-		backgroundColor: `${colors.blackGray}10`,
 		borderRadius: 10,
 		marginRight: widthScale(15),
 		overflow: 'hidden',
+		borderWidth: 1,
+		borderColor: `${colors.grayLine}50`,
 	},
 });

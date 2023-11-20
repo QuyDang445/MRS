@@ -1,26 +1,28 @@
-import {Image, ScrollView, StyleSheet, Text, TextInput, View,RefreshControl,ActivityIndicator,FlatList,TouchableOpacity} from 'react-native';
-import React, {useState, useRef,useEffect} from 'react';
-import FixedContainer from '../components/fixed-container';
+import React, {useEffect, useRef, useState} from 'react';
+import {ActivityIndicator, FlatList, Image, RefreshControl, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import {ICONS} from '../assets/image-paths';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
-import {RootStackScreenProps} from '../navigator/stacks';
-import Filter,{Sort} from '../components/search/filter';
+import FixedContainer from '../components/fixed-container';
+import Filter, {Sort} from '../components/search/filter';
 import Star from '../components/star';
-import {colors} from '../styles/colors';
-import {ICONS} from '../assets/image-paths';
-import {widthScale,heightScale} from '../styles/scaling-utils';
-import {generateRandomId, getServiceAll} from '../utils';
-import Logger from '../utils/logger';
-import {ROUTE_KEY} from '../navigator/routers';
 import {FONT_FAMILY} from '../constants/enum';
 import {ServiceProps} from '../constants/types';
+import {useLanguage} from '../hooks/useLanguage';
+import {ROUTE_KEY} from '../navigator/routers';
+import {RootStackScreenProps} from '../navigator/stacks';
+import {colors} from '../styles/colors';
+import {heightScale, widthScale} from '../styles/scaling-utils';
+import {generateRandomId, getServiceAll} from '../utils';
 import {sleep} from '../utils/time';
 
-const sort = [
-	{title: 'Đánh giá tăng dần', id: '333', function: (a: any, b: any) => a?.star - b?.star},
-	{title: 'Đánh giá giảm dần', id: '444', function: (a: any, b: any) => b?.star - a?.star},
-];
 const Search = (props: RootStackScreenProps<'Search'>) => {
+	const text = useLanguage().Search;
+
+	const sort = [
+		{title: text.sort1, id: '333', function: (a: any, b: any) => a?.star - b?.star},
+		{title: text.sort2, id: '444', function: (a: any, b: any) => b?.star - a?.star},
+	];
 	const {navigation, route} = props;
 	const categories = route.params.categories;
 
@@ -36,15 +38,9 @@ const Search = (props: RootStackScreenProps<'Search'>) => {
 	const [filterData, setFilterData] = useState<Sort>();
 
 	const allServiceRef = useRef<ServiceProps[]>(route.params.data);
-	const text = {
-		title: 'TÌM KIẾM',
-		entersearch: 'Nhập thông tin tìm kiếm',
-		sort: 'Sắp xếp',
-		filters : 'lọc',
-		servicesavailable: 'Không có dịch vụ nào'
-	};
+
 	useEffect(() => {
-		const all = {id: 'ALL', name: 'Tất cả'};
+		const all = {id: 'ALL', name: text.all};
 		const newCategories = [all, ...categories] as any;
 		setFilter(newCategories);
 	}, []);
@@ -77,7 +73,7 @@ const Search = (props: RootStackScreenProps<'Search'>) => {
 		const newData = [...allServiceRef.current];
 		setServiceAll(newData.sort(data.function));
 	};
-	
+
 	const onSearch = (text: string) => {
 		setLoading(true);
 		setTextSearch(text);
@@ -96,7 +92,9 @@ const Search = (props: RootStackScreenProps<'Search'>) => {
 	};
 	const renderItemOutstandingService = ({item}: {item: ServiceProps}) => {
 		return (
-			<TouchableOpacity onPress={() => navigation.navigate(ROUTE_KEY.ServiceDetail, {serviceData: item})} style={[styles.itemService, {marginRight: 0}]}>
+			<TouchableOpacity
+				onPress={() => navigation.navigate(ROUTE_KEY.ServiceDetail, {serviceData: item})}
+				style={[styles.itemService, {marginRight: 0}]}>
 				<Image source={{uri: item?.image}} style={styles.imageService} />
 
 				<View style={{flex: 1, padding: widthScale(15)}}>
@@ -110,7 +108,7 @@ const Search = (props: RootStackScreenProps<'Search'>) => {
 	};
 	return (
 		<FixedContainer>
-			<CustomHeader title={text.title}/>
+			<CustomHeader title={text.title} />
 			<ScrollView
 				refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />}
 				showsVerticalScrollIndicator={false}
@@ -201,9 +199,10 @@ const styles = StyleSheet.create({
 	},
 	itemService: {
 		width: widthScale(150),
-		backgroundColor: `${colors.blackGray}10`,
 		borderRadius: 10,
 		marginRight: widthScale(15),
 		overflow: 'hidden',
+		borderWidth: 1,
+		borderColor: `${colors.grayLine}50`,
 	},
 });

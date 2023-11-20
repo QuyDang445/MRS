@@ -9,6 +9,7 @@ import ModalChooseProvince, {ModalObject} from '../components/sign-up/modal-choo
 import Spinner from '../components/spinner';
 import {TABLE} from '../constants/enum';
 import {AddressProps} from '../constants/types';
+import {useLanguage} from '../hooks/useLanguage';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
 import {useAppSelector} from '../stores/store/storeHooks';
@@ -17,6 +18,7 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo} from '../utils';
 
 const ListAddress = (props: RootStackScreenProps<'ListAddress'>) => {
+	const text = useLanguage().ListAddress;
 	const {navigation, route} = props;
 	const onChooseAddress = route.params?.onChoose;
 
@@ -25,11 +27,7 @@ const ListAddress = (props: RootStackScreenProps<'ListAddress'>) => {
 	const modalChooseProvinceRef = useRef<ModalObject>(null);
 	const [data, setData] = useState<AddressProps[]>([]);
 	const [refreshing, setRefreshing] = useState(false);
-	const text = {
-		title: 'SỔ ĐỊA CHỈ',
-		addaddress: 'Thêm địa chỉ',
-		noaddress: 'Không có thông tin địa chỉ'
-	};
+
 	useEffect(() => {
 		onRefresh();
 	}, []);
@@ -52,7 +50,7 @@ const ListAddress = (props: RootStackScreenProps<'ListAddress'>) => {
 	};
 
 	const handleDeleteAddress = (id: string) => {
-		AlertYesNo(undefined, 'Bạn có muốn xoá không ?', () => {
+		AlertYesNo(undefined, text.deleteConfirm, () => {
 			Spinner.show();
 			API.put(`${TABLE.ADDRESS}/${userInfo?.id}/${id}`, {})
 				.then(() => onRefresh())
@@ -83,9 +81,9 @@ const ListAddress = (props: RootStackScreenProps<'ListAddress'>) => {
 						disabled={!onChooseAddress}
 						style={styles.item}>
 						<View style={{width: widthScale(280), paddingVertical: heightScale(10), paddingLeft: widthScale(10)}}>
-							<CustomText text={`Họ tên: ${item.name}`} />
-							<CustomText text={`Số điện thoại: ${item.phone}`} />
-							<CustomText text={`Địa chỉ: ${item.address}`} />
+							<CustomText text={`${text.name}${item.name}`} />
+							<CustomText text={`${text.phone}${item.phone}`} />
+							<CustomText text={`${text.address}${item.address}`} />
 						</View>
 
 						{!onChooseAddress && (

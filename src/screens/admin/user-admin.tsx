@@ -1,15 +1,18 @@
-import {DeviceEventEmitter, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {memo} from 'react';
+import {DeviceEventEmitter, StyleSheet, TouchableOpacity, View} from 'react-native';
 import CustomHeader from '../../components/custom-header';
-import FixedContainer from '../../components/fixed-container';
-import {RootStackScreenProps} from '../../navigator/stacks';
 import CustomText from '../../components/custom-text';
+import FixedContainer from '../../components/fixed-container';
 import {EMIT_EVENT, FONT_FAMILY} from '../../constants/enum';
-import {widthScale, heightScale} from '../../styles/scaling-utils';
+import {useLanguage} from '../../hooks/useLanguage';
 import {ROUTE_KEY} from '../../navigator/routers';
+import {RootStackScreenProps} from '../../navigator/stacks';
+import {heightScale, widthScale} from '../../styles/scaling-utils';
 import {AlertYesNo} from '../../utils';
 
 const UserAdmin = (props: RootStackScreenProps<'User'>) => {
+	const text = useLanguage().UserAdmin;
+
 	const {navigation} = props;
 
 	const onPressChangePassword = () => navigation.navigate(ROUTE_KEY.ChangePassword);
@@ -19,39 +22,39 @@ const UserAdmin = (props: RootStackScreenProps<'User'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="ADMIN" hideBack />
+			<CustomHeader title={text.title} hideBack />
 
 			<View style={styles.viewContent}>
-				<CustomText text={'QUẢN LÝ TÀI KHOẢN:'} font={FONT_FAMILY.BOLD} size={14} />
+				<CustomText text={text.accountManagement} font={FONT_FAMILY.BOLD} size={14} />
 
 				<TouchableOpacity onPress={onPressChangePassword} style={styles.button}>
-					<CustomText text={'Đổi mật khẩu'} size={13} />
+					<CustomText text={text.changePassword} size={13} />
 				</TouchableOpacity>
 			</View>
 
 			<View style={styles.viewContent}>
-				<CustomText text={'THÔNG TIN KHÁC:'} font={FONT_FAMILY.BOLD} size={14} />
+				<CustomText text={text.otherInformation} font={FONT_FAMILY.BOLD} size={14} />
 
 				<TouchableOpacity onPress={onPressPayment} style={styles.button}>
-					<CustomText text={'Cập nhật phương thức thanh toán'} size={13} />
+					<CustomText text={text.updatePaymentMethod} size={13} />
 				</TouchableOpacity>
 
 				<TouchableOpacity onPress={() => {}} style={styles.button}>
-					<CustomText text={'Quy định và điều khoản'} size={13} />
+					<CustomText text={text.termsAndConditions} size={13} />
 				</TouchableOpacity>
 
 				<TouchableOpacity onPress={() => {}} style={styles.button}>
-					<CustomText text={'Chính sách quyền riêng tư'} size={13} />
+					<CustomText text={text.privacyPolicy} size={13} />
 				</TouchableOpacity>
 
 				<TouchableOpacity onPress={() => {}} style={styles.button}>
-					<CustomText text={'FAQs'} size={13} />
+					<CustomText text={text.faqs} size={13} />
 				</TouchableOpacity>
 			</View>
 
 			<View style={styles.viewContent}>
-				<TouchableOpacity onPress={() => AlertYesNo(undefined, 'Bạn chắc chắn muốn đăng xuất?', onPressLogout)} style={styles.button}>
-					<CustomText text={'Đăng xuất'} size={13} />
+				<TouchableOpacity onPress={() => AlertYesNo(undefined, text.logoutConfirmation, onPressLogout)} style={styles.button}>
+					<CustomText text={text.logout} size={13} />
 				</TouchableOpacity>
 			</View>
 		</FixedContainer>
@@ -59,6 +62,7 @@ const UserAdmin = (props: RootStackScreenProps<'User'>) => {
 };
 
 export default memo(UserAdmin);
+
 const styles = StyleSheet.create({
 	viewContent: {
 		paddingHorizontal: widthScale(20),

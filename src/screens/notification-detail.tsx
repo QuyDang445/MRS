@@ -1,21 +1,19 @@
-import React, {memo} from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
-import {RootStackScreenProps} from '../navigator/stacks';
-import FixedContainer from '../components/fixed-container';
-import CustomHeader from '../components/custom-header';
-import {ICONS} from '../assets/image-paths';
-import {heightScale, widthScale} from '../styles/scaling-utils';
-import CustomText from '../components/custom-text';
-import {FONT_FAMILY} from '../constants/enum';
 import moment from 'moment';
+import React from 'react';
+import {Image, StyleSheet, View} from 'react-native';
+import {ICONS} from '../assets/image-paths';
+import CustomHeader from '../components/custom-header';
+import CustomText from '../components/custom-text';
+import FixedContainer from '../components/fixed-container';
+import {FONT_FAMILY} from '../constants/enum';
+import {useLanguage} from '../hooks/useLanguage';
+import {RootStackScreenProps} from '../navigator/stacks';
+import {heightScale, widthScale} from '../styles/scaling-utils';
 
 const NotificationDetail = ({navigation, route}: RootStackScreenProps<'NotificationDetail'>) => {
+	const text = useLanguage().NotificationDetail;
 	const {notificationData} = route.params;
-	console.log(JSON.stringify(notificationData));
-	const text = {
-		title: 'Chi tiết thông báo',
-		
-	};
+
 	return (
 		<FixedContainer>
 			<CustomHeader title={text.title} hideBack={false} />

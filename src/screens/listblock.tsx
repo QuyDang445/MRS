@@ -7,7 +7,8 @@ import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
 import Spinner from '../components/spinner';
 import {TABLE} from '../constants/enum';
-import {ServicerBlockUser, UserProps} from '../constants/types';
+import {ServicerBlockUser} from '../constants/types';
+import {useLanguage} from '../hooks/useLanguage';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
 import {useAppSelector} from '../stores/store/storeHooks';
@@ -16,6 +17,7 @@ import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo, generateRandomId, showMessage} from '../utils';
 
 const Listblock = (props: RootStackScreenProps<'Listblock'>) => {
+	const text = useLanguage().Listblock;
 	const {navigation} = props;
 
 	const [showBlock, setShowBlock] = useState(false);
@@ -26,10 +28,7 @@ const Listblock = (props: RootStackScreenProps<'Listblock'>) => {
 	const [data, setData] = useState<ServicerBlockUser[]>([]);
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
 	const [error, setError] = useState<string>('');
-	const text = {
-		title: 'DANH SÁCH CHẶN',
-		block: 'chặn'
-	};
+
 	useEffect(() => {
 		onRefresh();
 	}, []);
@@ -46,51 +45,37 @@ const Listblock = (props: RootStackScreenProps<'Listblock'>) => {
 			})
 			.finally(() => setRefreshing(false));
 	};
-	// const handleRegister = async (value: any) => {
-	// 	const allUser = (await API.get(`${TABLE.USERS}`, true)) as UserProps[];
-	// 	for (let i = 0; i < allUser.length; i++) {
-	// 		if (allUser[i].phone === value.phone) {
-	// 			return showMessage('Số điện thoại này đang khóa');
-	// 		}
-	// 	}
-	// };
+
 	const handleAddBlock = () => {
-		// const users = (await API.get(TABLE.USERS, true)) as UserProps[];
-		// let check = false;
-		// for (let i = 0; i < users.length; i++) {
-		// 	if (users[i].phone !== phone) {
-		// 		check = true;
-		// 	}
-		// }
 		setError('');
 		if (!phone.trim()) {
-		  setError('Vui lòng nhập số điện thoại.');
-		  return showMessage('Vui lòng nhập số điện thoại..');
+			setError(text.enterPhoneNumber);
+			return showMessage(text.enterPhoneNumber);
 		} else if (phoneRegex.test(phone) == false) {
-		  setError('Số điện thoại không hợp lệ..');
-		  return showMessage('Số điện thoại không hợp lệ..');
+			setError(text.invalidPhoneNumber);
+			return showMessage(text.invalidPhoneNumber);
 		} else {
-		  setShowBlock(false);
-		  Spinner.show();
-		  API.post(`${TABLE.SERVICE_BLOCK_USER}`, { idServicer: userInfo?.id, phone: phone })
-			.then(() => {
-			  showMessage('Block số điện thoại thành công!');
-			  onRefresh();
-			  setPhone('');
-			})
-			.catch((error) => {
-			  console.error('Error posting data:', error);
-			})
-			.finally(() => Spinner.hide());
+			setShowBlock(false);
+			Spinner.show();
+			API.post(`${TABLE.SERVICE_BLOCK_USER}`, {idServicer: userInfo?.id, phone: phone})
+				.then(() => {
+					showMessage(text.blockSuccess);
+					onRefresh();
+					setPhone('');
+				})
+				.catch(error => {
+					console.error('Error posting data:', error);
+				})
+				.finally(() => Spinner.hide());
 		}
-	  };
+	};
 
 	const deleteBlock = (id: string) => {
-		AlertYesNo(undefined, 'Bạn chắc chắn muốn xoá?', () => {
+		AlertYesNo(undefined, text.confirmDelete, () => {
 			Spinner.show();
 			API.put(`${TABLE.SERVICE_BLOCK_USER}/${id}`, {})
 				.then(() => {
-					showMessage('Xoá thành công!');
+					showMessage(text.deleteSuccess);
 					onRefresh();
 				})
 				.finally(() => Spinner.hide());
@@ -179,4 +164,3 @@ const Listblock = (props: RootStackScreenProps<'Listblock'>) => {
 export default Listblock;
 
 const styles = StyleSheet.create({});
-

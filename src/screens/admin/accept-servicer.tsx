@@ -6,20 +6,19 @@ import CustomHeader from '../../components/custom-header';
 import CustomText from '../../components/custom-text';
 import FixedContainer from '../../components/fixed-container';
 import {EMIT_EVENT, FONT_FAMILY} from '../../constants/enum';
-import {UserProps} from '../../constants/types';
-import {ROUTE_KEY} from '../../navigator/routers';
+import {useLanguage} from '../../hooks/useLanguage';
 import {RootStackScreenProps} from '../../navigator/stacks';
 import {colors} from '../../styles/colors';
 import {heightScale, widthScale} from '../../styles/scaling-utils';
 import {generateRandomId, getServicerALl} from '../../utils';
 
 const AcceptServicer = (props: RootStackScreenProps<'AcceptServicer'>) => {
+	const text = useLanguage().AcceptServicer;
 	const {navigation, route} = props;
-    const [servicer, setServicer] = useState(route.params.data);
+	const [servicer, setServicer] = useState(route.params.data);
 	const [refreshing, setRefreshing] = useState(false);
 
-    const onPressDetailService = () => console.log("onPressDetailService ");
-
+	const onPressDetailService = () => console.log('onPressDetailService ');
 
 	const onRefresh = async () => {
 		setRefreshing(true);
@@ -42,7 +41,7 @@ const AcceptServicer = (props: RootStackScreenProps<'AcceptServicer'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="SÉT DUYỆT TÀI KHOẢN" />
+			<CustomHeader title={text.title} />
 			<FlatList
 				onRefresh={onRefresh}
 				refreshing={refreshing}
@@ -51,7 +50,6 @@ const AcceptServicer = (props: RootStackScreenProps<'AcceptServicer'>) => {
 				data={servicer}
 				renderItem={({item}) => (
 					<TouchableOpacity
-						
 						style={{borderRadius: 5, borderWidth: 1, marginBottom: heightScale(20), padding: widthScale(10), flexDirection: 'row'}}>
 						<View
 							style={{
@@ -69,7 +67,7 @@ const AcceptServicer = (props: RootStackScreenProps<'AcceptServicer'>) => {
 						<View>
 							<CustomText font={FONT_FAMILY.BOLD} text={item?.name} />
 							<CustomText text={item?.phone} />
-							<CustomText text={`Ngày đăng ký: ${moment(item?.dateRegister).format('DD/MM/YYYY')}`} />
+							<CustomText text={text.date(moment(item?.dateRegister).format('DD/MM/YYYY'))} />
 						</View>
 					</TouchableOpacity>
 				)}

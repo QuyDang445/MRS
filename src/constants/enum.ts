@@ -6,6 +6,7 @@ export enum FONT_FAMILY {
 
 export enum ASYNC_STORAGE_KEY {
 	FIRST_OPEN = 'FIRST_OPEN',
+	DYNAMIC_LINK_ID_SERVICE = 'DYNAMIC_LINK_ID_SERVICE',
 }
 
 export enum EMIT_EVENT {

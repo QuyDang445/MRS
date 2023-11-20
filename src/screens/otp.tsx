@@ -18,9 +18,7 @@ const Otp = (props: RootStackScreenProps<'Otp'>) => {
 	const [code, setCode] = useState('');
 	const text = {
 		title: 'Xác thực OTP',
-		accuracy: 'Xác thực'
-	
-		
+		accuracy: 'Xác thực',
 	};
 
 	const handleOtp = () => {

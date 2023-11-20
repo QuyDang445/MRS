@@ -1,13 +1,16 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {FlatList, Image, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {FlatList, Image, ScrollView, Share, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {ICONS} from '../assets/image-paths';
 import CustomButton from '../components/custom-button';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
+import Spinner from '../components/spinner';
 import Star from '../components/star';
 import {WIDTH} from '../constants/constants';
 import {FONT_FAMILY, TABLE, TYPE_USER} from '../constants/enum';
-import {EvaluateProps, UserProps, ServicerBlockUser, ServiceProps} from '../constants/types';
+import {EvaluateProps, ServicerBlockUser, UserProps} from '../constants/types';
+import {useLanguage} from '../hooks/useLanguage';
 import {ROUTE_KEY} from '../navigator/routers';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
@@ -15,10 +18,10 @@ import {useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {generateRandomId, getServiceFromID, showMessage} from '../utils';
-import Spinner from '../components/spinner';
 import {ReviewAndRating} from './all-review';
 
 const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
+	const text = useLanguage().DetailService;
 	const {navigation, route} = props;
 
 	const data = route.params.serviceData;
@@ -28,17 +31,7 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 	const [evaluates, setEvaluates] = useState<EvaluateProps[]>([]);
 
 	const [servicer, setServicer] = useState<UserProps[]>([]);
-	const text = {
-		title: 'CHI TIẾT DỊCH VỤ',
-		descriptionservicesL: 'Mô tả dịch vụ',
-		description: 'Nội dung đánh giá',
-		suggestions: 'Gợi ý cho bạn',
-		infomationprovider: 'Thông tin thợ',
-		booking : "Đặt lịch",
-		evulate: 'Đánh giá',
-		allevulate : 'Xem tất cả đánh giá',
-		noevulate: 'Không có đánh giá nào',
-	};
+
 	const starTotal = useMemo(() => {
 		let total = 0;
 		for (let i = 0; i < evaluates.length; i++) {
@@ -77,7 +70,7 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 	const onPressBooking = async () => {
 		const servicer = (await API.get(`${TABLE.USERS}/${data.servicer}`)) as UserProps;
 		if (!servicer?.receiveBooking) {
-			return showMessage('Thợ này hiện không hoạt động!');
+			return showMessage(text.servicerNotActive);
 		}
 		Spinner.show();
 		API.get(`${TABLE.SERVICE_BLOCK_USER}`, true)
@@ -90,7 +83,7 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 				}
 
 				if (check) {
-					showMessage('Bạn đã bị người dùng này chặn!');
+					showMessage(text.servicerBlocked);
 				} else {
 					navigation.navigate(ROUTE_KEY.Booking, {service: data});
 				}
@@ -103,9 +96,28 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 	};
 
 	const onPressViewAllReview = () => navigation.navigate(ROUTE_KEY.AllReview, {idService: data.id});
+
 	return (
 		<FixedContainer>
-			<CustomHeader title={text.title} />
+			<CustomHeader
+				title={text.title}
+				// rightContent={
+				// 	<TouchableOpacity
+				// 		onPress={async () => {
+				// 			Spinner.show();
+
+				// 			if (link) {
+				// 				const message = text.shareMessage(data.name, userInfo?.name!, link);
+				// 				const title = text.shareService;
+				// 				Share.share({message: message, url: link, title: title});
+				// 			} else {
+				// 				showMessage(text.shareError);
+				// 			}
+				// 			Spinner.hide();
+				// 		}}>
+				// 	</TouchableOpacity>
+				// }
+			/>
 			<ScrollView style={styles.view}>
 				<View style={styles.viewTop}>
 					<Image source={{uri: data?.image}} style={styles.image} />
@@ -144,47 +156,44 @@ const DetailService = (props: RootStackScreenProps<'ServiceDetail'>) => {
 					</View>
 				</View>
 
-				{/* <View style={styles.line} /> */}
-
 				<View style={{padding: widthScale(10)}}>
 					{evaluates.slice(0, 5).map(item => {
-						return <ReviewAndRating item={item} />;
+						return <ReviewAndRating key={generateRandomId()} item={item} />;
 					})}
 					{!evaluates.length && <CustomText color={colors.grayLine} style={{textAlign: 'center'}} text={text.noevulate} />}
 				</View>
-				{servicer.length > 0 && (
-					<View style={{marginVertical: heightScale(20)}}>
-						<CustomText text={text.suggestions} font={FONT_FAMILY.BOLD} />
 
-						<FlatList
-							showsHorizontalScrollIndicator={false}
-							horizontal
-							renderItem={({item, index}) => (
-								<TouchableOpacity
-									style={{
-										flexDirection: 'row',
-										marginVertical: heightScale(5),
-										alignItems: 'center',
-										marginRight: widthScale(20),
-										paddingVertical: heightScale(10),
-									}}
-									onPress={() => onPressViewInfoServicer(item.id)}
-									key={generateRandomId()}>
-									<Image style={styles.avatarComment} source={{uri: item?.avatar || ''}} />
-									<View style={{marginLeft: widthScale(10)}}>
-										<CustomText text={item?.name} font={FONT_FAMILY.BOLD} />
-										<CustomText text={item?.phone} />
-									</View>
-								</TouchableOpacity>
-							)}
-							data={servicer}
-						/>
-					</View>
-				)}
+				<View style={{marginVertical: heightScale(20)}}>
+					<CustomText text={text.suggestions} font={FONT_FAMILY.BOLD} />
+
+					<FlatList
+						showsHorizontalScrollIndicator={false}
+						horizontal
+						renderItem={({item, index}) => (
+							<TouchableOpacity
+								style={{
+									flexDirection: 'row',
+									marginVertical: heightScale(5),
+									alignItems: 'center',
+									marginRight: widthScale(20),
+									paddingVertical: heightScale(10),
+								}}
+								onPress={() => onPressViewInfoServicer(item.id)}
+								key={generateRandomId()}>
+								<Image style={styles.avatarComment} source={{uri: item?.avatar || ''}} />
+								<View style={{marginLeft: widthScale(10)}}>
+									<CustomText text={item?.name} font={FONT_FAMILY.BOLD} />
+									<CustomText text={item?.phone} />
+								</View>
+							</TouchableOpacity>
+						)}
+						data={servicer}
+					/>
+				</View>
 			</ScrollView>
 			{userInfo?.type === TYPE_USER.USER && (
 				<View style={{flexDirection: 'row', justifyContent: 'center', paddingVertical: heightScale(10)}}>
-					<CustomButton style={{width: WIDTH / 2.5}} text={text.infomationprovider} onPress={onPressViewInfoServicer} />
+					<CustomButton style={{width: WIDTH / 2.5}} text={text.infomationprovider} onPress={() => onPressViewInfoServicer(data.servicer)} />
 					<View style={{width: widthScale(15)}} />
 					<CustomButton style={{width: WIDTH / 2.5}} text={text.booking} onPress={onPressBooking} />
 				</View>

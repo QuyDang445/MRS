@@ -11,6 +11,7 @@ import {generateRandomId} from '../utils';
 import {EvaluateProps, UserProps} from '../constants/types';
 import API from '../services/api';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import { useLanguage } from '../hooks/useLanguage';
 
 // export const PopupWithImage = ({imageUrl, visibility, onClose}) => {
 // 	console.log('visibility: ' + visibility);
@@ -48,10 +49,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export const ReviewAndRating = ({item}) => {
 	// console.log('ReviewAndRating New' + JSON.stringify(item));
-	const text = {
-		title: 'TẤT CẢ ĐÁNH GIÁ',
-		
-	};
+	
 	return (
 		<View style={{flexDirection: 'row', marginVertical: heightScale(5)}} key={generateRandomId()}>
 			<Image style={styles.avatarComment} source={{uri: item.userObject?.avatar}} />
@@ -80,7 +78,7 @@ export const ReviewAndRating = ({item}) => {
 };
 const AllReview = (props: RootStackScreenProps<'AllReview'>) => {
 	const {navigation, route} = props;
-
+	const text = useLanguage().AllReview;
 	const [allReview, setAllReview] = useState<EvaluateProps[]>([]);
 	// const [modalVisible, setModalVisible] = useState(false);
 	// const [image, setImage] = useState();
@@ -117,7 +115,7 @@ const AllReview = (props: RootStackScreenProps<'AllReview'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="TẤT CẢ ĐÁNH GIÁ" />
+			<CustomHeader title={text.title}  />
 			<ScrollView style={styles.view}>
 				<Star star={starTotal} isShowNumber />
 

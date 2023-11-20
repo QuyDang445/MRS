@@ -5,6 +5,7 @@ import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
 import {FONT_FAMILY} from '../constants/enum';
+import {useLanguage} from '../hooks/useLanguage';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import OrderAll from './order-all';
@@ -16,14 +17,7 @@ import OrderPending from './order-pending';
 const Tab = createMaterialTopTabNavigator();
 
 const Order = () => {
-	const text = {
-		title: 'ĐƠN ĐẶT HÀNG',
-		all: 'Tất cả',
-		pending: 'Đang chờ',
-		inprocess: 'Tiến hành',
-		completed: 'Hoàn thành',
-		canceled: 'Hủy'
-	};
+	const text = useLanguage().Order;
 
 	const renderTapBarItem = useCallback(
 		(props: MaterialTopTabBarProps) => (
@@ -51,7 +45,7 @@ const Order = () => {
 			<Tab.Navigator screenOptions={{lazy: true, swipeEnabled: false}} tabBar={renderTapBarItem}>
 				<Tab.Screen key={'OrderAll'} name={text.all} component={OrderAll} />
 				<Tab.Screen key={'OrderPending'} name={text.pending} component={OrderPending} />
-				<Tab.Screen key={'OrderInProcess'} name={text.inprocess } component={OrderInProcess} />
+				<Tab.Screen key={'OrderInProcess'} name={text.inprocess} component={OrderInProcess} />
 				<Tab.Screen key={'OrderCompleted'} name={text.completed} component={OrderCompleted} />
 				<Tab.Screen key={'OrderCanceled'} name={text.canceled} component={OrderCanceled} />
 			</Tab.Navigator>

@@ -201,7 +201,27 @@ export const getUserAll = async () => {
 	}
 	return newData;
 };
+export const getServiceDetailFromID = async (id: string) => {
+	const service = (await API.get(`${TABLE.SERVICE}/${id}`)) as ServiceProps;
+	const allCategory = (await API.get(`${TABLE.CATEGORY}`, true)) as any[];
+	const allServicer = (await API.get(`${TABLE.USERS}`, true)) as any[];
 
+	service.id = id;
+
+	service.categoryObject = allCategory.find(o => o.id === service.category);
+
+	service.servicerObject = allServicer.find(o => o.id === service.servicer);
+
+	const evaluate = (await API.get(`${TABLE.EVALUATE}/${id}`, true)) as EvaluateProps[];
+	service.evaluate = evaluate;
+
+	let totalStar = 0;
+	for (let j = 0; j < evaluate.length; j++) {
+		totalStar += evaluate[j].star;
+	}
+	service.star = totalStar / (evaluate.length || 1);
+	return service;
+};
 export const getOrderAllFromIDServicer = async (idServicer: string) => {
 	const newData = [];
 	const allOrder = (await API.get(`${TABLE.ORDERS}`, true)) as OrderProps[];

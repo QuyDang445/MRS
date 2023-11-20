@@ -11,19 +11,18 @@ import API from '../services/api';
 import {useAppSelector} from '../stores/store/storeHooks';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {getColorStatusOrder, getStatusOrder} from '../utils';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
+import {useLanguage} from '../hooks/useLanguage';
 
 const OrderPending = () => {
+	const text = useLanguage().OrderAll;
 	const navigation = useNavigation<any>();
-
+	const status = useLanguage().StatusOrder;
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
 
 	const [refreshing, setRefreshing] = useState(false);
 	const [data, setData] = useState<OrderProps[]>([]);
-	const text = {
-		
-		servicesavailable: 'Không có đơn hàng!'
-	};
+
 	useFocusEffect(
 		useCallback(() => {
 			onRefresh();
@@ -52,12 +51,13 @@ const OrderPending = () => {
 
 			for (let j = 0; j < arrServicer.length; j++) {
 				if (arrServicer[j].id === newData[i].serviceObject.servicer) {
-					servicerObject = arrServicer[i];
+					servicerObject = arrServicer[j];
 					break;
 				}
 			}
 			newData[i].servicerObject = servicerObject;
 		}
+
 		setData(newData);
 		setRefreshing(false);
 	};
@@ -75,13 +75,13 @@ const OrderPending = () => {
 							<CustomText font={FONT_FAMILY.BOLD} text={item?.serviceObject?.name} />
 							<CustomText text={item?.servicerObject.name} />
 							<CustomText text={moment(item?.timeBooking).format('hh:mm - DD/MM/YYYY')} />
-							<CustomText font={FONT_FAMILY.BOLD} color={getColorStatusOrder(item.status)} text={getStatusOrder(item.status)} />
+							<CustomText font={FONT_FAMILY.BOLD} color={getColorStatusOrder(item.status)} text={getStatusOrder(item.status, status)} />
 						</View>
 					</TouchableOpacity>
 				)}
 				ListEmptyComponent={
 					<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-						<CustomText color={colors.grayText} text={text.servicesavailable} />
+						<CustomText color={colors.grayText} text={text.no_order} />
 					</View>
 				}
 				data={data}

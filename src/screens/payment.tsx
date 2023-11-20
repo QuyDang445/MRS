@@ -10,24 +10,15 @@ import {FONT_FAMILY} from '../constants/enum';
 import {generateRandomId} from '../utils';
 import {colors} from '../styles/colors';
 import {ROUTE_KEY} from '../navigator/routers';
+import {useLanguage} from '../hooks/useLanguage';
 
 const Payment = (props: RootStackScreenProps<'Payment'>) => {
+	const text = useLanguage().Payment;
 	const {navigation} = props;
 
 	//const onPressEditFee = () => navigation.navigate(ROUTE_KEY.EditPaymentFee);
 	//const onPressAddPayment = () => navigation.navigate(ROUTE_KEY.AddPayment);
-	const text = {
-		title: 'THANH TOÁN',
-		feeservicer: 'Phí dịch vụ',
-		payfees: '50.000 VND/tháng',
-		bank: 'Ngân hàng',
-		bankname: 'techcombank',
-		numberaccount: 'Số tài khoản',
-		nameaccount: 'Tên chủ thẻ',
-		descriptsion :'Nội dung',
 
-		
-	};
 	return (
 		<FixedContainer>
 			<CustomHeader
