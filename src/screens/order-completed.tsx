@@ -56,6 +56,18 @@ const OrderCompleted = () => {
 			}
 			newData[i].servicerObject = servicerObject;
 		}
+
+		// Sort orders by time booking in descending order
+		newData.sort((a, b) => {
+			if (moment(a.timeBooking) > moment(b.timeBooking)) {
+				return -1;
+			} else if (moment(a.timeBooking) < moment(b.timeBooking)) {
+				return 1;
+			} else {
+				return 0;
+			}
+		});
+
 		setData(newData);
 		setRefreshing(false);
 	};

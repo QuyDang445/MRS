@@ -98,6 +98,7 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 						onChangeText={setPhone}
 						keyboardType="numeric"
 						placeholder="Số điện thoại"
+						maxLength={10}
 						placeholderTextColor={colors.grayText}
 						style={styles.inputText}
 					/>

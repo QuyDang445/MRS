@@ -128,3 +128,4 @@ export interface InfoPaymentAdmin {
 	content: string;
 	image?: string;
 }
+export interface Notification {}
