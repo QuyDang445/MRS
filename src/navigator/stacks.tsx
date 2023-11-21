@@ -36,7 +36,20 @@ import Listblock from '../screens/listblock';
 import DetailOrder from '../screens/detail-order';
 import EvaluateService from '../screens/EvaluateService';
 import AddService from '../screens/add-service';
-import Payment from '../screens/payment';
+import AcceptServicer from '../screens/admin/accept-servicer';
+import ManagePayment from '../screens/admin/manage-payment';
+
+import ManageUser from '../screens/admin/manage-user';
+import InfoDetailUser from '../screens/admin/info-detail-user';
+import Payment from '../screens/admin/payment';
+import infoAcceptServicer from '../screens/admin/info-accept-servicer';
+
+import AddPayment from '../screens/admin/add-payment';
+import EditPaymentFee from '../screens/admin/edit-payment-fee';
+
+import FeeService from '../screens/fee-service';
+import ManageServicer from '../screens/admin/manage-servicer';
+
 import AddCategory from '../screens/add-category';
 export type RootStackScreens = keyof RootStackScreensParams;
 export type RootStackScreenProps<T extends RootStackScreens> = StackScreenProps<RootStackScreensParams, T>;
@@ -78,9 +91,14 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.Listblock} component={Listblock} />
 			<Screen name={ROUTE_KEY.EvaluateService} component={EvaluateService} />
 			<Screen name={ROUTE_KEY.AddService} component={AddService} />
+			<Screen name={ROUTE_KEY.AcceptServicer} component={AcceptServicer} />
+			<Screen name={ROUTE_KEY.ManagePayment} component={ManagePayment} />
+			<Screen name={ROUTE_KEY.ManageUser} component={ManageUser} />
+			<Screen name={ROUTE_KEY.ManageServicer} component={ManageServicer} />
+			<Screen name={ROUTE_KEY.InfoDetailUser} component={InfoDetailUser} />
 			<Screen name={ROUTE_KEY.Payment} component={Payment} />
-			<Screen name={ROUTE_KEY.AllReview} component={AllReview} />
-			<Screen name={ROUTE_KEY.InfoServicer} component={InfoServicer} />
+			<Screen name={ROUTE_KEY.FeeService} component={FeeService} />
+			<Screen name={ROUTE_KEY.EditPaymentFee} component={EditPaymentFee} />
 			<Screen name={ROUTE_KEY.AdminServiceAndServiceType} component={AdminServiceAndServiceType} />
 			<Screen name={ROUTE_KEY.AddCategory} component={AddCategory} />
 			<Screen name={ROUTE_KEY.AdminAddService} component={AdminAddService} />

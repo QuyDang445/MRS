@@ -1,20 +1,22 @@
-import React, {memo} from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
-import {RootStackScreenProps} from '../navigator/stacks';
-import FixedContainer from '../components/fixed-container';
-import CustomHeader from '../components/custom-header';
-import {ICONS} from '../assets/image-paths';
-import {heightScale, widthScale} from '../styles/scaling-utils';
-import CustomText from '../components/custom-text';
-import {FONT_FAMILY} from '../constants/enum';
 import moment from 'moment';
+import React from 'react';
+import {Image, StyleSheet, View} from 'react-native';
+import {ICONS} from '../assets/image-paths';
+import CustomHeader from '../components/custom-header';
+import CustomText from '../components/custom-text';
+import FixedContainer from '../components/fixed-container';
+import {FONT_FAMILY} from '../constants/enum';
+import {useLanguage} from '../hooks/useLanguage';
+import {RootStackScreenProps} from '../navigator/stacks';
+import {heightScale, widthScale} from '../styles/scaling-utils';
 
 const NotificationDetail = ({navigation, route}: RootStackScreenProps<'NotificationDetail'>) => {
+	const text = useLanguage().NotificationDetail;
 	const {notificationData} = route.params;
-	console.log(JSON.stringify(notificationData));
+
 	return (
 		<FixedContainer>
-			<CustomHeader title="Chi tiết thông báo" hideBack={false} />
+			<CustomHeader title={text.title} hideBack={false} />
 			<View style={{paddingHorizontal: widthScale(20), flexDirection: 'column', gap: heightScale(10)}}>
 				<View style={{flexDirection: 'row', gap: widthScale(10), width: '100%'}}>
 					<Image style={styles.notificationIcon} source={ICONS.notification_read} />

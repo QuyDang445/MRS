@@ -59,7 +59,8 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 		}
 		Spinner.show();
 		const users = (await API.get(TABLE.USERS, true)) as UserProps[];
-		
+		console.log('user list: ' + JSON.stringify(users));
+
 		for (let i = 0; i < users.length; i++) {
 			if (users[i].phone === phone && users[i].password === password) {
 				// update token user:
@@ -98,6 +99,7 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 						onChangeText={setPhone}
 						keyboardType="numeric"
 						placeholder="Số điện thoại"
+						maxLength={10}
 						placeholderTextColor={colors.grayText}
 						style={styles.inputText}
 					/>

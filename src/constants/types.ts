@@ -1,4 +1,4 @@
-import {NOTIFICATION_TYPE, TYPE_ORDER_SERVICE, TYPE_USER} from './enum';
+import {NOTIFICATION_TYPE, TYPE_ORDER_SERVICE, TYPE_USER,LANGUAGE} from './enum';
 
 export interface ImageProps {
 	name: string;
@@ -22,8 +22,11 @@ export interface UserProps {
 		id: string;
 		image: string;
 	};
+	receiveBooking?: boolean;
 	isAccept?: boolean;
 	dateRegister?: number;
+	reasonBlock: string;
+	language?: LANGUAGE;
 }
 
 export interface NotificationProps {
@@ -98,3 +101,33 @@ export interface ServicerBlockUser {
 	phone: string;
 	id: string;
 }
+export interface FAQType {
+	id?: string;
+	question: string;
+	answer: string;
+}
+export interface PaymentProps {
+	date: number;
+	id: string;
+	idServicer: string;
+	image: string;
+	servicerObject?: UserProps;
+	isAccept?: boolean;
+}
+export interface PaymentServicer {
+	idServicer: string;
+	image: string;
+	id: string;
+	date: number;
+	paymentTime: string;  //'10-2023'
+	isAccept?: boolean;
+}
+export interface InfoPaymentAdmin {
+	id: string;
+	number: number;
+	nameBank: string;
+	name: string;
+	content: string;
+	image?: string;
+}
+export interface Notification {}

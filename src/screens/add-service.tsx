@@ -10,6 +10,7 @@ import Spinner from '../components/spinner';
 import {ModalRefObject} from '../components/time-picker';
 import {EMIT_EVENT, FONT_FAMILY, TABLE} from '../constants/enum';
 import {Category, ImageProps} from '../constants/types';
+import {useLanguage} from '../hooks/useLanguage';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
 import {useAppSelector} from '../stores/store/storeHooks';
@@ -19,6 +20,7 @@ import {AlertYesNo, showMessage} from '../utils';
 import {getImageFromDevice, uploadImage} from '../utils/image';
 
 const AddService = (props: RootStackScreenProps<'AddService'>) => {
+	const text = useLanguage().AddService;
 	const {navigation, route} = props;
 	const data = route.params?.data;
 
@@ -53,7 +55,7 @@ const AddService = (props: RootStackScreenProps<'AddService'>) => {
 
 			API.put(`${TABLE.SERVICE}/${data.id}`, body)
 				.then(() => {
-					showMessage('Sửa dịch vụ thành công!');
+					showMessage(text.editMessage);
 					DeviceEventEmitter.emit(EMIT_EVENT.LOAD_SERVICE);
 					navigation.goBack();
 				})
@@ -71,7 +73,7 @@ const AddService = (props: RootStackScreenProps<'AddService'>) => {
 
 			API.post(`${TABLE.SERVICE}`, body)
 				.then(() => {
-					showMessage('Thêm dịch vụ thành công');
+					showMessage(text.successMessage);
 					navigation.goBack();
 				})
 				.finally(() => Spinner.hide());
@@ -80,10 +82,10 @@ const AddService = (props: RootStackScreenProps<'AddService'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="THÊM DỊCH VỤ" />
+			<CustomHeader title={text.title} />
 			<ScrollView style={styles.view}>
 				{/* CATEGORY  */}
-				<CustomText font={FONT_FAMILY.BOLD} text={'LOẠI DỊCH VỤ'} size={14} />
+				<CustomText font={FONT_FAMILY.BOLD} text={text.category} size={14} />
 				<TouchableOpacity
 					onPress={() => chooseCategoriesRef.current?.show()}
 					style={{
@@ -94,15 +96,15 @@ const AddService = (props: RootStackScreenProps<'AddService'>) => {
 						paddingLeft: widthScale(20),
 						marginBottom: heightScale(20),
 					}}>
-					<CustomText text={category?.name || 'Chọn loại dịch vụ'} />
+					<CustomText text={category?.name || text.selectCategory} />
 				</TouchableOpacity>
 
 				{/* NAME  */}
-				<CustomText font={FONT_FAMILY.BOLD} text={'TÊN DỊCH VỤ'} size={14} />
+				<CustomText font={FONT_FAMILY.BOLD} text={text.serviceName} size={14} />
 				<TextInput value={name} onChangeText={setName} style={styles.input} />
 
 				{/* IMAGE  */}
-				<CustomText font={FONT_FAMILY.BOLD} text={'HÌNH ẢNH'} size={14} />
+				<CustomText font={FONT_FAMILY.BOLD} text={text.image} size={14} />
 				<TouchableOpacity
 					onPress={async () => {
 						const image = await getImageFromDevice();
@@ -117,7 +119,7 @@ const AddService = (props: RootStackScreenProps<'AddService'>) => {
 				</TouchableOpacity>
 
 				{/* DESCRIPTION  */}
-				<CustomText font={FONT_FAMILY.BOLD} text={'MÔ TẢ'} size={14} />
+				<CustomText font={FONT_FAMILY.BOLD} text={text.description} size={14} />
 				<View style={styles.viewInput}>
 					<TextInput value={description} onChangeText={setDescription} style={{color: colors.black}} multiline />
 				</View>
@@ -126,9 +128,9 @@ const AddService = (props: RootStackScreenProps<'AddService'>) => {
 				<CustomButton
 					disabled={!category || !name || !image || !description}
 					onPress={() => {
-						AlertYesNo(undefined, 'Bạn chắc chắn đã kiểm tra kĩ thông tin?', handleAdd);
+						AlertYesNo(undefined, text.confirmCheckInfo, handleAdd);
 					}}
-					text={data ? 'SỬA' : 'THÊM'}
+					text={data ? text.editService : text.addService}
 				/>
 			</View>
 			<ChooseCategoriesService onPressChoose={setCategory} ref={chooseCategoriesRef} />

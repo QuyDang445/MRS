@@ -1,22 +1,25 @@
+import database from '@react-native-firebase/database';
 import React, {memo, useEffect, useState} from 'react';
 import {FlatList, View} from 'react-native';
+import {NotificationItem} from '../components';
 import CustomHeader from '../components/custom-header';
+import CustomText from '../components/custom-text';
 import FixedContainer from '../components/fixed-container';
+import Spinner from '../components/spinner';
+import {TABLE} from '../constants/enum';
+import {NotificationProps} from '../constants/types';
+import {useLanguage} from '../hooks/useLanguage';
+import {ROUTE_KEY} from '../navigator/routers';
 import {RootStackScreenProps} from '../navigator/stacks';
+import API from '../services/api';
+import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
+import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {generateRandomId, parseObjectToArray, showMessage} from '../utils';
-import {NotificationItem} from '../components';
-import {NotificationProps} from '../constants/types';
-import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
-import {TABLE} from '../constants/enum';
-import API from '../services/api';
-import Spinner from '../components/spinner';
-import {ROUTE_KEY} from '../navigator/routers';
-import CustomText from '../components/custom-text';
-import {colors} from '../styles/colors';
-import database from '@react-native-firebase/database';
 
 const Notification = (props: RootStackScreenProps<'Notification'>) => {
+	const text = useLanguage().Notification;
+
 	const dispatch = useAppDispatch();
 	const {navigation} = props;
 
@@ -56,7 +59,7 @@ const Notification = (props: RootStackScreenProps<'Notification'>) => {
 		Spinner.show();
 		API.put(`${TABLE.NOTIFICATION}/${userInfo?.id}/${notificationItem.id}`, {})
 			.then(() => {
-				showMessage('Xoá thành công!');
+				showMessage(text.delete_success);
 				onRefresh();
 			})
 			.finally(() => Spinner.hide());
@@ -73,7 +76,7 @@ const Notification = (props: RootStackScreenProps<'Notification'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="Thông báo" hideBack />
+			<CustomHeader title={text.title} hideBack />
 			<FlatList
 				onRefresh={onRefresh}
 				refreshing={refreshing}
@@ -83,7 +86,7 @@ const Notification = (props: RootStackScreenProps<'Notification'>) => {
 				data={data}
 				ListEmptyComponent={
 					<View style={{marginTop: heightScale(40), alignItems: 'center'}}>
-						<CustomText color={colors.grayText} text={'Không có thông báo nào'} />
+						<CustomText color={colors.grayText} text={text.notifiavailable} />
 					</View>
 				}
 			/>

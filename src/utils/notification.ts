@@ -3,10 +3,10 @@ import {YOUR_SERVER_KEY} from '../constants/constants';
 import {Notification} from '@notifee/react-native';
 import {NotificationProps, ServiceProps, UserProps} from '../constants/types';
 import API from '../services/api';
-import {TABLE} from '../constants/enum';
+import {NOTIFICATION_TYPE, TABLE} from '../constants/enum';
 import moment from 'moment';
 
-export const sendNotificationToDevices = async (token: string, title: string, body: any, data: NotificationProps) => {
+export const sendNotificationToDevices = async (token: string, title: string, body: string, data: Notification) => {
 	try {
 		const response = await axios.post(
 			'https://fcm.googleapis.com/fcm/send',
@@ -31,6 +31,28 @@ export const sendNotificationToDevices = async (token: string, title: string, bo
 		console.error('Error sending notification:', error);
 	}
 };
+const getTokenDeviceFromID = async (id: string) => {
+	const servicer = await API.get(`${TABLE.USERS}/${id}`);
+	return servicer?.tokenDevice as string | undefined;
+};
+
+// + có 1 giao dịch cần được xác thực
+export const pushNotificationAdminNewPayment = async (idServicer: string, idPayment: string, nameServicer: string) => {
+	const idAdmin = 'admin';
+	const token = await getTokenDeviceFromID(idAdmin);
+	const data = {
+		data: {idOrder: idPayment},
+		idUser: idAdmin,
+		status: NOTIFICATION_TYPE.NEW_PAYMENT,
+	};
+	const title = 'Có giao dịch cần được xác nhận!';
+	const body = `Bạn có 1 giao dịch cần được xác nhận tên ${nameServicer}`;
+
+	API.post(`${TABLE.NOTIFICATION}/${idAdmin}`, {data, title, body, time: new Date().valueOf()});
+	token && sendNotificationToDevices(token, title, body, data);
+};
+
+
 
 const saveNotification = async (userId: string, data: NotificationProps) => {
 	// save notification

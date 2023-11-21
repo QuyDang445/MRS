@@ -1,4 +1,4 @@
-import payment from '../screens/payment';
+import payment from '../screens/admin/payment';
 
 function createEnum<T extends {[P in keyof T]: P}>(o: T) {
 	return o;
@@ -14,7 +14,6 @@ export const ROUTE_KEY = createEnum({
 	NotificationDetail: 'NotificationDetail',
 	UpdateInformation: 'UpdateInformation',
 	ChangePassword: 'ChangePassword',
-	TermsAndConditions: 'TermsAndConditions',
 	ListAddress: 'ListAddress',
 	DataPrivacy: 'DataPrivacy',
 	FAQs: 'FAQs',
@@ -34,10 +33,19 @@ export const ROUTE_KEY = createEnum({
 	EvaluateService: 'EvaluateService',
 	Listblock: 'Listblock',
 	AddService: 'AddService',
+	AcceptServicer: 'AcceptServicer',
+	ManagePayment: 'ManagePayment',
+	ManageServicer: 'ManageServicer',
+	ManageUser: 'ManageUser',
+	InfoDetailUser: 'InfoDetailUser',
 	Payment: 'Payment',
 	AllReview: 'AllReview',
 	InfoServicer: 'InfoServicer',
 	AdminServiceAndServiceType: 'AdminServiceAndServiceType',
 	AddCategory: 'AddCategory',
 	AdminAddService: 'AdminAddService',
+	InfoAcceptServicer: 'InfoAcceptServicer',
+	EditPaymentFee: 'EditPaymentFee',
+	AddPayment: 'AddPayment',
+	FeeService: 'FeeService',
 });
