@@ -119,7 +119,7 @@ const SignUpServices = async (props: RootStackScreenProps<'SignUpServices'>) => 
 										maxLength={10}
 										onChangeText={handleChange('phone')}
 										keyboardType={'numeric'}
-										maxLength={10}
+									
 										placeholder="Số điện thoại"
 										placeholderTextColor={colors.grayText}
 										style={styles.inputText}

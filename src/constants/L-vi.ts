@@ -45,7 +45,7 @@ export const VI = {
 	},
 	User: {
 		title: 'HỒ SƠ',
-		activityStatusText: 'Trạng thái hoạt động',
+		activityStatusText: 'TRẠNG THÁI HOẠT ĐỘNG',
 		updateInfoButtonText: 'Cập nhật thông tin',
 		addressButtonText: 'Địa chỉ',
 		changePasswordButtonText: 'Đổi mật khẩu',

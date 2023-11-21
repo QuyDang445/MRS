@@ -42,4 +42,5 @@ export type RootStackScreensParams = {
 	FeeService: undefined;
 	EditPaymentFee: undefined;
 	AddPayment: undefined;
+	InfoDetailServicer: {data: UserProps};
 };
