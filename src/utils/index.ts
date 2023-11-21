@@ -40,6 +40,9 @@ export const showMessage = (message: string) => {
 export const AlertYesNo = (title = 'THÔNG BÁO', message?: string, onYes?: () => void) =>
 	Alert.alert('', message, [{text: 'HUỶ'}, {text: 'OK', onPress: onYes}], {cancelable: false});
 
+export const AlertConfirm = (title = 'THÔNG BÁO', message?: string, onYes?: () => void) =>
+	Alert.alert(title, message, [{text: 'OK', onPress: onYes}], {cancelable: false});
+
 export const getServiceFromID = async (id: string) => {
 	const result = (await API.get(`${TABLE.SERVICE}`, true)) as ServiceProps[];
 
@@ -163,22 +166,21 @@ export const getMyLocation = () =>
 		),
 	);
 
-
-	export const getStatusOrder = (
-		status: TYPE_ORDER_SERVICE,
-		language: {OrderPending: string; OrderCanceled: string; OrderInProcess: string; OrderCompleted: string},
-	) => {
-		switch (status) {
-			case TYPE_ORDER_SERVICE.OrderPending:
-				return language.OrderPending;
-			case TYPE_ORDER_SERVICE.OrderInProcess:
-				return language.OrderInProcess;
-			case TYPE_ORDER_SERVICE.OrderCompleted:
-				return language.OrderCompleted;
-			case TYPE_ORDER_SERVICE.OrderCanceled:
-				return language.OrderCanceled;
-		}
-	};
+export const getStatusOrder = (
+	status: TYPE_ORDER_SERVICE,
+	language: {OrderPending: string; OrderCanceled: string; OrderInProcess: string; OrderCompleted: string},
+) => {
+	switch (status) {
+		case TYPE_ORDER_SERVICE.OrderPending:
+			return language.OrderPending;
+		case TYPE_ORDER_SERVICE.OrderInProcess:
+			return language.OrderInProcess;
+		case TYPE_ORDER_SERVICE.OrderCompleted:
+			return language.OrderCompleted;
+		case TYPE_ORDER_SERVICE.OrderCanceled:
+			return language.OrderCanceled;
+	}
+};
 
 export const getColorStatusOrder = (status: TYPE_ORDER_SERVICE) => {
 	switch (status) {

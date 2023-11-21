@@ -1,17 +1,15 @@
-import {useFocusEffect, useIsFocused, useNavigation} from '@react-navigation/native';
-import moment from 'moment';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {memo, useCallback, useEffect, useState} from 'react';
 import {Image, RefreshControl, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import CustomText from '../components/custom-text';
 import {FONT_FAMILY, TABLE} from '../constants/enum';
-import {Category, OrderProps, UserProps} from '../constants/types';
+import {Category, ServiceProps, UserProps} from '../constants/types';
 import {ROUTE_KEY} from '../navigator/routers';
 import API from '../services/api';
-import {useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
-import {AlertYesNo, getColorStatusOrder, getStatusOrder, showMessage} from '../utils';
+import {AlertConfirm, AlertYesNo, showMessage} from '../utils';
 import {ICONS} from '../assets/image-paths';
 import Spinner from '../components/spinner';
 
@@ -57,16 +55,34 @@ const CategoryType = () => {
 		}
 	};
 	const onPressDelete = (item: Category) => {
-		AlertYesNo(undefined, 'Bạn chắc chắn muốn xoá?', () => {
+		AlertYesNo(undefined, 'Bạn chắc chắn muốn xoá?', async () => {
 			Spinner.show();
-			API.put(`${TABLE.CATEGORY}/${item.id}`, {})
-				.then(() => {
-					showMessage('Xoá dịch vụ thành công!');
-					onRefresh();
-				})
-				.finally(() => Spinner.hide());
+
+			let isCategoryValidToDelete = true;
+
+			const arr = (await API.get(`${TABLE.SERVICE}`, true)) as ServiceProps[];
+
+			console.log('service list: ' + JSON.stringify(arr));
+			for (let i = 0; i <= arr.length; i++) {
+				if (arr[i]?.category && arr[i]?.category == item.id) {
+					isCategoryValidToDelete = false;
+					AlertConfirm('Thông báo', 'Danh mục này đã tồn tại dịch vụ và đơn hàng. Không thể xóa.', () => {
+						Spinner.hide();
+					});
+					return;
+				}
+			}
+			if (isCategoryValidToDelete) {
+				API.put(`${TABLE.CATEGORY}/${item.id}`, {})
+					.then(() => {
+						showMessage('Xoá dịch vụ thành công!');
+						onRefresh();
+					})
+					.finally(() => Spinner.hide());
+			}
 		});
 	};
+
 	const onPressEdit = (item: Category) => navigation.navigate(ROUTE_KEY.AddCategory, {data: item});
 
 	return (
