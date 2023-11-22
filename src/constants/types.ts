@@ -128,4 +128,12 @@ export interface InfoPaymentAdmin {
 	content: string;
 	image?: string;
 }
+export interface BankType {
+	id: string;
+	name: string;
+	number: string;
+	image?: string;
+	nameBank: string;
+	nameCard: string;
+}
 export interface Notification {}

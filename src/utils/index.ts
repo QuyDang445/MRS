@@ -260,3 +260,4 @@ export const getOrderAllFromIDServicer = async (idServicer: string) => {
 
 	return newData as OrderProps[];
 };
+export const formatNumber = (number: number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
