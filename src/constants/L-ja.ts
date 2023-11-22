@@ -13,10 +13,17 @@ export const JA = {
 		faqs: 'よくある質問',
 		logout: 'ログアウト',
 		logoutConfirmation: 'ログアウトしますか？',
+		settingsButtonText: '設定',
 	},
 	BottomTab: {
 		logoutAlert: 'アカウントがブロックされています！',
 		logoutAlertReason: (reasonBlock: string) => `ブロックの理由: ${reasonBlock}`,
+	},
+	Transactionsrequireconfirmation:{
+		title: "取引には確認が必要です",
+	},
+	ManageUser:{
+		title: "ユーザーの管理",
 	},
 	Home: {
 		title: 'ホーム',
@@ -256,6 +263,13 @@ export const JA = {
 		confirmDelete: '削除しますか？',
 		deleteSuccess: '削除に成功しました！',
 	},
+	HomeAdmin: {
+		title: '家',
+		AccountWitingForApproval: 'アカウントは承認待ちです',
+		AccountUserManager: 'ユーザーアカウントの管理',
+		AccountProviderManager: 'サービスプロバイダーのアカウント管理',
+		BROWSEWAYSTODEPOSIT:'入金方法を参照する',
+	},
 	OrderServicer: {
 		title: '私のサービス',
 		servicesavailable: 'サービスはありません',
@@ -268,4 +282,8 @@ export const JA = {
 		OrderInProcess: '注文処理中',
 		OrderCompleted: '注文完了済み',
 	},
+	AddPayment:{
+		title: "THÊM PHƯƠNG THỨC THANH TOÁN",
+		
+	}
 };

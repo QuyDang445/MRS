@@ -13,10 +13,17 @@ export const EN = {
 		faqs: 'FAQs',
 		logout: 'Logout',
 		logoutConfirmation: 'Are you sure you want to log out?',
+		settingsButtonText: 'Setting'
 	},
 	BottomTab: {
 		logoutAlert: 'Your account has been blocked!',
 		logoutAlertReason: (reasonBlock: string) => `Reason: ${reasonBlock}`,
+	},
+	Transactionsrequireconfirmation:{
+		title: "Transactionsrequireconfirmation",
+	},
+	ManageUser:{
+		title: "ManageUser",
 	},
 	Home: {
 		title: 'HOME',
@@ -107,6 +114,7 @@ export const EN = {
 		alertMessage: 'Have you double-checked the information?',
 		booking_success: (text: string) => `Appointment created successfully! ${text}`,
 	},
+	
 	InfoServicer: {
 		title: 'DETAILS',
 		all: 'ALL SERVICES PROVIDED',
@@ -160,6 +168,7 @@ export const EN = {
 		address: 'Address: ',
 		deleteConfirm: 'Do you want to delete?',
 	},
+
 	DetailOrder: {
 		title: 'ORDER DETAILS',
 		status: 'Status',
@@ -240,6 +249,14 @@ export const EN = {
 		question: 'Question ',
 		answer: '- Answer: ',
 	},
+	HomeAdmin: {
+		title: 'HOME',
+		AccountWitingForApproval: 'Account pending approval',
+		AccountUserManager: 'MANAGE USER ACCOUNT',
+		AccountProviderManager: 'SUPPLIER ACCOUNT MANAGEMENT\nSERVICE PROVIDER',
+		BROWSEWAYSTODEPOSIT:'BROWSE WAYS TO DEPOSIT',
+		
+	},
 	HomeServicer: {
 		title: 'ORDERS',
 		pending: 'Pending Confirmation',
@@ -268,4 +285,8 @@ export const EN = {
 		OrderInProcess: 'OrderInProcess',
 		OrderCompleted: 'OrderCompleted',
 	},
+	AddPayment:{
+		title: "THÊM PHƯƠNG THỨC THANH TOÁN",
+		
+	}
 };

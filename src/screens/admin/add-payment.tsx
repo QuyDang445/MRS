@@ -10,16 +10,16 @@ import {FONT_FAMILY} from '../../constants/enum';
 import {RootStackScreenProps} from '../../navigator/stacks';
 import {colors} from '../../styles/colors';
 import {heightScale, widthScale} from '../../styles/scaling-utils';
+import { useLanguage } from '../../hooks/useLanguage';
 
 const AddPayment = (props: RootStackScreenProps<'AddPayment'>) => {
 	const {navigation} = props;
-
+	const text = useLanguage().AddPayment;
 	const [isShow, setIsShow] = useState('QR');
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="THÊM PHƯƠNG THỨC THANH TOÁN" />
-
+			<CustomHeader title={text.title} />
 			<ScrollView style={styles.view}>
 				<CustomText font={FONT_FAMILY.BOLD} text={'TÊN PHƯƠNG THỨC THANH TOÁN'} size={14} />
 				<View style={styles.viewInput}>

@@ -31,7 +31,7 @@ const Search = (props: RootStackScreenProps<'Search'>) => {
 	const [serviceAll, setServiceAll] = useState<ServiceProps[]>(route.params.data);
 	const [refreshing, setRefreshing] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [sortData, setSortData] = useState<Sort>();
+	const [sortData , setSortData] = useState<Sort>();
 
 	const [filter, setFilter] = useState<Sort[]>([]);
 	const [isShowFilter, setIsShowFilter] = useState(false);

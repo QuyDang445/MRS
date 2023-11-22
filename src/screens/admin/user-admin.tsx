@@ -12,14 +12,16 @@ import {AlertYesNo} from '../../utils';
 
 const UserAdmin = (props: RootStackScreenProps<'User'>) => {
 	const text = useLanguage().UserAdmin;
-
+	const text1 = useLanguage().User;
 	const {navigation} = props;
 
 	const onPressChangePassword = () => navigation.navigate(ROUTE_KEY.ChangePassword);
 	const onPressPayment = () => navigation.navigate(ROUTE_KEY.Payment);
-
+	const onPressTermsAndConditions = () => navigation.navigate(ROUTE_KEY.Termsandconditions);
+	const onPressFAQs = () => navigation.navigate(ROUTE_KEY.FAQs);
 	const onPressLogout = () => DeviceEventEmitter.emit(EMIT_EVENT.LOGOUT);
-
+	const onPressDataPrivacy = () => navigation.navigate(ROUTE_KEY.Privacypolicy);
+	const onPressSetting = () => navigation.navigate(ROUTE_KEY.Setting);
 	return (
 		<FixedContainer>
 			<CustomHeader title={text.title} hideBack />
@@ -39,16 +41,19 @@ const UserAdmin = (props: RootStackScreenProps<'User'>) => {
 					<CustomText text={text.updatePaymentMethod} size={13} />
 				</TouchableOpacity>
 
-				<TouchableOpacity onPress={() => {}} style={styles.button}>
+				<TouchableOpacity onPress={onPressTermsAndConditions} style={styles.button}>
 					<CustomText text={text.termsAndConditions} size={13} />
 				</TouchableOpacity>
 
-				<TouchableOpacity onPress={() => {}} style={styles.button}>
+				<TouchableOpacity onPress={onPressDataPrivacy} style={styles.button}>
 					<CustomText text={text.privacyPolicy} size={13} />
 				</TouchableOpacity>
 
-				<TouchableOpacity onPress={() => {}} style={styles.button}>
+				<TouchableOpacity onPress={onPressFAQs} style={styles.button}>
 					<CustomText text={text.faqs} size={13} />
+				</TouchableOpacity>
+				<TouchableOpacity onPress={onPressSetting} style={styles.button}>
+					<CustomText text={text1.settingsButtonText} size={13} />
 				</TouchableOpacity>
 			</View>
 

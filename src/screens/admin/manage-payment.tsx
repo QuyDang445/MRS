@@ -11,11 +11,12 @@ import API from '../../services/api';
 import {colors} from '../../styles/colors';
 import {heightScale, widthScale} from '../../styles/scaling-utils';
 import {AlertYesNo, showMessage} from '../../utils';
+import { useLanguage } from '../../hooks/useLanguage';
 
 const ManagePayment = () => {
 	const [data, setData] = useState<PaymentProps[]>([]);
 	const [refreshing, setRefreshing] = useState(false);
-
+	const text = useLanguage().Transactionsrequireconfirmation;
 	useEffect(() => {
 		onRefresh();
 	}, []);
@@ -57,7 +58,7 @@ const ManagePayment = () => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="CÁC GIAO DỊCH CHỜ XÁC NHẬN" />
+			<CustomHeader title={text.title} />
 
 			<FlatList
 				refreshing={refreshing}
