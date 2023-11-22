@@ -13,10 +13,17 @@ export const VI = {
 		faqs: 'FAQs',
 		logout: 'Đăng xuất',
 		logoutConfirmation: 'Bạn chắc chắn muốn đăng xuất?',
+		settingsButtonText: 'Cài Đặt'
 	},
 	BottomTab: {
 		logoutAlert: 'Tài khoản của bạn đã bị chặn!',
 		logoutAlertReason: (reasonBlock: string) => `Lí do ${reasonBlock}`,
+	},
+	Transactionsrequireconfirmation:{
+		title: "Giao Dịch Yêu Cầu Xác Nhận",
+	},
+	ManageUser:{
+		title: "Tài Khoản Người Dùng",
 	},
 	Home: {
 		title: 'TRANG CHỦ',
@@ -247,6 +254,14 @@ export const VI = {
 		completed: 'Hoàn thành',
 		canceled: 'Đã hủy',
 	},
+	HomeAdmin: {
+		title: 'TRANG CHỦ',
+		AccountWitingForApproval: 'TÀI KHOẢN CHỜ XÉT DUYỆT',
+		AccountUserManager:'QUẢN LÝ TÀI KHOẢN NGƯỜI DÙNG',
+		AccountProviderManager: 'QUẢN LÝ TÀI KHOẢN NGƯỜI CUNG\nCẤP DỊCH VỤ',
+		BROWSEWAYSTODEPOSIT:'DUYỆT CÁC GIAO DỊCH NẠP TIỀN',
+
+	},
 	Listblock: {
 		title: 'DANH SÁCH CHẶN',
 		block: 'chặn',
@@ -268,4 +283,8 @@ export const VI = {
 		OrderInProcess: 'ĐANG TIẾN HÀNG',
 		OrderCompleted: 'HOÀN THÀNH',
 	},
+	AddPayment:{
+		title: "THÊM PHƯƠNG THỨC THANH TOÁN",
+
+	}
 };

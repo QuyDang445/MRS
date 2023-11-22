@@ -13,10 +13,13 @@ import {generateRandomId, getUserAll} from '../../utils';
 import {UserProps} from '../../constants/types';
 import moment from 'moment';
 import {useFocusEffect} from '@react-navigation/native';
+import { useLanguage } from '../../hooks/useLanguage';
 
 const ManageUser = (props: RootStackScreenProps<'ManageUser'>) => {
 	const {navigation} = props;
+	const text = useLanguage().ManageUser;
 
+	 
 	const [data, setData] = useState<UserProps[]>([]);
 	const [refreshing, setRefreshing] = useState(false);
 
@@ -34,7 +37,7 @@ const ManageUser = (props: RootStackScreenProps<'ManageUser'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="DANH SÁCH NGƯỜI DÙNG" />
+			<CustomHeader title={text.title} />
 			<ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} style={styles.view}>
 				{/* <View style={styles.viewInput}>
 					<Image source={ICONS.search} style={styles.iconSearch} />

@@ -15,12 +15,19 @@ import { colors } from '../../styles/colors';
 import { heightScale, widthScale } from '../../styles/scaling-utils';
 import { showMessage } from '../../utils';
 import { getImageFromDevice, uploadImage } from '../../utils/image';
+import {FONT_FAMILY} from '../../constants/enum';
+import {RootStackScreenProps} from '../../navigator/stacks';
+import {colors} from '../../styles/colors';
+import {heightScale, widthScale} from '../../styles/scaling-utils';
+import { useLanguage } from '../../hooks/useLanguage';
 
 const AddPayment = (props: RootStackScreenProps<'AddPayment'>) => {
 	const { navigation, route } = props;
 	const payment = route.params?.data;
 	console.log(payment);
 
+	const {navigation} = props;
+	const text = useLanguage().AddPayment;
 	const [isShow, setIsShow] = useState('QR');
 	const [image, setImage] = useState<ImageProps>();
 	const [nameBank, setNameBank] = useState('');
@@ -93,8 +100,8 @@ const AddPayment = (props: RootStackScreenProps<'AddPayment'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title={`${payment ? 'CHỈNH SỬA' : 'THÊM'} PHƯƠNG THỨC THANH TOÁN`} />
 
+			<CustomHeader title={text.title} />
 			<ScrollView style={styles.view}>
 				<View style={{ marginTop: heightScale(20) }}>
 					<CustomText font={FONT_FAMILY.BOLD} text={'CÁCH HIỂN THỊ'} size={14} />
