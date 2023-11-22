@@ -184,3 +184,8 @@ export const pushNotificationToUserConfirmOrder = async (serviceId: string, user
 
 	saveNotification(userId, data);
 };
+
+// Push notification cho admin khi co tk service provider.
+export const pushNotificationAdminNewServicer = async (serviceId: string, userId: string, orderId: string) => {
+
+};

@@ -20,7 +20,7 @@ import {getImageFromDevice, uploadImage} from '../utils/image';
 import { UserProps } from '../constants/types';
 import {pushNotificationAdminNewServicer} from '../utils/notification';
 
-const SignUpServices = async (props: RootStackScreenProps<'SignUpServices'>) => {
+const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 	const {navigation} = props;
 
 	const [passwordVisible, setPasswordVisible] = useState(false);
@@ -119,7 +119,6 @@ const SignUpServices = async (props: RootStackScreenProps<'SignUpServices'>) => 
 										maxLength={10}
 										onChangeText={handleChange('phone')}
 										keyboardType={'numeric'}
-										maxLength={10}
 										placeholder="Số điện thoại"
 										placeholderTextColor={colors.grayText}
 										style={styles.inputText}
