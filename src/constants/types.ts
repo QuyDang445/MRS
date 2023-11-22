@@ -51,6 +51,7 @@ export interface ServiceProps {
 	servicerObject: UserProps;
 	evaluate: EvaluateProps[];
 	star: number;
+	disable?: boolean;
 }
 export interface EvaluateProps {
 	id: string;

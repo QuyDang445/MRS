@@ -27,13 +27,14 @@ import ManagePayment from '../screens/admin/manage-payment';
 import ManageUser from '../screens/admin/manage-user';
 import InfoDetailUser from '../screens/admin/info-detail-user';
 import Payment from '../screens/admin/payment';
-import infoAcceptServicer from '../screens/admin/info-accept-servicer';
+import InfoDetailServicer from '../screens/admin/info-detail-servicer';
 
 import AddPayment from '../screens/admin/add-payment';
 import EditPaymentFee from '../screens/admin/edit-payment-fee';
 
 import FeeService from '../screens/fee-service';
 import ManageServicer from '../screens/admin/manage-servicer';
+import infoAcceptServicer from '../screens/admin/info-accept-servicer';
 
 export type RootStackScreens = keyof RootStackScreensParams;
 export type RootStackScreenProps<T extends RootStackScreens> = StackScreenProps<RootStackScreensParams, T>;
@@ -82,8 +83,10 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.InfoDetailUser} component={InfoDetailUser} />
 			<Screen name={ROUTE_KEY.Payment} component={Payment} />
 			<Screen name={ROUTE_KEY.FeeService} component={FeeService} />
+			<Screen name={ROUTE_KEY.InfoAcceptServicer} component={infoAcceptServicer} />
 			<Screen name={ROUTE_KEY.EditPaymentFee} component={EditPaymentFee} />
 			<Screen name={ROUTE_KEY.AddPayment} component={AddPayment} />
+			<Screen name={ROUTE_KEY.InfoDetailServicer} component={InfoDetailServicer} />
 		</Navigator>
 	);
 };

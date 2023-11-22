@@ -52,6 +52,7 @@ const AcceptServicer = (props: RootStackScreenProps<'AcceptServicer'>) => {
 				data={servicer}
 				renderItem={({item}) => (
 					<TouchableOpacity
+					onPress={() => onPressDetailService(item)}
 						style={{borderRadius: 5, borderWidth: 1, marginBottom: heightScale(20), padding: widthScale(10), flexDirection: 'row'}}>
 						<View
 							style={{

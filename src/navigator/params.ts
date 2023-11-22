@@ -40,6 +40,7 @@ export type RootStackScreensParams = {
 	AllReview: {idService: string};
 	InfoAcceptServicer: {data: UserProps};
 	FeeService: undefined;
-	EditPaymentFee: {fee: number};
-	AddPayment: undefined | {data: BankType};
+	EditPaymentFee: undefined;
+	AddPayment: undefined;
+	InfoDetailServicer: {data: UserProps};
 };

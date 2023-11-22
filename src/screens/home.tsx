@@ -39,6 +39,7 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 		const data = await getServiceAll();
 		allServiceRef.current = data;
 		setServiceAll(data);
+		setOutstandingService( data.filter((o)=> o.star > 0))
 	};
 
 	const getCategories = async () => {
@@ -89,7 +90,7 @@ const Home = (props: RootStackScreenProps<'Home'>) => {
 		return (
 			<TouchableOpacity
 				onPress={() => navigation.navigate(ROUTE_KEY.ServiceDetail, {serviceData: item})}
-				style={[styles.itemService, {marginRight: 0}]}>
+				style={[styles.itemService, {marginRight: 20}]}>
 				<Image source={{uri: item?.image}} style={styles.imageService} />
 
 				<View style={{flex: 1, padding: widthScale(15)}}>
