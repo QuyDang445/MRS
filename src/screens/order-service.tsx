@@ -45,9 +45,11 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 	const onPressEdit = (item: ServiceProps) => navigation.navigate(ROUTE_KEY.AddService, {data: item});
 
 	const onPressDelete = (item: ServiceProps) => {
-		AlertYesNo(undefined, text.confirmDelete, () => {
+		AlertYesNo(undefined, text.confirmDelete, async () => {
 			Spinner.show();
-			API.put(`${TABLE.SERVICE}/${item.id}`, {})
+
+			const data = await API.get(`${TABLE.SERVICE}/${item.id}`);
+			API.put(`${TABLE.SERVICE}/${item.id}`, {...data, disable: true})
 				.then(() => {
 					showMessage(text.deleteSuccess);
 					onRefresh();

@@ -76,7 +76,7 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 			};
 			const res = await API.post(`${TABLE.USERS}`, body);
 			if (res) {
-				await pushNotificationAdminNewServicer(res.id);
+				//await pushNotificationAdminNewServicer(res.id);
 				showMessage('Đăng ký tài khoản thành công, vui lòng chờ đợi admin duyệt qua thông tin!');
 				DeviceEventEmitter.emit(EMIT_EVENT.DATA_LOGIN, {phone: value.phone, password: value.pass});
 				navigation.goBack();
