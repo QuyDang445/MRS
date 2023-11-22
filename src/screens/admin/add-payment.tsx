@@ -15,10 +15,7 @@ import { colors } from '../../styles/colors';
 import { heightScale, widthScale } from '../../styles/scaling-utils';
 import { showMessage } from '../../utils';
 import { getImageFromDevice, uploadImage } from '../../utils/image';
-import {FONT_FAMILY} from '../../constants/enum';
-import {RootStackScreenProps} from '../../navigator/stacks';
-import {colors} from '../../styles/colors';
-import {heightScale, widthScale} from '../../styles/scaling-utils';
+
 import { useLanguage } from '../../hooks/useLanguage';
 
 const AddPayment = (props: RootStackScreenProps<'AddPayment'>) => {
@@ -26,7 +23,6 @@ const AddPayment = (props: RootStackScreenProps<'AddPayment'>) => {
 	const payment = route.params?.data;
 	console.log(payment);
 
-	const {navigation} = props;
 	const text = useLanguage().AddPayment;
 	const [isShow, setIsShow] = useState('QR');
 	const [image, setImage] = useState<ImageProps>();

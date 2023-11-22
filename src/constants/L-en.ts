@@ -259,7 +259,7 @@ export const EN = {
 	},
 	HomeServicer: {
 		title: 'ORDERS',
-		pending: 'Pending Confirmation',
+		pending: 'Pending',
 		inprocess: 'In Progress',
 		completed: 'Completed',
 		canceled: 'Cancelled',
