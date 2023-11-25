@@ -23,7 +23,15 @@ const Tab = createMaterialTopTabNavigator();
 
 const AdminServiceAndServiceType = (props: RootStackScreenProps<'AdminServiceAndServiceType'>) => {
 	const navigation = props.navigation;
-	const onPressAdd = (item: ServiceProps) => navigation.navigate(ROUTE_KEY.AddCategory, {});
+
+	const [selectedTab, setSelectedTab] = useState<string>('');
+	const onPressAdd = (item: ServiceProps) => {
+		if (selectedTab == 'SERVICE') {
+			navigation.navigate(ROUTE_KEY.AdminAddService, {});
+		} else {
+			navigation.navigate(ROUTE_KEY.AddCategory, {});
+		}
+	};
 
 	const renderTapBarItem = useCallback(
 		(props: MaterialTopTabBarProps) => (
@@ -32,7 +40,15 @@ const AdminServiceAndServiceType = (props: RootStackScreenProps<'AdminServiceAnd
 					{props.state.routes.map((item, index) => (
 						<TouchableOpacity
 							key={index}
-							onPress={() => props.navigation.navigate(item)}
+							onPress={() => {
+								const routeName = props.navigation.getState().routeNames[index];
+								if (routeName == 'Loại dịch vụ') {
+									setSelectedTab('CATEGORY');
+								} else {
+									setSelectedTab('SERVICE');
+								}
+								props.navigation.navigate(item);
+							}}
 							style={{justifyContent: 'center', alignItems: 'center', paddingHorizontal: widthScale(10)}}>
 							<CustomText text={item.name} font={props.state?.index === index ? FONT_FAMILY.BOLD : undefined} />
 						</TouchableOpacity>

@@ -2,6 +2,7 @@ import React, {memo, useEffect, useRef, useState} from 'react';
 import {DeviceEventEmitter, Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import ChooseCategoriesService from '../components/choose-categories-service';
+import ChooseServicer from '../components/choose-servicers';
 import CustomButton from '../components/custom-button';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
@@ -9,7 +10,7 @@ import FixedContainer from '../components/fixed-container';
 import Spinner from '../components/spinner';
 import {ModalRefObject} from '../components/time-picker';
 import {EMIT_EVENT, FONT_FAMILY, TABLE} from '../constants/enum';
-import {Category, ImageProps} from '../constants/types';
+import {Category, ImageProps, UserProps} from '../constants/types';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
 import {useAppSelector} from '../stores/store/storeHooks';
@@ -23,33 +24,37 @@ const AdminAddService = (props: RootStackScreenProps<'AddService'>) => {
 	const data = route.params?.data;
 
 	const chooseCategoriesRef = useRef<ModalRefObject>(null);
-
-	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
+	const chooseServicerRef = useRef<ModalRefObject>(null);
 
 	const [category, setCategory] = useState<Category>();
+	const [servicer, setServicer] = useState<UserProps>();
 	const [name, setName] = useState('');
 	const [image, setImage] = useState<ImageProps>();
 	const [description, setDescription] = useState('');
 
 	useEffect(() => {
-		console.log('data: ' + JSON.stringify(data));
 		if (data) {
-			setCategory({name: data.categoryObject.name} as any);
-			setName(data.name);
-			setImage({uri: data.image} as any);
-			setDescription(data.description);
+			console.log('data: ' + JSON.stringify(data));
+			API.get(`${TABLE.USERS}/${data.servicer}`, false).then(res => {
+				setServicer(res);
+				setCategory({id: data.categoryObject.idCategoryService, name: data.categoryObject.name} as any);
+				setName(data.name);
+				setImage({uri: data.image} as any);
+				setDescription(data.description);
+			});
 		}
 	}, []);
 
 	const handleAdd = async () => {
 		if (data) {
+			console.log('data cate' + JSON.stringify(category));
 			Spinner.show();
 			const body = {
 				name: name,
 				category: category?.id!,
-				servicer: userInfo?.id!,
+				servicer: servicer?.id!,
 				description: description,
-				image: image?.width ? await uploadImage(image?.uri!) : image?.uri,
+				image: await uploadImage(image?.uri!),
 			};
 
 			API.put(`${TABLE.SERVICE}/${data.id}`, body)
@@ -65,7 +70,7 @@ const AdminAddService = (props: RootStackScreenProps<'AddService'>) => {
 			const body = {
 				name: name,
 				category: category?.id!,
-				servicer: userInfo?.id!,
+				servicer: servicer?.id!,
 				description: description,
 				image: imageUrl!,
 			};
@@ -96,6 +101,20 @@ const AdminAddService = (props: RootStackScreenProps<'AddService'>) => {
 						marginBottom: heightScale(20),
 					}}>
 					<CustomText text={category?.name || 'Chọn loại dịch vụ'} />
+				</TouchableOpacity>
+				{/* SERVICER  */}
+				<CustomText font={FONT_FAMILY.BOLD} text={'NHÀ CUNG CẤP DỊCH VỤ'} size={14} />
+				<TouchableOpacity
+					onPress={() => chooseServicerRef.current?.show()}
+					style={{
+						borderWidth: 1,
+						height: heightScale(50),
+						justifyContent: 'center',
+						borderRadius: 5,
+						paddingLeft: widthScale(20),
+						marginBottom: heightScale(20),
+					}}>
+					<CustomText text={servicer?.name || 'Chọn nhà cung cấp dịch vụ'} />
 				</TouchableOpacity>
 
 				{/* NAME  */}
@@ -133,6 +152,7 @@ const AdminAddService = (props: RootStackScreenProps<'AddService'>) => {
 				/>
 			</View>
 			<ChooseCategoriesService onPressChoose={setCategory} ref={chooseCategoriesRef} />
+			<ChooseServicer onPressChoose={setServicer} ref={chooseServicerRef} />
 		</FixedContainer>
 	);
 };

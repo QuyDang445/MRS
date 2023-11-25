@@ -7,14 +7,14 @@ import FixedContainer from '../components/fixed-container';
 import Spinner from '../components/spinner';
 import Star from '../components/star';
 import {EMIT_EVENT, FONT_FAMILY, TABLE} from '../constants/enum';
-import {ServiceProps} from '../constants/types';
+import {OrderProps, ServiceProps} from '../constants/types';
 import {ROUTE_KEY} from '../navigator/routers';
 import {RootStackScreenProps} from '../navigator/stacks';
 import API from '../services/api';
 import {useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
-import {AlertYesNo, getServiceAll, getServiceFromID, showMessage} from '../utils';
+import {AlertConfirm, AlertYesNo, getServiceAll, getServiceFromID, showMessage} from '../utils';
 import {useIsFocused} from '@react-navigation/native';
 
 const AdminService = (props: RootStackScreenProps<'Order'>) => {
@@ -36,7 +36,6 @@ const AdminService = (props: RootStackScreenProps<'Order'>) => {
 	const onRefresh = async () => {
 		setRefreshing(true);
 		await getServiceAll().then(res => {
-			console.log('res: ' + JSON.stringify(res));
 			setServiceList(res);
 			setData(res);
 			setRefreshing(false);
@@ -44,23 +43,39 @@ const AdminService = (props: RootStackScreenProps<'Order'>) => {
 	};
 
 	const onPressEdit = (item: ServiceProps) => {
-		// navigation.navigate(ROUTE_KEY.AdminAddService, {data: item})
+		navigation.navigate(ROUTE_KEY.AdminAddService, {data: item});
 	};
 
 	const onPressDelete = (item: ServiceProps) => {
-		AlertYesNo(undefined, 'Bạn chắc chắn muốn xoá?', () => {
+		AlertYesNo(undefined, 'Bạn chắc chắn muốn xoá?', async () => {
 			Spinner.show();
-			API.put(`${TABLE.SERVICE}/${item.id}`, {})
-				.then(() => {
-					showMessage('Xoá dịch vụ thành công!');
-					onRefresh();
-				})
-				.finally(() => Spinner.hide());
+
+			let isCategoryValidToDelete = true;
+
+			const arr = (await API.get(`${TABLE.ORDERS}`, true)) as OrderProps[];
+
+			for (let i = 0; i <= arr.length; i++) {
+				if (arr[i]?.idService && arr[i]?.idService == item.id) {
+					isCategoryValidToDelete = false;
+					AlertConfirm('Thông báo', 'Dịch vụ này đã tồn tại đơn hàng. Không thể xóa.', () => {
+						Spinner.hide();
+					});
+					return;
+				}
+			}
+			if (isCategoryValidToDelete) {
+				Spinner.show();
+				API.put(`${TABLE.SERVICE}/${item.id}`, {})
+					.then(() => {
+						showMessage('Xoá dịch vụ thành công!');
+						onRefresh();
+					})
+					.finally(() => Spinner.hide());
+			}
 		});
 	};
 
 	const searchService = async (keyword: string) => {
-		console.log('search: keyword' + keyword + ' length: ' + keyword.length);
 		if (keyword && keyword.length > 0) {
 			setKeyword(keyword);
 
@@ -71,7 +86,7 @@ const AdminService = (props: RootStackScreenProps<'Order'>) => {
 			});
 		} else {
 			setKeyword('');
-			console.log('data: ' + JSON.stringify(data));
+			console.log('data: ' + JSON.stringify(serviceList));
 			setData(serviceList ? [...serviceList] : []);
 		}
 	};
@@ -94,7 +109,6 @@ const AdminService = (props: RootStackScreenProps<'Order'>) => {
 					scrollEnabled={false}
 					contentContainerStyle={{paddingVertical: widthScale(20)}}
 					renderItem={({item}) => {
-						console.log('service: ' + JSON.stringify(item));
 						return (
 							<TouchableOpacity
 								onPress={() => onPressDetail(item)}
