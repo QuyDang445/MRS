@@ -51,6 +51,7 @@ export interface ServiceProps {
 	servicerObject: UserProps;
 	evaluate: EvaluateProps[];
 	star: number;
+	disable?: boolean;
 }
 export interface EvaluateProps {
 	id: string;
@@ -129,5 +130,13 @@ export interface InfoPaymentAdmin {
 	name: string;
 	content: string;
 	image?: string;
+}
+export interface BankType {
+	id: string;
+	name: string;
+	number: string;
+	image?: string;
+	nameBank: string;
+	nameCard: string;
 }
 export interface Notification {}

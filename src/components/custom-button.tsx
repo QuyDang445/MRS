@@ -11,9 +11,10 @@ interface Props {
 	style?: StyleProp<ViewStyle>;
 	colorText?: string;
 	disabled?: boolean;
+	backgroundColor?: string;
 }
 const CustomButton = (props: Props) => {
-	const {text, onPress, style, colorText, disabled} = props;
+	const {text, onPress, style, colorText, disabled,backgroundColor} = props;
 	// const [buttonColor, setButtonColor] = useState(colors.purple);
 	// const handleClick = () => {
 	// 	setButtonColor(colors.appColor);
@@ -24,7 +25,16 @@ const CustomButton = (props: Props) => {
 	//   };
 
 	return (
-		<TouchableOpacity disabled={disabled} style={[styles.view, style]} onPress={onPress}>
+		<TouchableOpacity
+			disabled={disabled}
+			style={[
+				styles.view,
+				style,
+				{
+					backgroundColor: disabled ? `${backgroundColor || colors.appColor}90` : backgroundColor || colors.appColor,
+				},
+			]}
+			onPress={onPress}>
 			<CustomText text={text} font={FONT_FAMILY.BOLD} color={colorText || colors.white} />
 		</TouchableOpacity>
 	);

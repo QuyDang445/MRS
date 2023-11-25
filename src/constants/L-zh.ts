@@ -13,6 +13,20 @@ export const ZH = {
 		faqs: '常见问题',
 		logout: '注销',
 		logoutConfirmation: '确定要注销吗？',
+		settingsButtonText: '環境'
+	},
+	Transactionsrequireconfirmation:{
+		title: "交易需要确认",
+	},
+	ManageUser:{
+		title: "管理用户",
+	},
+	HomeAdmin: {
+		title: '家',
+		AccountWitingForApproval: '账户待批准',
+		AccountUserManager: '管理用户帐户',
+		AccountProviderManager: '服务提供商帐户管理',
+		BROWSEWAYSTODEPOSIT:'浏览存款方式',
 	},
 	BottomTab: {
 		logoutAlert: '您的帐户已被封锁！',
@@ -268,4 +282,8 @@ export const ZH = {
 		OrderInProcess: '订单处理中',
 		OrderCompleted: '订单已完成',
 	},
+	AddPayment:{
+		title: "THÊM PHƯƠNG THỨC THANH TOÁN",
+		
+	}
 };

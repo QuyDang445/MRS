@@ -33,7 +33,7 @@ const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => 
 
 	// const onChangeAddress = (text: string) => innerRefFormik.current?.setFieldValue('address', text);
 	const onChangeAddress = (text: string) => {
-		console.log("Adress: " + text)
+		console.log("Adress: " + text);
 		setAddress(text)
 	};
 	const modalChooseProvinceRef = useRef<ModalObject>(null);
@@ -118,7 +118,7 @@ const UpdateInformation = (props: RootStackScreenProps<'UpdateInformation'>) => 
 						<TextInput keyboardType="numeric" onChangeText={setPhone} editable={false} value={phone} style={styles.input} />
 						<CustomText text={text.addresss} font={FONT_FAMILY.BOLD} size={14} />
 						<TouchableOpacity onPress={() => modalChooseProvinceRef.current?.show({})} style={styles.buttonProvince}>
-							<CustomText color={address ? colors.black : colors.grayText} text={setAddress || text.addresss} />
+							<CustomText color={address ? colors.black : colors.grayText} text={address || text.addresss} />
 						</TouchableOpacity>
 					</View>
 				)}

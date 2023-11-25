@@ -219,8 +219,9 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 						<CustomText text={data?.address} />
 					</View>
 				</View>
+
 				<View style={{marginTop: heightScale(15)}}>
-					<CustomText font={FONT_FAMILY.BOLD} text={text.description} />
+					<CustomText font={FONT_FAMILY.BOLD} text={'MÔ TẢ'} />
 					<View style={{padding: 10, marginTop: heightScale(5), borderWidth: 1, borderRadius: 5}}>
 						<CustomText text={data?.description} />
 					</View>

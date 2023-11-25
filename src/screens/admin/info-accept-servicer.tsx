@@ -2,12 +2,15 @@ import React,{ memo } from "react";
 import { RootStackScreenProps } from "../../navigator/stacks";
 import FixedContainer from "../../components/fixed-container";
 import moment from "moment";
-import { ScrollView, View, Image,StyleSheet } from "react-native";
+import { DeviceEventEmitter,ScrollView, View, Image,StyleSheet } from "react-native";
 import CustomButton from "../../components/custom-button";
 import CustomHeader from "../../components/custom-header";
 import CustomText from "../../components/custom-text";
-import { FONT_FAMILY } from "../../constants/enum";
+import { EMIT_EVENT, FONT_FAMILY, TABLE } from "../../constants/enum";
 import { heightScale, widthScale } from "../../styles/scaling-utils";
+import { AlertYesNo, showMessage } from "../../utils";
+import Spinner from "../../components/spinner";
+import API from "../../services/api";
 
 
 const InfoAcceptServicer = (props: RootStackScreenProps<'InfoAcceptServicer'>) => {
@@ -15,7 +18,16 @@ const InfoAcceptServicer = (props: RootStackScreenProps<'InfoAcceptServicer'>) =
 
   const data = route.params.data;
   const onPressStart = () => {
-    console.log("ddđ");
+    AlertYesNo(undefined, 'Đồng ý người này cung cấp dịch vụ?', async () => {
+			Spinner.show();
+			API.put(`${TABLE.USERS}/${data.id}`, {...data, isAccept: true})
+				.then(() => {
+					showMessage('Kích hoạt thành công!');
+					navigation.goBack();
+					DeviceEventEmitter.emit(EMIT_EVENT.LOAD_SERVICE_ACCEPT);
+				})
+				.finally(() => Spinner.hide());
+		});
 
   };
   return (

@@ -48,7 +48,7 @@ const OrderInProcess = () => {
 
 			for (let j = 0; j < arrServicer.length; j++) {
 				if (arrServicer[j].id === newData[i].serviceObject.servicer) {
-					servicerObject = arrServicer[i];
+					servicerObject = arrServicer[j];
 					break;
 				}
 			}
@@ -90,7 +90,7 @@ const OrderInProcess = () => {
 			)}
 			ListEmptyComponent={
 				<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-					<CustomText color={colors.grayText} text={'Không có đơn đặt hàng!'} />
+					<CustomText color={colors.grayText} text={text.no_order} />
 				</View>
 			}
 			data={data}
