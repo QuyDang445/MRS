@@ -46,7 +46,7 @@ const InfoDetailServicer = (props: RootStackScreenProps<'InfoDetailServicer'>) =
 				return colors.red;
 			case 'Đã thanh toán':
 				return colors.green;
-			case 'Chờ sét duyệt':
+			case 'Chờ xét duyệt':
 				return colors.appColor;
 		}
 	};
@@ -64,7 +64,7 @@ const InfoDetailServicer = (props: RootStackScreenProps<'InfoDetailServicer'>) =
 						if (payment.isAccept) {
 							setStatus('Đã thanh toán');
 						} else {
-							setStatus('Chờ sét duyệt');
+							setStatus('Chờ xét duyệt');
 						}
 					}
 				} else {

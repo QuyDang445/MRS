@@ -12,7 +12,7 @@ import {RootStackScreenProps} from '../navigator/stacks';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {getServicerALl} from '../utils';
 import notifee from '@notifee/react-native';
-import { useLanguage } from '../hooks/useLanguage';
+import {useLanguage} from '../hooks/useLanguage';
 
 const HomeAdmin = (props: RootStackScreenProps<'Home'>) => {
 	// const text = useLanguage().Home;
@@ -22,7 +22,7 @@ const HomeAdmin = (props: RootStackScreenProps<'Home'>) => {
 	const [servicerPending, setServicerPending] = useState<UserProps[]>([]);
 
 	const [loading, setLoading] = useState(false);
-	
+
 	const getServicerPending = async () => {
 		setLoading(true);
 		const arr = [];
@@ -68,7 +68,7 @@ const HomeAdmin = (props: RootStackScreenProps<'Home'>) => {
 						paddingLeft: widthScale(10),
 					}}>
 					<Image source={ICONS.user_accept} style={styles.image} />
-					<CustomText font={FONT_FAMILY.BOLD} text={`${servicerPending.length} TÀI KHOẢN CHỜ SÉT DUYỆT`} />
+					<CustomText font={FONT_FAMILY.BOLD} text={`${servicerPending.length} TÀI KHOẢN CHỜ XÉT DUYỆT`} />
 				</TouchableOpacity>
 				<TouchableOpacity
 					onPress={() => navigation.navigate(ROUTE_KEY.ManageUser)}
