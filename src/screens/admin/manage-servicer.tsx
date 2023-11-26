@@ -1,6 +1,6 @@
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import moment from 'moment';
-import React, {memo, useCallback, useEffect, useState} from 'react';
+import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, Image, RefreshControl, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import {ICONS} from '../../assets/image-paths';
 import CustomHeader from '../../components/custom-header';
@@ -13,19 +13,62 @@ import {RootStackScreenProps, UseRootStackNavigation} from '../../navigator/stac
 import API from '../../services/api';
 import {colors} from '../../styles/colors';
 import {heightScale, widthScale} from '../../styles/scaling-utils';
-import {generateRandomId, getServicerALl} from '../../utils';
+import {generateRandomId, getServicerALl, getUserAll} from '../../utils';
+import Filter, { Sort } from '../../components/search/filter';
+import { sleep } from '../../utils/time';
+import filter from '../../components/search/filter';
 
 const ManageServicer = (props: RootStackScreenProps<'ManageServicer'>) => {
 	const {navigation} = props;
+	const [textSearch, setTextSearch] = useState('');
+	const [sortData, setSortData] = useState<Sort>();
+
+	const [loading, setLoading] = useState(false);
+	const [filter, setFilter] = useState<Sort[]>([]);
 
 	const [data, setData] = useState<UserProps[]>([]);
 	const [refreshing, setRefreshing] = useState(false);
-
+	const allServiceProviderRef = useRef<UserProps[]>([]);
+	const [isShowFilter, setIsShowFilter] = useState(false);
+	const [filterData, setFilterData] = useState<Sort>();
+	
 	useFocusEffect(
 		useCallback(() => {
 			onRefresh();
 		}, []),
+		
 	);
+	const onPressFilter = (data: Sort) => {
+		setFilterData(data);
+		setIsShowFilter(false);
+
+		if (data.id === 'ALL') {
+			return setData(allServiceProviderRef.current);
+		}
+
+		const newData = [];
+		for (let i = 0; i < allServiceProviderRef.current.length; i++) {
+			if (allServiceProviderRef.current[i].name === data.id) {
+				newData.push(allServiceProviderRef.current[i]);
+			}
+		}
+		setData(newData);
+	};
+	const onSearch = (text: string) => {
+		setLoading(true);
+		setTextSearch(text);
+
+		const changeText = (_: string) =>
+			_.toLowerCase()
+				.normalize('NFD')
+				.replace(/[\u0300-\u036f]/g, '');
+
+		const newText = changeText(text);
+
+		const newArr = [...allServiceProviderRef.current];
+		setData(newArr.filter(item => changeText(item?.name).includes(newText)));
+		sleep(500).finally(() => setLoading(false));
+	};
 
 	const onRefresh = async () => {
 		setRefreshing(true);
@@ -34,22 +77,39 @@ const ManageServicer = (props: RootStackScreenProps<'ManageServicer'>) => {
 				setData(res);
 			})
 			.finally(() => setRefreshing(false));
+			const res = await getServicerALl();
+			allServiceProviderRef.current = res;
+		setRefreshing(false);
 	};
 
 	return (
 		<FixedContainer>
 			<CustomHeader title="DANH SÁCH NHÀ CUNG CẤP DỊCH VỤ" />
-			<ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} style={styles.view}>
-				{/* <View style={styles.viewInput}>
+			<ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+			showsVerticalScrollIndicator={false} style={styles.view}>
+				<View style={styles.viewInput}>
 					<Image source={ICONS.search} style={styles.iconSearch} />
-					<TextInput placeholder="Tìm kiếm" style={styles.input} />
-				</View> */}
-
+					<TextInput placeholderTextColor={colors.grayText}
+						placeholder="Tìm kiếm"
+						autoFocus
+						onChangeText={onSearch}
+						style={styles.input}
+						value={textSearch} />
+				</View>
+				<Filter
+					onPressSort={onPressFilter}
+					onPressShow={() => setIsShowFilter(!isShowFilter)}
+					isOn={isShowFilter}
+					title="LỌC"
+					textButton={filterData?.name! || 'Tất cả'}
+					filter={filter}
+				/>
 				<View style={{marginVertical: heightScale(10)}}></View>
 
 				{data.map(item => {
 					return <Item item={item} />;
 				})}
+				
 			</ScrollView>
 		</FixedContainer>
 	);

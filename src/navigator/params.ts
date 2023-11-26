@@ -43,7 +43,7 @@ export type RootStackScreensParams = {
 	AdminAddService: {data: ServiceProps};
 	InfoAcceptServicer: {data: UserProps};
 	FeeService: undefined;
-	EditPaymentFee: undefined;
+	EditPaymentFee: {fee: number};
 	AddPayment: undefined | {data: BankType};
 	InfoDetailServicer: {data: UserProps};
 };
