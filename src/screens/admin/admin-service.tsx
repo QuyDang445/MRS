@@ -1,20 +1,20 @@
 import React, {memo, useEffect, useState} from 'react';
 import {Button, DeviceEventEmitter, FlatList, Image, RefreshControl, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
-import {ICONS} from '../assets/image-paths';
-import CustomHeader from '../components/custom-header';
-import CustomText from '../components/custom-text';
-import FixedContainer from '../components/fixed-container';
-import Spinner from '../components/spinner';
-import Star from '../components/star';
-import {EMIT_EVENT, FONT_FAMILY, TABLE} from '../constants/enum';
-import {OrderProps, ServiceProps} from '../constants/types';
-import {ROUTE_KEY} from '../navigator/routers';
-import {RootStackScreenProps} from '../navigator/stacks';
-import API from '../services/api';
-import {useAppSelector} from '../stores/store/storeHooks';
-import {colors} from '../styles/colors';
-import {heightScale, widthScale} from '../styles/scaling-utils';
-import {AlertConfirm, AlertYesNo, getServiceAll, getServiceFromID, showMessage} from '../utils';
+import {ICONS} from '../../assets/image-paths';
+import CustomHeader from '../../components/custom-header';
+import CustomText from '../../components/custom-text';
+import FixedContainer from '../../components/fixed-container';
+import Spinner from '../../components/spinner';
+import Star from '../../components/star';
+import {EMIT_EVENT, FONT_FAMILY, TABLE} from '../../constants/enum';
+import {OrderProps, ServiceProps} from '../../constants/types';
+import {ROUTE_KEY} from '../../navigator/routers';
+import {RootStackScreenProps} from '../../navigator/stacks';
+import API from '../../services/api';
+import {useAppSelector} from '../../stores/store/storeHooks';
+import {colors} from '../../styles/colors';
+import {heightScale, widthScale} from '../../styles/scaling-utils';
+import {AlertConfirm, AlertYesNo, getServiceAll, getServiceFromID, showMessage} from '../../utils';
 import {useIsFocused} from '@react-navigation/native';
 
 const AdminService = (props: RootStackScreenProps<'Order'>) => {

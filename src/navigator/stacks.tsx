@@ -51,7 +51,7 @@ import FeeService from '../screens/fee-service';
 import ManageServicer from '../screens/admin/manage-servicer';
 import infoAcceptServicer from '../screens/admin/info-accept-servicer';
 
-import AddCategory from '../screens/add-category';
+import AddCategory from '../screens/admin/add-category';
 export type RootStackScreens = keyof RootStackScreensParams;
 export type RootStackScreenProps<T extends RootStackScreens> = StackScreenProps<RootStackScreensParams, T>;
 export type UseRootStackNavigation<T extends RootStackScreens = 'Splash'> = StackNavigationProp<RootStackScreensParams, T>;
