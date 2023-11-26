@@ -96,7 +96,7 @@ const Item = memo(({item}: {item: UserProps}) => {
 				return colors.red;
 			case 'Đã thanh toán':
 				return colors.green;
-			case 'Chờ sét duyệt':
+			case 'Chờ xét duyệt':
 				return colors.appColor;
 		}
 	};
@@ -114,7 +114,7 @@ const Item = memo(({item}: {item: UserProps}) => {
 						if (payment.isAccept) {
 							setStatus('Đã thanh toán');
 						} else {
-							setStatus('Chờ sét duyệt');
+							setStatus('Chờ xét duyệt');
 						}
 					}
 				} else {
