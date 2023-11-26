@@ -1,5 +1,5 @@
 import React, {memo, useEffect, useState} from 'react';
-import {DeviceEventEmitter, FlatList, Image, RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Button, DeviceEventEmitter, FlatList, Image, RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';

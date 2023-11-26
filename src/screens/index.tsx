@@ -13,6 +13,9 @@ import NotificationDetail from './notification-detail';
 import ServiceDetail from './detail-service';
 import AllReview from './all-review';
 import InfoServicer from './info-servicer';
+import AdminServiceAndServiceType from './admin/admin-service-and-service-type';
+import AdminService from './admin/admin-service';
+import AdminAddService from './admin/admin-add-service';
 export {
 	Home,
 	LogIn,
@@ -29,4 +32,7 @@ export {
 	ForgotPass,
 	Otp,
 	InfoServicer,
+	AdminServiceAndServiceType,
+	AdminService,
+	AdminAddService,
 };

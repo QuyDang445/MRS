@@ -1,11 +1,11 @@
-import { Alert, Linking, PermissionsAndroid, ToastAndroid } from 'react-native';
+import {Alert, Linking, PermissionsAndroid, ToastAndroid} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
-import { PERMISSIONS, request } from 'react-native-permissions';
+import {PERMISSIONS, request} from 'react-native-permissions';
 import API from '../services/api';
-import { EvaluateProps, ServiceProps, UserProps, OrderProps } from '../constants/types';
-import { TABLE, TYPE_ORDER_SERVICE, TYPE_USER } from '../constants/enum';
+import {EvaluateProps, ServiceProps, UserProps, OrderProps} from '../constants/types';
+import {TABLE, TYPE_ORDER_SERVICE, TYPE_USER} from '../constants/enum';
 
-import { colors } from '../styles/colors';
+import {colors} from '../styles/colors';
 
 export const parseObjectToArray = (object: any) => {
 	try {
@@ -13,7 +13,7 @@ export const parseObjectToArray = (object: any) => {
 		for (const key in object) {
 			if (Object.prototype.hasOwnProperty.call(object, key)) {
 				const element: object = object?.[key as keyof object];
-				array.push({ ...element, id: key });
+				array.push({...element, id: key});
 			}
 		}
 		return array as any[];
@@ -38,7 +38,10 @@ export const showMessage = (message: string) => {
 	ToastAndroid.show(message, ToastAndroid.LONG);
 };
 export const AlertYesNo = (title = 'THÔNG BÁO', message?: string, onYes?: () => void) =>
-	Alert.alert('', message, [{ text: 'HUỶ' }, { text: 'OK', onPress: onYes }], { cancelable: false });
+	Alert.alert('', message, [{text: 'HUỶ'}, {text: 'OK', onPress: onYes}], {cancelable: false});
+
+export const AlertConfirm = (title = 'THÔNG BÁO', message?: string, onYes?: () => void) =>
+	Alert.alert(title, message, [{text: 'OK', onPress: onYes}], {cancelable: false});
 
 export const getServiceFromID = async (id: string) => {
 	const result = (await API.get(`${TABLE.SERVICE}`, true)) as ServiceProps[];
@@ -46,7 +49,7 @@ export const getServiceFromID = async (id: string) => {
 	const arr = [];
 
 	for (let i = 0; i < result.length; i++) {
-		(result[i].servicer === id && !result[i].disable) && arr.push(result[i]);
+		result[i].servicer === id && !result[i].disable && arr.push(result[i]);
 	}
 
 	// get info category
@@ -91,7 +94,7 @@ export const getServiceFromID = async (id: string) => {
 };
 
 export const getServiceAll = async () => {
-	const arr = ((await API.get(`${TABLE.SERVICE}`, true)) as ServiceProps[]).filter((o) => !o.disable)
+	const arr = ((await API.get(`${TABLE.SERVICE}`, true)) as ServiceProps[]).filter(o => !o.disable);
 
 	// get info category
 	for (let i = 0; i < arr.length; i++) {
@@ -130,7 +133,7 @@ export const requestLocationPermission = () => {
 				isPreferred: true,
 				style: 'cancel',
 			},
-			{ text: 'Huỷ', onPress: () => { } },
+			{text: 'Huỷ', onPress: () => {}},
 		]);
 	};
 
@@ -149,24 +152,23 @@ export const getLocationMyDevice = async () => {
 	try {
 		const check = await requestLocationPermission();
 		if (check) {
-			return (await getMyLocation()) as { lat: number; long: number };
+			return (await getMyLocation()) as {lat: number; long: number};
 		}
-	} catch (error) { }
+	} catch (error) {}
 };
 
 export const getMyLocation = () =>
 	new Promise((resolve, reject) =>
 		Geolocation.getCurrentPosition(
-			position => resolve({ lat: position?.coords?.latitude, long: position?.coords?.longitude }),
+			position => resolve({lat: position?.coords?.latitude, long: position?.coords?.longitude}),
 			error => reject(error),
-			{ accuracy: { android: 'high', ios: 'best' } },
+			{accuracy: {android: 'high', ios: 'best'}},
 		),
 	);
 
-
 export const getStatusOrder = (
 	status: TYPE_ORDER_SERVICE,
-	language: { OrderPending: string; OrderCanceled: string; OrderInProcess: string; OrderCompleted: string },
+	language: {OrderPending: string; OrderCanceled: string; OrderInProcess: string; OrderCompleted: string},
 ) => {
 	switch (status) {
 		case TYPE_ORDER_SERVICE.OrderPending:
@@ -260,4 +262,5 @@ export const getOrderAllFromIDServicer = async (idServicer: string) => {
 
 	return newData as OrderProps[];
 };
+
 export const formatNumber = (number: number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');

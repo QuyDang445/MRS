@@ -59,7 +59,8 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 		}
 		Spinner.show();
 		const users = (await API.get(TABLE.USERS, true)) as UserProps[];
-		
+		console.log('user list: ' + JSON.stringify(users));
+
 		for (let i = 0; i < users.length; i++) {
 			if (users[i].phone === phone && users[i].password === password) {
 				// update token user:
@@ -72,8 +73,8 @@ const LogIn = (props: RootStackScreenProps<'LogIn'>) => {
 
 				//// Main when have home screen
 				if (users[i].type === TYPE_USER.SERVICER && !users[i]?.isAccept) {
-					//ToastAndroid.show('Tài khoản của bạn đang chờ admin sét duyệt', ToastAndroid.SHORT);
-					return showMessage('Tài khoản của bạn đang chờ admin sét duyệt');
+					//ToastAndroid.show('Tài khoản của bạn đang chờ admin xét duyệt', ToastAndroid.SHORT);
+					return showMessage('Tài khoản của bạn đang chờ admin xét duyệt');
 				} else {
 					dispatch(cacheUserInfo(newUser));
 					navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.BottomTab}]}));

@@ -66,7 +66,9 @@ export interface EvaluateProps {
 export interface Category {
 	id: string;
 	name: string;
-	idCategoryService: string;
+	uri: string;
+	// image: string;
+	// idCategoryService: string;
 }
 export interface AddressProps {
 	id: string;
