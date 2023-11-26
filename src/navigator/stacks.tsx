@@ -106,6 +106,8 @@ const Stacks = () => {
 			<Screen name={ROUTE_KEY.AdminAddService} component={AdminAddService} />
 			<Screen name={ROUTE_KEY.AddPayment} component={AddPayment} />
 			<Screen name={ROUTE_KEY.InfoDetailServicer} component={InfoDetailServicer} />
+			<Screen name={ROUTE_KEY.InfoServicer} component={InfoServicer} />
+			<Screen name={ROUTE_KEY.AllReview} component={AllReview} />
 		</Navigator>
 	);
 };
