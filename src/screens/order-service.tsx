@@ -1,5 +1,5 @@
 import React, {memo, useEffect, useState} from 'react';
-import {DeviceEventEmitter, FlatList, Image, RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Button, DeviceEventEmitter, FlatList, Image, RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {ICONS} from '../assets/image-paths';
 import CustomHeader from '../components/custom-header';
 import CustomText from '../components/custom-text';
@@ -45,9 +45,11 @@ const OrderServicer = (props: RootStackScreenProps<'Order'>) => {
 	const onPressEdit = (item: ServiceProps) => navigation.navigate(ROUTE_KEY.AddService, {data: item});
 
 	const onPressDelete = (item: ServiceProps) => {
-		AlertYesNo(undefined, text.confirmDelete, () => {
+		AlertYesNo(undefined, text.confirmDelete, async () => {
 			Spinner.show();
-			API.put(`${TABLE.SERVICE}/${item.id}`, {})
+
+			const data = await API.get(`${TABLE.SERVICE}/${item.id}`);
+			API.put(`${TABLE.SERVICE}/${item.id}`, {...data, disable: true})
 				.then(() => {
 					showMessage(text.deleteSuccess);
 					onRefresh();

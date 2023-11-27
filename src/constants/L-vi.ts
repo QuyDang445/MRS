@@ -13,10 +13,17 @@ export const VI = {
 		faqs: 'FAQs',
 		logout: 'Đăng xuất',
 		logoutConfirmation: 'Bạn chắc chắn muốn đăng xuất?',
+		settingsButtonText: 'Cài Đặt',
 	},
 	BottomTab: {
 		logoutAlert: 'Tài khoản của bạn đã bị chặn!',
 		logoutAlertReason: (reasonBlock: string) => `Lí do ${reasonBlock}`,
+	},
+	Transactionsrequireconfirmation: {
+		title: 'Giao Dịch Yêu Cầu Xác Nhận',
+	},
+	ManageUser: {
+		title: 'Tài Khoản Người Dùng',
 	},
 	Home: {
 		title: 'TRANG CHỦ',
@@ -45,7 +52,7 @@ export const VI = {
 	},
 	User: {
 		title: 'HỒ SƠ',
-		activityStatusText: 'Trạng thái hoạt động',
+		activityStatusText: 'TRẠNG THÁI HOẠT ĐỘNG',
 		updateInfoButtonText: 'Cập nhật thông tin',
 		addressButtonText: 'Địa chỉ',
 		changePasswordButtonText: 'Đổi mật khẩu',
@@ -60,7 +67,7 @@ export const VI = {
 		logoutConfirmationMessage: 'Bạn chắc chắn muốn đăng xuất?',
 		unpaid: 'Chưa thanh toán',
 		paid: 'Đã thanh toán',
-		wait: 'Chờ sét duyệt',
+		wait: 'Chờ xét duyệt',
 		ACCOUNT_MANAGEMENT: 'QUẢN LÝ TÀI KHOẢN',
 		SERVICE: 'DỊCH VỤ',
 	},
@@ -209,7 +216,7 @@ export const VI = {
 		editMessage: 'Sửa dịch vụ thành công!',
 	},
 	AcceptServicer: {
-		title: 'SÉT DUYỆT TÀI KHOẢN',
+		title: 'XÉT DUYỆT TÀI KHOẢN',
 		date: (text: string) => `Ngày đăng ký: ${text}`,
 	},
 	Payment: {
@@ -247,6 +254,13 @@ export const VI = {
 		completed: 'Hoàn thành',
 		canceled: 'Đã hủy',
 	},
+	HomeAdmin: {
+		title: 'TRANG CHỦ',
+		AccountWitingForApproval: 'TÀI KHOẢN CHỜ XÉT DUYỆT',
+		AccountUserManager: 'QUẢN LÝ TÀI KHOẢN NGƯỜI DÙNG',
+		AccountProviderManager: 'QUẢN LÝ TÀI KHOẢN NGƯỜI CUNG\nCẤP DỊCH VỤ',
+		BROWSEWAYSTODEPOSIT: 'DUYỆT CÁC GIAO DỊCH NẠP TIỀN',
+	},
 	Listblock: {
 		title: 'DANH SÁCH CHẶN',
 		block: 'chặn',
@@ -267,5 +281,8 @@ export const VI = {
 		OrderCanceled: 'ĐÃ HUỶ',
 		OrderInProcess: 'ĐANG TIẾN HÀNG',
 		OrderCompleted: 'HOÀN THÀNH',
+	},
+	AddPayment: {
+		title: 'THÊM PHƯƠNG THỨC THANH TOÁN',
 	},
 };

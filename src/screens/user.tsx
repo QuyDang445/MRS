@@ -1,6 +1,6 @@
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import React, {memo, useCallback, useState} from 'react';
-import {DeviceEventEmitter, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, DeviceEventEmitter, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ICONS} from '../assets/image-paths';
 import CustomHeader from '../components/custom-header';
@@ -16,12 +16,14 @@ import {useAppDispatch, useAppSelector} from '../stores/store/storeHooks';
 import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo} from '../utils';
+import { PaymentServicer } from '../constants/types';
 
 const User = (props: RootStackScreenProps<'User'>) => {
 	const {navigation} = props;
 	const dispatch = useAppDispatch();
 	const texts = useLanguage()?.User;
-
+	const [loadPayment, setLoadPayment] = useState(false);
+	const [statusPayment, setStatusPayment] = useState('');
 	const userInfo = useAppSelector(state => state.userInfoReducer.userInfo);
 	const [receiveBooking, setReceiveBooking] = useState(userInfo?.receiveBooking!);
 
@@ -42,7 +44,48 @@ const User = (props: RootStackScreenProps<'User'>) => {
 			}
 		}, [texts]),
 	);
-	const getStatusPayment = () => {};
+	const getStatusPayment = () => {
+		setLoadPayment(true);
+		API.get(`${TABLE.PAYMENT_FEE_SERVICE}/${userInfo?.id}`, true)
+			.then(async (res: PaymentServicer[]) => {
+				const payment = (await findClosestDateObject(res)) as PaymentServicer;
+				if (payment) {
+					const monthCurrent = new Date().getMonth() + 1;
+
+					if (monthCurrent > new Date(payment.date).getMonth() + 1) {
+						setStatusPayment(texts.unpaid);
+					} else {
+						if (payment.isAccept) {
+							setStatusPayment(texts.paid);
+						} else {
+							setStatusPayment(texts.wait);
+						}
+					}
+				} else {
+					setStatusPayment(texts.unpaid);
+				}
+			})
+			.catch(() => setStatusPayment(texts.unpaid))
+			.finally(() => setLoadPayment(false));
+	};
+	const findClosestDateObject = (data: PaymentServicer[]) => {
+		return new Promise((resolve, reject) => {
+			!data.length && reject(undefined);
+			const currentDate = new Date().getTime();
+			let closestItem = data?.[0];
+			let closestDifference = Math.abs(currentDate - data[0]?.date);
+
+			for (let i = 1; i < data.length; i++) {
+				const difference = Math.abs(currentDate - data[i].date);
+				if (difference < closestDifference) {
+					closestItem = data[i];
+					closestDifference = difference;
+				}
+			}
+
+			resolve(closestItem as PaymentServicer | undefined);
+		});
+	};
 	const onPressLogout = () => DeviceEventEmitter.emit(EMIT_EVENT.LOGOUT);
 
 	const ProfileButton = ({buttonName, onClick}: {buttonName: string; onClick: () => void}) => {
@@ -84,7 +127,9 @@ const User = (props: RootStackScreenProps<'User'>) => {
 				{userInfo?.type === TYPE_USER.SERVICER && (
 					<View style={styles.viewContent}>
 						<CustomText text={texts.SERVICE} font={FONT_FAMILY.BOLD} size={15} />
-						<ProfileButton buttonName={texts.feeServiceText} onClick={onPressServiceFree} />
+						<CustomText size={15} style={{paddingLeft: widthScale(10), paddingTop: widthScale(10),borderBottomWidth: 1, borderBottomColor: colors.grayLine,height: heightScale(40),}} text={texts.feeServiceText} onPress={onPressServiceFree} 
+						rightContent={loadPayment ? <ActivityIndicator /> : <CustomText size={13} font={FONT_FAMILY.BOLD} text={statusPayment} />}
+						/>
 						<ProfileButton buttonName={texts.blockedUsersButtonText} onClick={onPressserListBlock} />
 					</View>
 				)}

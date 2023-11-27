@@ -184,8 +184,20 @@ export const pushNotificationToUserConfirmOrder = async (serviceId: string, user
 
 	saveNotification(userId, data);
 };
+// Bắn thông báo cho Admin khi có 1 tài khoản mới cần được duyệt
+export const pushNotificationAdminNewServicer = async (idServicer: string) => {
+	const idAdmin = 'admin';
+	const token = await getTokenDeviceFromID(idAdmin);
+	const nameServicer = await API.get(`${TABLE.USERS}/${idServicer}`).then(({name}) => name);
 
-// Push notification cho admin khi co tk service provider.
-export const pushNotificationAdminNewServicer = async (serviceId: string, userId: string, orderId: string) => {
+	const title = 'Có tài khoản dịch vụ cần được duyệt!';
+	const body = `Bạn có 1 tài khoản dịch vụ cần được duyệt ${nameServicer}`;
 
+	const data = {
+		data: {idOrder: idServicer},
+		idUser: idAdmin,
+		status: NOTIFICATION_TYPE.NEW_SERVICER,
+	};
+	console.log('Tài khoản SP mới!')
+	token && sendNotificationToDevices(token, title, body, data);
 };

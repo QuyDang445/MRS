@@ -13,6 +13,20 @@ export const KO = {
 		faqs: '자주 묻는 질문',
 		logout: '로그아웃',
 		logoutConfirmation: '로그아웃하시겠습니까?',
+		settingsButtonText: '환경',
+	},
+	Transactionsrequireconfirmation:{
+		title: "거래확인이 필요함",
+	},
+	ManageUser:{
+		title: "사용자 관리",
+	},
+	HomeAdmin: {
+		title: '집',
+		AccountWitingForApproval: '승인 대기 중인 계정',
+		AccountUserManager: '사용자 계정 관리',
+		AccountProviderManager: '서비스 제공업체 계정 관리',
+		BROWSEWAYSTODEPOSIT:'입금 방법 찾아보기',
 	},
 	BottomTab: {
 		logoutAlert: '계정이 차단되었습니다!',
@@ -268,4 +282,8 @@ export const KO = {
 		OrderInProcess: '주문 처리 중',
 		OrderCompleted: '주문 완료됨',
 	},
+	AddPayment:{
+		title: "THÊM PHƯƠNG THỨC THANH TOÁN",
+		
+	}
 };

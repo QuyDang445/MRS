@@ -30,6 +30,7 @@ import {RootStackScreensParams} from './params';
 import {ROUTE_KEY} from './routers';
 import {RootStackScreenProps} from './stacks';
 import userAdmin from '../screens/admin/user-admin';
+import {AdminServiceAndServiceType} from '../screens';
 
 const Tab = createBottomTabNavigator<RootStackScreensParams>();
 
@@ -171,23 +172,6 @@ const BottomTab = (props: RootStackScreenProps<'BottomTab'>) => {
 		DeviceEventEmitter.addListener(EMIT_EVENT.LOGOUT, logout);
 	}, [userInfo]);
 
-	useEffect(() => {
-		messaging().onMessage(message => {
-			notifee.displayNotification({
-				android: {importance: AndroidImportance.HIGH, channelId: CHANNEL_ID, sound: 'custom_sound'},
-				title: message.notification?.title,
-				body: message?.notification?.body,
-				data: message.data,
-			});
-		});
-
-		notifee.onForegroundEvent(({type, detail}) => {
-			if (type === EventType.PRESS) {
-			}
-		});
-	}, []);
-
-
 	const logout = async () => {
 		navigation.dispatch(CommonActions.reset({index: 0, routes: [{name: ROUTE_KEY.LogIn}]}));
 
@@ -215,8 +199,8 @@ const BottomTab = (props: RootStackScreenProps<'BottomTab'>) => {
 		switch (userInfo?.type) {
 			case TYPE_USER.USER:
 				return Order;
-			// case TYPE_USER.ADMIN:
-			// 	return OrderAdmin;
+			case TYPE_USER.ADMIN:
+				return AdminServiceAndServiceType;
 			default:
 				return OrderService;
 		}

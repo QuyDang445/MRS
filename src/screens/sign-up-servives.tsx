@@ -32,7 +32,7 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 
 	const SignUpSchema = Yup.object().shape({
 		name: Yup.string().required('Thiếu tên'),
-		phone: Yup.string().matches(phoneRegex, 'Số điện thoại không hợp lệ!').required('Thiếu số điện thoai'),
+		phone: Yup.string().matches(phoneRegex, 'Số điện thoại không hợp lệ!').required('Thiếu số điện thoại'),
 		cccd: Yup.string().matches(cccdRegex, 'Số căn cước công dân không hợp lệ!').required('Thiếu căn cước công dân'),
 		image: Yup.string().required('Thiếu hình ảnh căn cước công dân'),
 		address: Yup.string().required('Thiếu địa chỉ'),
@@ -76,7 +76,7 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 			};
 			const res = await API.post(`${TABLE.USERS}`, body);
 			if (res) {
-				await pushNotificationAdminNewServicer(res.id);
+				//await pushNotificationAdminNewServicer(res.id);
 				showMessage('Đăng ký tài khoản thành công, vui lòng chờ đợi admin duyệt qua thông tin!');
 				DeviceEventEmitter.emit(EMIT_EVENT.DATA_LOGIN, {phone: value.phone, password: value.pass});
 				navigation.goBack();
@@ -116,7 +116,6 @@ const SignUpServices = (props: RootStackScreenProps<'SignUpServices'>) => {
 								<View style={styles.input}>
 									<TextInput
 										value={values.phone}
-										maxLength={10}
 										onChangeText={handleChange('phone')}
 										keyboardType={'numeric'}
 										placeholder="Số điện thoại"

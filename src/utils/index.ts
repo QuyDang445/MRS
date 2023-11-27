@@ -40,13 +40,16 @@ export const showMessage = (message: string) => {
 export const AlertYesNo = (title = 'THÔNG BÁO', message?: string, onYes?: () => void) =>
 	Alert.alert('', message, [{text: 'HUỶ'}, {text: 'OK', onPress: onYes}], {cancelable: false});
 
+export const AlertConfirm = (title = 'THÔNG BÁO', message?: string, onYes?: () => void) =>
+	Alert.alert(title, message, [{text: 'OK', onPress: onYes}], {cancelable: false});
+
 export const getServiceFromID = async (id: string) => {
 	const result = (await API.get(`${TABLE.SERVICE}`, true)) as ServiceProps[];
 
 	const arr = [];
 
 	for (let i = 0; i < result.length; i++) {
-		result[i].servicer === id && arr.push(result[i]);
+		result[i].servicer === id && !result[i].disable && arr.push(result[i]);
 	}
 
 	// get info category
@@ -91,7 +94,7 @@ export const getServiceFromID = async (id: string) => {
 };
 
 export const getServiceAll = async () => {
-	const arr = (await API.get(`${TABLE.SERVICE}`, true)) as ServiceProps[];
+	const arr = ((await API.get(`${TABLE.SERVICE}`, true)) as ServiceProps[]).filter(o => !o.disable);
 
 	// get info category
 	for (let i = 0; i < arr.length; i++) {
@@ -163,22 +166,21 @@ export const getMyLocation = () =>
 		),
 	);
 
-
-	export const getStatusOrder = (
-		status: TYPE_ORDER_SERVICE,
-		language: {OrderPending: string; OrderCanceled: string; OrderInProcess: string; OrderCompleted: string},
-	) => {
-		switch (status) {
-			case TYPE_ORDER_SERVICE.OrderPending:
-				return language.OrderPending;
-			case TYPE_ORDER_SERVICE.OrderInProcess:
-				return language.OrderInProcess;
-			case TYPE_ORDER_SERVICE.OrderCompleted:
-				return language.OrderCompleted;
-			case TYPE_ORDER_SERVICE.OrderCanceled:
-				return language.OrderCanceled;
-		}
-	};
+export const getStatusOrder = (
+	status: TYPE_ORDER_SERVICE,
+	language: {OrderPending: string; OrderCanceled: string; OrderInProcess: string; OrderCompleted: string},
+) => {
+	switch (status) {
+		case TYPE_ORDER_SERVICE.OrderPending:
+			return language.OrderPending;
+		case TYPE_ORDER_SERVICE.OrderInProcess:
+			return language.OrderInProcess;
+		case TYPE_ORDER_SERVICE.OrderCompleted:
+			return language.OrderCompleted;
+		case TYPE_ORDER_SERVICE.OrderCanceled:
+			return language.OrderCanceled;
+	}
+};
 
 export const getColorStatusOrder = (status: TYPE_ORDER_SERVICE) => {
 	switch (status) {
@@ -260,3 +262,5 @@ export const getOrderAllFromIDServicer = async (idServicer: string) => {
 
 	return newData as OrderProps[];
 };
+
+export const formatNumber = (number: number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');

@@ -12,8 +12,11 @@ import {RootStackScreenProps} from '../navigator/stacks';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {getServicerALl} from '../utils';
 import notifee from '@notifee/react-native';
+import {useLanguage} from '../hooks/useLanguage';
 
 const HomeAdmin = (props: RootStackScreenProps<'Home'>) => {
+	// const text = useLanguage().Home;
+	const text = useLanguage().HomeAdmin;
 	const {navigation} = props;
 
 	const [servicerPending, setServicerPending] = useState<UserProps[]>([]);
@@ -48,7 +51,7 @@ const HomeAdmin = (props: RootStackScreenProps<'Home'>) => {
 
 	return (
 		<FixedContainer>
-			<CustomHeader title="TRANG CHỦ" hideBack />
+			<CustomHeader title={text.title} hideBack />
 			<ScrollView
 				refreshControl={<RefreshControl onRefresh={getServicerPending} refreshing={loading} />}
 				style={{paddingHorizontal: widthScale(20)}}>
@@ -65,7 +68,7 @@ const HomeAdmin = (props: RootStackScreenProps<'Home'>) => {
 						paddingLeft: widthScale(10),
 					}}>
 					<Image source={ICONS.user_accept} style={styles.image} />
-					<CustomText font={FONT_FAMILY.BOLD} text={`${servicerPending.length} TÀI KHOẢN CHỜ SÉT DUYỆT`} />
+					<CustomText font={FONT_FAMILY.BOLD} text={`${servicerPending.length} TÀI KHOẢN CHỜ XÉT DUYỆT`} />
 				</TouchableOpacity>
 				<TouchableOpacity
 					onPress={() => navigation.navigate(ROUTE_KEY.ManageUser)}
@@ -79,7 +82,7 @@ const HomeAdmin = (props: RootStackScreenProps<'Home'>) => {
 						paddingLeft: widthScale(10),
 					}}>
 					<Image source={ICONS.user_accept} style={styles.image} />
-					<CustomText font={FONT_FAMILY.BOLD} text={'QUẢN LÝ TÀI KHOẢN NGƯỜI DÙNG'} />
+					<CustomText font={FONT_FAMILY.BOLD} text={text.AccountUserManager} />
 				</TouchableOpacity>
 				<TouchableOpacity
 					onPress={() => navigation.navigate(ROUTE_KEY.ManageServicer)}
@@ -93,7 +96,7 @@ const HomeAdmin = (props: RootStackScreenProps<'Home'>) => {
 						paddingLeft: widthScale(10),
 					}}>
 					<Image source={ICONS.user_accept} style={styles.image} />
-					<CustomText font={FONT_FAMILY.BOLD} text={'QUẢN LÝ TÀI KHOẢN NGƯỜI CUNG\nCẤP DỊCH VỤ'} />
+					<CustomText font={FONT_FAMILY.BOLD} text={text.AccountProviderManager} />
 				</TouchableOpacity>
 				<TouchableOpacity
 					onPress={() => navigation.navigate(ROUTE_KEY.ManagePayment)}
@@ -107,7 +110,7 @@ const HomeAdmin = (props: RootStackScreenProps<'Home'>) => {
 						paddingLeft: widthScale(10),
 					}}>
 					<Image source={ICONS.user_accept} style={styles.image} />
-					<CustomText font={FONT_FAMILY.BOLD} text={'DUYỆT CÁC GIAO DỊCH NẠP TIỀN'} />
+					<CustomText font={FONT_FAMILY.BOLD} text={text.BROWSEWAYSTODEPOSIT} />
 				</TouchableOpacity>
 			</ScrollView>
 		</FixedContainer>
