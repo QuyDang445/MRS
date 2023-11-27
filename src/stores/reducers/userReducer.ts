@@ -20,13 +20,13 @@ const userInfo = createSlice({
 		clearUserData: () => initialState,
 		cacheUserInfo: (state, action: PayloadAction<any>) => {
 			state.userInfo = action.payload;
-		},
+		},// lưu  
 		updateUserInfo: (state, action: PayloadAction<any>) => {
 			state.userInfo = {...state.userInfo, ...action.payload};
-		},
+		},// update
 		changeLanguage: (state, action: PayloadAction<LANGUAGE>) => {
 			state.language = action.payload;
-		},
+		}, // chuyển 
 	},
 });
 
