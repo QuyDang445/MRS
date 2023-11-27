@@ -201,3 +201,6 @@ export const pushNotificationAdminNewServicer = async (idServicer: string) => {
 	console.log('Tài khoản SP mới!')
 	token && sendNotificationToDevices(token, title, body, data);
 };
+// có 1 báo cáo của người dùng
+export const pushNotificationAdminUserReport = async (idServicer: string, reasonReport: string) => {};
+
