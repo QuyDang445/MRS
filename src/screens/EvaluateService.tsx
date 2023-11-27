@@ -98,7 +98,30 @@ const EvaluateService = (props: RootStackScreenProps<'EvaluateService'>) => {
 							style={[styles.star, {tintColor: star >= 1 ? colors.yellow : undefined}]}
 						/>
 					</TouchableOpacity>
-					{/* ... (Tương tự cho 5 sao) */}
+					<TouchableOpacity onPress={() => setStar(2)}>
+						<Image
+							source={star >= 2 ? ICONS.star_full : ICONS.star}
+							style={[styles.star, {tintColor: star >= 2 ? colors.yellow : undefined}]}
+						/>
+					</TouchableOpacity>
+					<TouchableOpacity onPress={() => setStar(3)}>
+						<Image
+							source={star >= 3 ? ICONS.star_full : ICONS.star}
+							style={[styles.star, {tintColor: star >= 3 ? colors.yellow : undefined}]}
+						/>
+					</TouchableOpacity>
+					<TouchableOpacity onPress={() => setStar(4)}>
+						<Image
+							source={star >= 4 ? ICONS.star_full : ICONS.star}
+							style={[styles.star, {tintColor: star >= 4 ? colors.yellow : undefined}]}
+						/>
+					</TouchableOpacity>
+					<TouchableOpacity onPress={() => setStar(5)}>
+						<Image
+							source={star >= 5 ? ICONS.star_full : ICONS.star}
+							style={[styles.star, {tintColor: star >= 5 ? colors.yellow : undefined}]}
+						/>
+					</TouchableOpacity>
 				</View>
 
 				<CustomText text={text.description} style={{textAlign: 'center'}} />
@@ -108,8 +131,9 @@ const EvaluateService = (props: RootStackScreenProps<'EvaluateService'>) => {
 						borderWidth: 1,
 						borderColor: 'black',
 						marginBottom: heightScale(20),
+						
 					}}>
-					<TextInput value={content} onChangeText={setContent} multiline placeholder={text.enterdescription} style={{}} />
+					<TextInput value={content} onChangeText={setContent} multiline placeholder={text.enterdescription} style={{color : colors.black}} />
 				</View>
 
 				<CustomText text={text.image} style={{textAlign: 'center'}} />

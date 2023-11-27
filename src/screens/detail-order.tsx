@@ -21,7 +21,7 @@ import {colors} from '../styles/colors';
 import {heightScale, widthScale} from '../styles/scaling-utils';
 import {AlertYesNo, generateRandomId, getColorStatusOrder, getStatusOrder, showMessage} from '../utils';
 import {getImageFromDevice, uploadImage} from '../utils/image';
-import {pushNotificationToServiceCancelOrder, pushNotificationToUserConfirmOrder} from '../utils/notification';
+import {pushNotificationAdminUserReport, pushNotificationToServiceCancelOrder, pushNotificationToUserConfirmOrder} from '../utils/notification';
 
 const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 	const text = useLanguage().DetailOrder;
@@ -134,22 +134,18 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 		});
 	};
 	const handleReport = (reasonReport: string) => {
-		console.log('report')
 		AlertYesNo(undefined, 'Xác nhận?', async () => {
 			Spinner.show();
 			API.get(`${TABLE.ORDERS}/${data.id}`)
-				.then(async (newData: any) => {
-					if (newData?.status !== TYPE_ORDER_SERVICE.OrderCanceled) {
-						await API.put(`${TABLE.ORDERS}/${data.id}`, {...newData, status: TYPE_ORDER_SERVICE.OrderInProcess}).then(() => {
-							showMessage('Báo cáo thành công!');
-						});
-					} else {
-						showMessage('Báo cáo đã bị huỷ!');
-					}
+				.then(async newData => {
+					await API.put(`${TABLE.ORDERS}/${data.id}`, {...newData, isEvaluate: true}).then(async () => {
+						pushNotificationAdminUserReport(data.servicerObject.name, reasonReport);
+						showMessage('Báo cáo thành công');
+					});
 				})
 				.finally(() => Spinner.hide())
 				.finally(() => navigation.goBack());
-			});
+		});
 	};
 	const handleEvaluate = () => {
 		navigation.navigate(ROUTE_KEY.EvaluateService, {data: data});
@@ -415,9 +411,10 @@ const DetailOrder = (props: RootStackScreenProps<'DetailOrder'>) => {
 										placeholder={text.enterdo}
 										style={{
 											width: '100%',
-											backgroundColor: `${colors.grayLine}40`,
+											backgroundColor: `${colors.darkGray}40`,
 											maxHeight: heightScale(200),
 											borderRadius: 5,
+											color: colors.black,
 										}}
 									/>
 								)}
