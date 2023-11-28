@@ -37,6 +37,11 @@ const ForgotPass = (props: RootStackScreenProps<'ForgotPass'>) => {
 			return showMessage('Không có thông tin số điện thoại!');
 		}
 
+		if (userPhone.phone == '0123456789') {
+			Spinner.hide();
+			return showMessage('ADMin không dùng được chức năng này!');
+		}
+
 		auth()
 			.signInWithPhoneNumber(phoneCheck)
 			.then(confirm => {

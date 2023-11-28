@@ -136,13 +136,8 @@ const BottomTab = (props: RootStackScreenProps<'BottomTab'>) => {
 					.ref(`/USERS/${userInfo?.id}`)
 					.on('value', snapshot => handleBlockUser(snapshot.val()));
 				console.log('\x1b[32;1m--> Socket - connected');
-				listenBlockAccount = database()
-					.ref(`/USERS/${userInfo?.id}`)
-					.on('value', snapshot => handleBlockUser(snapshot.val()));
-				console.log('\x1b[32;1m--> Socket - connected');
+				
 			} else {
-				database().ref(`/USERS/${userInfo?.id}`).off('value', listenBlockAccount);
-				console.log('\x1b[31;1m--> Socket - disconnect');
 				database().ref(`/USERS/${userInfo?.id}`).off('value', listenBlockAccount);
 				console.log('\x1b[31;1m--> Socket - disconnect');
 			}
@@ -153,10 +148,7 @@ const BottomTab = (props: RootStackScreenProps<'BottomTab'>) => {
 			sub.remove();
 			database().ref(`/USERS/${userInfo?.id}`).off('value', listenBlockAccount);
 		};
-		return () => {
-			sub.remove();
-			database().ref(`/USERS/${userInfo?.id}`).off('value', listenBlockAccount);
-		};
+		
 	}, []);
 
 	const handleBlockUser = (user: UserProps) => {
